@@ -32,3 +32,24 @@ if (burger && menu) {
     burger.setAttribute("aria-expanded", open);
   });
 }
+
+// Aviso de cookies (necesario para la etiqueta de Google Ads)
+(function () {
+  let elegido = null;
+  try { elegido = localStorage.getItem("cookies-engrana"); } catch (e) {}
+  if (elegido) return;
+  const aviso = document.createElement("div");
+  aviso.className = "cookies";
+  aviso.innerHTML = '<p>Usamos cookies de Google para saber qué anuncios funcionan. ¿Nos dejas?</p>' +
+    '<div><button type="button" data-c="no">Rechazar</button><button type="button" data-c="si">Aceptar</button></div>';
+  document.body.appendChild(aviso);
+  aviso.addEventListener("click", (e) => {
+    const c = e.target.getAttribute("data-c");
+    if (!c) return;
+    try { localStorage.setItem("cookies-engrana", c); } catch (err) {}
+    if (c === "si" && window.gtag) {
+      gtag("consent", "update", { ad_storage: "granted", ad_user_data: "granted", ad_personalization: "granted", analytics_storage: "granted" });
+    }
+    aviso.remove();
+  });
+})();
