@@ -248,3 +248,67 @@ footer{background:var(--pine-dark);color:#8FB0A3;padding:56px 0 30px;font-size:.
 .cookies div{display:flex;gap:10px}
 .cookies button{font:inherit;font-weight:600;border-radius:999px;padding:9px 16px;cursor:pointer;border:2px solid var(--pine);background:transparent;color:var(--pine)}
 .cookies button[data-c="si"]{background:var(--pine);color:var(--white)}
+
+/* ---------- Colaboradores ---------- */
+.collab{display:grid;grid-template-columns:1.6fr 1fr;gap:18px;margin-top:48px;align-items:stretch}
+.collab-main{display:grid;grid-template-columns:1.1fr 1fr;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;text-decoration:none;transition:border-color .2s}
+.collab-main:hover{border-color:var(--pine)}
+.collab-photo{width:100%;height:100%;object-fit:cover;min-height:260px}
+.collab-body{padding:30px;display:flex;flex-direction:column;gap:10px}
+.collab-logo{height:44px;width:auto;align-self:flex-start;background:var(--white);border-radius:10px;padding:6px 10px}
+.collab-sector{color:var(--stone);font-size:.92rem}
+.collab-body p{color:var(--stone)}
+.collab-body .more{margin-top:auto;font-weight:600;color:var(--pine)}
+.collab .case{display:flex;flex-direction:column}
+.case-head{display:grid;grid-template-columns:auto 1fr;gap:36px;align-items:center}
+.case-logo{background:var(--white);border-radius:var(--radius);padding:22px 26px}
+.case-logo img{width:200px;height:auto}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px}
+.pillar{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:28px;border-top:4px solid var(--gold)}
+.pillar p{color:var(--stone);margin-top:10px}
+.gallery{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:44px}
+.gallery figure{margin:0}
+.gallery .wide{grid-column:span 2}
+.gallery img{width:100%;border-radius:16px;border:1px solid var(--line)}
+.gallery figcaption{color:var(--stone);font-size:.92rem;margin-top:10px}
+.caseband{display:flex;align-items:center;gap:28px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:26px 30px}
+.caseband img{height:52px;width:auto;flex:none}
+.caseband div{flex:1}
+.caseband p{color:var(--stone);margin-top:6px}
+@media (max-width:960px){
+  .collab,.collab-main,.pillars{grid-template-columns:1fr}
+  .collab-photo{min-height:0;aspect-ratio:16/10}
+  .case-head{grid-template-columns:1fr;gap:22px}
+  .caseband{flex-direction:column;align-items:flex-start}
+}
+@media (max-width:600px){
+  .gallery{grid-template-columns:1fr}
+  .gallery .wide{grid-column:auto}
+  .case-logo img{width:160px}
+}
+
+/* ---------- Caso técnico ---------- */
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:56px 0 0}
+.facts div{border-top:1px solid var(--pine-line);padding-top:16px}
+.facts dt{font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(2.6rem,5vw,3.6rem);font-weight:800;line-height:1;color:var(--gold)}
+.facts dd{margin:8px 0 0;color:var(--mist);font-size:.97rem}
+.flow{list-style:none;padding:0;margin:48px 0 0;display:grid;grid-template-columns:repeat(6,1fr);gap:12px;counter-reset:f}
+.flow li{counter-increment:f;background:var(--white);border:1px solid var(--line);border-radius:16px;padding:18px;position:relative}
+.flow li::before{content:counter(f);display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--pine);color:var(--gold-soft);font-weight:700;font-size:.9rem;margin-bottom:12px}
+.flow li:not(:last-child)::after{content:"";position:absolute;top:32px;right:-12px;width:12px;height:2px;background:var(--gold)}
+.flow b{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:1.08rem}
+.flow span{display:block;color:var(--stone);font-size:.9rem;margin-top:6px;line-height:1.45}
+.systems{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:48px}
+.system{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:32px}
+.system-tag{color:var(--stone);font-size:.9rem;margin-bottom:8px}
+.system > p:not(.system-tag){color:var(--stone);margin:10px 0 22px}
+.tech{list-style:none;padding:0;margin:0;border-top:1px solid var(--pine-line)}
+.tech li{padding:16px 0;border-bottom:1px solid var(--pine-line);color:var(--mist)}
+.tech b{color:var(--white);font-weight:600}
+@media (max-width:960px){
+  .facts{grid-template-columns:1fr 1fr}
+  .flow{grid-template-columns:1fr 1fr}
+  .flow li::after{display:none}
+  .systems{grid-template-columns:1fr}
+}
+section[id]{scroll-margin-top:84px}
