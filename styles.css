@@ -342,3 +342,17 @@ section[id]{scroll-margin-top:84px}
   .showcase{gap:18px;margin-top:40px}
   .showcase.flip figure{order:0}
 }
+
+/* ===== Filosofía ===== */
+.ideas{display:flex;flex-direction:column;gap:28px}
+.idea{display:grid;grid-template-columns:minmax(0,420px) 1fr;gap:48px;align-items:center;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:28px}
+.idea figure{margin:0}
+.idea img{width:100%;border-radius:16px;border:1px solid var(--line)}
+.idea-text{display:flex;flex-direction:column;gap:14px}
+.idea-meta{color:var(--stone);font-size:.9rem}
+.idea h2{max-width:none;font-size:clamp(1.8rem,3.4vw,2.6rem)}
+.idea-es{color:var(--stone);font-style:italic}
+.idea-mean{font-size:1.2rem;line-height:1.55;border-left:3px solid var(--gold);padding-left:18px;margin-top:6px}
+@media (max-width:860px){
+  .idea{grid-template-columns:1fr;gap:22px;padding:18px}
+}

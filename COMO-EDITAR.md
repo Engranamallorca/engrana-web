@@ -11,6 +11,7 @@ Todos los archivos van sueltos, sin carpetas.
 | `correo.html` | Servicio: correo profesional |
 | `sobre-nosotros.html` | Sobre nosotros |
 | `blog.html` | Lista de artículos del blog |
+| `filosofia.html` | Filosofía: la frase de cada semana |
 | `senales-web-pierde-clientes.html` | Primer artículo del blog |
 | `_plantilla-articulo.html` | Plantilla para artículos nuevos |
 | `styles.css` | Colores, letras y diseño de TODA la web |
@@ -34,3 +35,11 @@ Todos los archivos van sueltos, sin carpetas.
 
 - **Un archivo:** ábrelo en GitHub, pulsa el lápiz ✏️, cambia y pulsa **Commit changes**. Se publica solo en un minuto.
 - **Varios archivos:** en la página del repositorio pulsa la tecla `.` (punto) para abrir el editor completo.
+
+## Publicar la frase de la semana (Filosofía)
+
+1. Sube la imagen de la frase con **Add file → Upload files** y llámala `filosofia-02.jpg` (la siguiente, `filosofia-03.jpg`…).
+2. Abre `filosofia.html` y pulsa el lápiz ✏️.
+3. Copia un bloque `<article class="idea"> … </article>` entero y pégalo **encima** del anterior (la más nueva va arriba).
+4. Cambia: `id="idea-02"`, el número y la fecha, el nombre de la imagen, la frase (también en el `alt`), la traducción y el significado.
+5. Pulsa **Commit changes**.
