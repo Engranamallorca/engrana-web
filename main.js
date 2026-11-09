@@ -9,6 +9,9 @@ const EMAIL = "info@engrana-mallorca.com";
 const ASUNTO = "Diagnóstico gratis para mi empresa";
 const MENSAJE = "Hola, me dedico a: \nMi web o ficha de Google: \nMe gustaría mejorar: \n";
 
+// 3) Google Analytics 4: pega aquí tu ID (empieza por G-). Vacío = desactivado.
+const GA4_ID = "";
+
 /* ---- A partir de aquí no hace falta tocar nada ---- */
 (function () {
   "use strict";
@@ -17,13 +20,34 @@ const MENSAJE = "Hola, me dedico a: \nMi web o ficha de Google: \nMe gustaría m
   var fine = w.matchMedia("(hover: hover) and (pointer: fine)").matches;
   var small = w.matchMedia("(max-width: 760px)").matches;
 
+  // Analítica: GA4 (si hay ID) y eventos de conversión
+  if (GA4_ID && w.gtag) gtag("config", GA4_ID);
+  function track(name, params) { try { if (w.gtag) gtag("event", name, Object.assign({ page_path: location.pathname }, params || {})); } catch (e) {} }
+
+  // Formulario de diagnóstico: servicio de origen y evento al enviar
+  var form = d.querySelector('form[name="diagnostico"]');
+  if (form) {
+    var qs = new URLSearchParams(location.search);
+    var srv = form.querySelector('[name="servicio"]'), org = form.querySelector('[name="pagina-origen"]');
+    if (srv) srv.value = qs.get("servicio") || "";
+    if (org) { try { org.value = d.referrer ? new URL(d.referrer).pathname : "directo"; } catch (e) { org.value = ""; } }
+    form.addEventListener("submit", function () {
+      track("generate_lead", { form_name: "diagnostico", servicio: srv ? srv.value : "", transport_type: "beacon" });
+    });
+  }
+
   // Correo, año y copiar
   var mailto = "mailto:" + EMAIL + "?subject=" + encodeURIComponent(ASUNTO) + "&body=" + encodeURIComponent(MENSAJE);
   d.querySelectorAll("[data-email]").forEach(function (el) { el.textContent = EMAIL; if (el.tagName === "A") el.href = "mailto:" + EMAIL; });
   d.querySelectorAll("[data-mailto]").forEach(function (el) { el.href = mailto; });
+  d.addEventListener("click", function (e) {
+    var a = e.target.closest('a[href^="mailto:"]');
+    if (a) track("contact_email_click", { transport_type: "beacon" });
+  });
   d.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
   d.querySelectorAll("[data-copy]").forEach(function (btn) {
     btn.addEventListener("click", function () {
+      track("contact_email_copy");
       var done = function (t) { btn.textContent = t; setTimeout(function () { btn.textContent = "Copiar"; }, 2000); };
       if (navigator.clipboard) navigator.clipboard.writeText(EMAIL).then(function () { done("Copiado"); }, function () { done("Selecciónalo"); });
       else done("Selecciónalo");

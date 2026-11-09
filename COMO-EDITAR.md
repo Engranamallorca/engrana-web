@@ -1,63 +1,71 @@
 # Cómo editar la web de Engrana
 
-Todos los archivos van sueltos, sin carpetas.
+Cada página vive en su propia carpeta con un archivo `index.html`. Así las direcciones quedan limpias
+(`engrana-mallorca.com/automatizacion/`). Las imágenes, `styles.css` y `main.js` siguen en la carpeta principal.
 
-| Archivo | Qué es |
+| Dirección | Archivo |
 |---|---|
-| `index.html` | Portada |
-| `automatizacion.html` | Solución: automatización empresarial |
-| `sistemas-comerciales.html` | Solución: sistemas comerciales y CRM |
-| `ia-aplicada.html` | Solución: inteligencia artificial aplicada |
-| `webs.html` | Solución: desarrollo y renovación web |
-| `marketing.html` | Solución: marketing digital |
-| `correo.html` | Solución: correo profesional |
-| `inox-brico.html` | Caso real: Inox Brico |
-| `taxi-25-muro.html` | Caso real: Taxi 25 Muro |
-| `sobre-nosotros.html` | Sobre nosotros |
-| `filosofia.html` | Filosofía: la frase de cada semana |
-| `blog.html` | Lista de artículos del blog |
-| `senales-web-pierde-clientes.html` | Primer artículo del blog |
-| `_plantilla-articulo.html` | Plantilla para artículos nuevos |
-| `gracias.html` | Página que se ve después de enviar el formulario |
-| `404.html` | Página de error |
-| `styles.css` | Colores, letras, diseño y animaciones de TODA la web |
-| `main.js` | Tu correo de contacto y las animaciones |
-| `sitemap.xml`, `robots.txt` | Para Google (añade aquí las páginas nuevas) |
+| `/` | `index.html` (portada) |
+| `/servicios/` | `servicios/index.html` |
+| `/automatizacion/` | `automatizacion/index.html` |
+| `/sistemas-comerciales/` | `sistemas-comerciales/index.html` |
+| `/ia-aplicada/` | `ia-aplicada/index.html` |
+| `/webs/` | `webs/index.html` |
+| `/marketing/` | `marketing/index.html` |
+| `/correo/` | `correo/index.html` |
+| `/sectores/distribucion-suministro/` | `sectores/distribucion-suministro/index.html` |
+| `/casos/` | `casos/index.html` |
+| `/inox-brico/` | `inox-brico/index.html` |
+| `/gaspar-pico/` | `gaspar-pico/index.html` |
+| `/taxi-25-muro/` | `taxi-25-muro/index.html` |
+| `/sobre-nosotros/` | `sobre-nosotros/index.html` |
+| `/filosofia/` | `filosofia/index.html` |
+| `/blog/` | `blog/index.html` |
+| `/blog/senales-web-pierde-clientes/` | `blog/senales-web-pierde-clientes/index.html` |
+| `/contacto/` | `contacto/index.html` (el formulario) |
+| `/gracias/` | `gracias/index.html` |
+| — | `404.html` (página de error) |
+| — | `_plantilla-articulo.html` (plantilla del blog) |
+| — | `_redirects` (redirecciones 301 de las direcciones antiguas `.html`) |
+| — | `sitemap.xml`, `robots.txt` (para Google) |
+
+## Reglas importantes
+
+- **Enlaces e imágenes siempre empiezan por `/`**: `href="/contacto/"`, `src="/filosofia-02.jpg"`.
+- **No borres `_redirects`**: hace que las direcciones antiguas (`/webs.html`…) sigan funcionando.
+- **Página nueva** = carpeta nueva con su `index.html` + añadirla a `sitemap.xml`.
 
 ## Cambios rápidos
 
-- **Correo de contacto:** en `main.js`, cambia la línea `const EMAIL = "..."`.
-- **Colores:** en `styles.css`, arriba del todo: `--green` (verde), `--gold` (dorado), `--warm` (blanco cálido), `--carbon` (gris carbón).
-- **Textos:** abre la página, busca el texto y cámbialo. No borres lo que va entre `< >`.
+- **Correo de contacto:** `main.js`, línea `const EMAIL = "..."`.
+- **Google Analytics 4:** `main.js`, línea `const GA4_ID = ""` → pega tu ID (`G-XXXXXXX`) entre las comillas.
+- **Colores:** `styles.css`, arriba del todo.
 - **Palabras en dorado y cursiva** en los títulos: van entre `<em>` y `</em>`.
 
 ## Foto de fondo de la portada (opcional)
 
-1. Sube una foto horizontal (mínimo 2000 px de ancho, menos de 400 KB) con el nombre `hero.jpg`.
-2. En `index.html`, busca `FOTO DE FONDO OPCIONAL` y borra `<!--` del principio de esa nota y `-->` del final de la línea siguiente.
+1. Sube una foto horizontal (mínimo 2000 px de ancho, menos de 400 KB) llamada `hero.jpg`.
+2. En `index.html`, busca `FOTO DE FONDO OPCIONAL` y borra `<!--` del principio de la nota y `-->` del final de la línea siguiente.
 
 ## Formulario de contacto
 
-El formulario funciona con Netlify Forms. En Netlify: **Site configuration → Forms → Enable form detection** (solo una vez).
-Los mensajes llegan en Netlify → **Forms → diagnostico**, y puedes activar que te lleguen al correo en **Form notifications**.
+Está en `/contacto/`. Los botones de cada página llevan a él indicando el servicio
+(`/contacto/?servicio=automatizacion`), y cada solicitud que llega a Netlify (Forms → diagnostico)
+dice desde qué servicio y qué página vino.
 
 ## Publicar la frase de la semana (Filosofía)
 
-1. Sube la imagen de la frase con **Add file → Upload files** y llámala `filosofia-02.jpg` (la siguiente, `filosofia-03.jpg`…).
-2. Abre `filosofia.html` y pulsa el lápiz ✏️.
-3. Copia un bloque `<article class="idea"> … </article>` entero y pégalo **encima** del anterior (la más nueva va arriba).
-4. Cambia: `id="idea-02"`, el número y la fecha, el nombre de la imagen, la frase (también en el `alt`), la traducción y el significado.
-5. Pulsa **Commit changes**.
+1. Sube la imagen a la carpeta principal con el nombre `filosofia-02.jpg` (la siguiente, `filosofia-03.jpg`…).
+2. Abre `filosofia/index.html` y pulsa el lápiz ✏️.
+3. Copia un bloque `<article class="idea"> … </article>` y pégalo **encima** del anterior.
+4. Cambia: `id="idea-02"`, número, fecha, imagen (`src="/filosofia-02.jpg"`), frase (también en `alt`), traducción y significado.
+5. **Commit changes.**
 
 ## Escribir un artículo del blog
 
-1. En GitHub, abre `_plantilla-articulo.html`, copia todo el contenido.
-2. Pulsa **Add file → Create new file**, ponle nombre sin espacios ni tildes (ej. `como-conseguir-resenas.html`) y pega.
-3. Cambia título, descripción, fecha, categoría y párrafos. Borra la línea `<meta name="robots" content="noindex">`. Pulsa **Commit changes**.
-4. Abre `blog.html`, copia un bloque `<a class="post-card" …> … </a>`, pégalo el primero y cambia el enlace, el título y el resumen.
-5. Añade la página nueva a `sitemap.xml`.
-
-## Editar desde el navegador
-
-- **Un archivo:** ábrelo en GitHub, pulsa el lápiz ✏️, cambia y pulsa **Commit changes**. Se publica solo en un minuto.
-- **Varios archivos:** en la página del repositorio pulsa la tecla `.` (punto) para abrir el editor completo.
+1. Copia el contenido de `_plantilla-articulo.html`.
+2. **Add file → Create new file** y escribe como nombre `blog/nombre-del-articulo/index.html` (sin tildes ni espacios). Pega.
+3. Cambia título SEO, descripción, fecha, categoría, texto y los enlaces relacionados.
+   Borra la línea `<meta name="robots" content="noindex, follow">` y cambia el `canonical` por la nueva dirección.
+4. En `blog/index.html`, copia un bloque `<a class="post-card" …>…</a>`, pégalo el primero y cambia enlace, título y resumen.
+5. Añade la dirección a `sitemap.xml`.
