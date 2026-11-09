@@ -1,0 +1,17 @@
+# Redirecciones permanentes (301) de las URLs antiguas a la nueva arquitectura.
+# Formato de Netlify: origen  destino  código
+/automatizacion.html                /automatizacion/                      301
+/sistemas-comerciales.html          /sistemas-comerciales/                301
+/ia-aplicada.html                   /ia-aplicada/                         301
+/webs.html                          /webs/                                301
+/marketing.html                     /marketing/                           301
+/correo.html                        /correo/                              301
+/inox-brico.html                    /inox-brico/                          301
+/taxi-25-muro.html                  /taxi-25-muro/                        301
+/sobre-nosotros.html                /sobre-nosotros/                      301
+/filosofia.html                     /filosofia/                           301
+/blog.html                          /blog/                                301
+/senales-web-pierde-clientes.html   /blog/senales-web-pierde-clientes/    301
+/gracias.html                       /gracias/                             301
+/sectores                           /sectores/distribucion-suministro/    301
+/sectores/                          /sectores/distribucion-suministro/    301

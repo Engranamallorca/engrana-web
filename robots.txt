@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /_plantilla-articulo.html
-Disallow: /gracias.html
+Disallow: /gracias/
 
 Sitemap: https://www.engrana-mallorca.com/sitemap.xml
