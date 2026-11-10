@@ -762,3 +762,11 @@ h1 em,h2 em{color:#9A6D12}
 .card-img--plain svg{position:absolute;right:-30px;top:-30px;width:180px;height:180px;fill:none;stroke:rgba(245,243,236,.12);stroke-width:.4;transition:transform 1.2s var(--ease)}
 .card-img--plain .core{stroke:var(--gold)}
 .card:hover .card-img--plain svg{transform:rotate(30deg)}
+
+/* ---------- Ayuda de digitalización: enlace del menú y aviso de portada ---------- */
+.menu a.nav-ayuda{color:var(--gold)}
+.ay-pill{display:inline-flex;align-items:center;gap:10px;margin-bottom:28px;padding:7px 14px 7px 7px;border:1px solid rgba(220,162,46,.45);border-radius:40px;background:rgba(220,162,46,.08);color:var(--warm);font-size:.88rem;text-decoration:none;transition:background .3s,border-color .3s}
+.ay-pill:hover{background:rgba(220,162,46,.16);border-color:var(--gold)}
+.ay-pill b{font-family:var(--f-mono);font-weight:500;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;background:var(--gold);color:var(--carbon);padding:4px 9px;border-radius:40px}
+.ay-pill svg{width:14px;height:14px;flex:none;color:var(--gold)}
+@media (max-width:760px){.ay-pill{font-size:.8rem;align-items:flex-start;border-radius:14px}}
