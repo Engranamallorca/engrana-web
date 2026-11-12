@@ -12,6 +12,11 @@ const MENSAJE = "Hola, me dedico a: \nMi web o ficha de Google: \nMe gustaría m
 // 3) Google Analytics 4: pega aquí tu ID (empieza por G-). Vacío = desactivado.
 const GA4_ID = "";
 
+// 4) Fotografías reales. Sube la foto a la carpeta principal en .jpg y .webp
+//    (por ejemplo foto-almacen.jpg y foto-almacen.webp) y añade aquí su nombre:
+//    const FOTOS = ["foto-almacen"];
+const FOTOS = [];
+
 /* ---- A partir de aquí no hace falta tocar nada ---- */
 (function () {
   "use strict";
@@ -81,7 +86,12 @@ const GA4_ID = "";
       header.classList.toggle("is-scrolled", y > 30);
       header.classList.toggle("is-hidden", y > 500 && y > lastY && !d.body.classList.contains("menu-open"));
     }
-    if (!reduce) gears.forEach(function (g) { g.style.setProperty("--spin", (y * 0.25) + "deg"); });
+    // El engranaje avanza diente a diente (30 grados), no gira sin parar
+    if (!reduce) {
+      var notch = Math.round(y / 180) * 30;
+      gears.forEach(function (g) { g.style.setProperty("--spin", notch + "deg"); });
+      d.documentElement.style.setProperty("--sy", y.toFixed(0));
+    }
     parallax(y);
     lastY = y; ticking = false;
   }
@@ -153,6 +163,36 @@ const GA4_ID = "";
     }
     if (reduce) { paint(steps.length - 1); return; }
     whenVisible(flow, function () { if (!t) tick(); }, function () { clearTimeout(t); t = null; });
+  });
+
+  // Fotografías reales (ver FOTOS arriba)
+  d.querySelectorAll("[data-photo]").forEach(function (slot) {
+    var n = slot.getAttribute("data-photo");
+    if (FOTOS.indexOf(n) < 0) return;
+    slot.innerHTML = '<picture><source srcset="/' + n + '.webp" type="image/webp"><img src="/' + n + '.jpg" alt="' + (slot.getAttribute("data-alt") || "") + '" loading="lazy" decoding="async" width="1600" height="900"></picture>';
+    slot.classList.add("has-photo");
+  });
+
+  // Mecanismo: el engranaje hace avanzar el pedido paso a paso
+  d.querySelectorAll("[data-mech]").forEach(function (m) {
+    var steps = m.querySelectorAll(".mech-steps li"), i = 0, t = null;
+    function go(n) { i = n; m.style.setProperty("--step", n); steps.forEach(function (s, k) { s.classList.toggle("is-on", k === n); }); }
+    if (reduce) return;
+    whenVisible(m, function () { if (!t) t = setInterval(function () { go((i + 1) % steps.length); }, 2600); }, function () { clearInterval(t); t = null; });
+  });
+
+  // Búsquedas de ejemplo que se escriben solas
+  d.querySelectorAll("[data-type]").forEach(function (el) {
+    if (reduce) return;
+    var list = el.getAttribute("data-type").split("|"), w0 = 0, c = list[0].length, del = true, t = null;
+    function tick() {
+      var word = list[w0];
+      if (del) { c--; if (c <= 0) { del = false; w0 = (w0 + 1) % list.length; } }
+      else { c++; if (c >= list[w0].length) { del = true; el.textContent = list[w0]; t = setTimeout(tick, 2200); return; } }
+      el.textContent = list[w0].slice(0, Math.max(c, 0));
+      t = setTimeout(tick, del ? 28 : 62);
+    }
+    whenVisible(el, function () { if (!t) t = setTimeout(tick, 1800); }, function () { clearTimeout(t); t = null; });
   });
 
   // Demostración de IA (clasificar correos)

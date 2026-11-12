@@ -22,6 +22,7 @@ Cada página vive en su propia carpeta con un archivo `index.html`. Así las dir
 | `/filosofia/` | `filosofia/index.html` |
 | `/blog/` | `blog/index.html` |
 | `/blog/senales-web-pierde-clientes/` | `blog/senales-web-pierde-clientes/index.html` |
+| `/ayuda/` | `ayuda/index.html` (ayuda de digitalización 2027) |
 | `/contacto/` | `contacto/index.html` (el formulario) |
 | `/gracias/` | `gracias/index.html` |
 | — | `404.html` (página de error) |
@@ -40,12 +41,24 @@ Cada página vive en su propia carpeta con un archivo `index.html`. Así las dir
 - **Correo de contacto:** `main.js`, línea `const EMAIL = "..."`.
 - **Google Analytics 4:** `main.js`, línea `const GA4_ID = ""` → pega tu ID (`G-XXXXXXX`) entre las comillas.
 - **Colores:** `styles.css`, arriba del todo.
-- **Palabras en dorado y cursiva** en los títulos: van entre `<em>` y `</em>`.
+- **Palabras en cursiva** en los títulos: van entre `<em>` y `</em>`.
 
-## Foto de fondo de la portada (opcional)
+## Fotografías reales
 
-1. Sube una foto horizontal (mínimo 2000 px de ancho, menos de 400 KB) llamada `hero.jpg`.
-2. En `index.html`, busca `FOTO DE FONDO OPCIONAL` y borra `<!--` del principio de la nota y `-->` del final de la línea siguiente.
+La web tiene huecos preparados para fotos reales (almacén, oficina, equipo). Mientras no haya foto, el hueco no se ve.
+
+1. Prepara la foto en horizontal (1600 × 900 px) y guárdala en dos formatos con el mismo nombre: `foto-almacen.jpg` y `foto-almacen.webp`.
+2. Súbelas a la carpeta principal.
+3. En `main.js`, cambia `const FOTOS = [];` por `const FOTOS = ["foto-almacen"];`.
+
+Hueco disponible ahora: `foto-almacen` (portada, sección «Venimos de la distribución»).
+
+## Diseño (noviembre 2026)
+
+- Tipografías: **Archivo** (títulos y texto), **Newsreader** (cursivas entre `<em>`), **IBM Plex Mono** (datos).
+- El dorado solo se usa en el núcleo del engranaje y en pequeños acentos. Los botones son oscuros sobre fondo claro y claros sobre fondo oscuro.
+- Cada página lleva en `<body class="p-… t-…">` su nombre y su tono (`t-light`, `t-white`, `t-dark`, `t-carbon`, `t-blue`). Al crear una página nueva, copia el `<body>` de una parecida.
+- La capa de diseño actual está al final de `styles.css` («Dirección de arte v3»).
 
 ## Formulario de contacto
 
