@@ -15,3 +15,27 @@
 /gracias.html                       /gracias/                             301
 /sectores                           /sectores/distribucion-suministro/    301
 /sectores/                          /sectores/distribucion-suministro/    301
+
+# Imágenes retiradas en el rediseño de noviembre de 2026 (sustituidas por versiones anonimizadas)
+/inox-pipeline-ofertas.jpg          /img/inox-pipeline-comercial.jpg      301
+/inox-pipeline-ofertas.webp         /img/inox-pipeline-comercial.webp     301
+/inox-panel-hoy.jpg                 /img/inox-panel-comercial.jpg         301
+/inox-panel-hoy.webp                /img/inox-panel-comercial.webp        301
+/inox-completar-fichas.jpg          /img/inox-panel-comercial.jpg         301
+/inox-completar-fichas.webp         /img/inox-panel-comercial.webp        301
+/taxi25-admin.jpg                   /img/taxi25-administracion.jpg        301
+/taxi25-admin.webp                  /img/taxi25-administracion.webp       301
+/taxi25-inicio.jpg                  /img/taxi25-acceso.jpg                301
+/taxi25-inicio.webp                 /img/taxi25-acceso.webp               301
+/foto-almacen-fondo.jpg             /img/almacen-fertilizantes-baleares.jpg   301
+/foto-almacen-fondo.webp            /img/almacen-fertilizantes-baleares.webp  301
+/web-engrana.jpg                    /og-engrana.jpg                       301
+/web-engrana.webp                   /og-engrana.jpg                       301
+
+# Direcciones intuitivas que pueden escribirse a mano
+/proyectos                          /casos/                               301
+/proyectos/                         /casos/                               301
+/soluciones                         /servicios/                           301
+/soluciones/                        /servicios/                           301
+/distribucion                       /sectores/distribucion-suministro/    301
+/distribucion/                      /sectores/distribucion-suministro/    301
