@@ -6,47 +6,31 @@
 const EMAIL = "info@engrana-mallorca.com";
 
 // 2) Texto que aparece ya escrito cuando alguien pulsa "Escribir un correo".
-const ASUNTO = "Diagnóstico gratis para mi empresa";
-const MENSAJE = "Hola, me dedico a: \nMi web o ficha de Google: \nMe gustaría mejorar: \n";
+const ASUNTO = "Valoración para mi empresa";
+const MENSAJE = "Hola, me dedico a: \nCómo trabajamos hoy: \nMe gustaría mejorar: \n";
 
 // 3) Google Analytics 4: pega aquí tu ID (empieza por G-). Vacío = desactivado.
 const GA4_ID = "";
 
-// 4) Fotografías reales. Sube la foto a la carpeta principal en .jpg y .webp
-//    (por ejemplo foto-almacen.jpg y foto-almacen.webp) y añade aquí su nombre:
-//    const FOTOS = ["foto-almacen"];
-const FOTOS = [];
-
 /* ---- A partir de aquí no hace falta tocar nada ---- */
 (function () {
   "use strict";
-  var d = document, w = window;
+  var d = document, w = window, root = d.documentElement;
+  root.classList.add("js");
   var reduce = w.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var fine = w.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  var small = w.matchMedia("(max-width: 760px)").matches;
+  var small = w.matchMedia("(max-width: 980px)");
 
   // Analítica: GA4 (si hay ID) y eventos de conversión
   if (GA4_ID && w.gtag) gtag("config", GA4_ID);
   function track(name, params) { try { if (w.gtag) gtag("event", name, Object.assign({ page_path: location.pathname }, params || {})); } catch (e) {} }
-
-  // Formulario de diagnóstico: servicio de origen y evento al enviar
-  var form = d.querySelector('form[name="diagnostico"]');
-  if (form) {
-    var qs = new URLSearchParams(location.search);
-    var srv = form.querySelector('[name="servicio"]'), org = form.querySelector('[name="pagina-origen"]');
-    if (srv) srv.value = qs.get("servicio") || "";
-    if (org) { try { org.value = d.referrer ? new URL(d.referrer).pathname : "directo"; } catch (e) { org.value = ""; } }
-    form.addEventListener("submit", function () {
-      track("generate_lead", { form_name: "diagnostico", servicio: srv ? srv.value : "", transport_type: "beacon" });
-    });
-  }
 
   // Correo, año y copiar
   var mailto = "mailto:" + EMAIL + "?subject=" + encodeURIComponent(ASUNTO) + "&body=" + encodeURIComponent(MENSAJE);
   d.querySelectorAll("[data-email]").forEach(function (el) { el.textContent = EMAIL; if (el.tagName === "A") el.href = "mailto:" + EMAIL; });
   d.querySelectorAll("[data-mailto]").forEach(function (el) { el.href = mailto; });
   d.addEventListener("click", function (e) {
-    var a = e.target.closest('a[href^="mailto:"]');
+    var a = e.target.closest && e.target.closest('a[href^="mailto:"]');
     if (a) track("contact_email_click", { transport_type: "beacon" });
   });
   d.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
@@ -59,56 +43,69 @@ const FOTOS = [];
     });
   });
 
-  // Menú del móvil
+  // Menú: submenús accesibles (clic, teclado y Escape) y panel en el móvil
   var burger = d.querySelector(".burger"), menu = d.querySelector(".menu");
-  if (burger && menu) {
-    burger.addEventListener("click", function () {
-      var open = menu.classList.toggle("open");
-      burger.setAttribute("aria-expanded", open);
-      d.body.classList.toggle("menu-open", open);
-    });
-    menu.addEventListener("click", function (e) {
-      if (e.target.closest("a") && menu.classList.contains("open")) {
-        menu.classList.remove("open"); burger.setAttribute("aria-expanded", false); d.body.classList.remove("menu-open");
-      }
-    });
+  var subs = d.querySelectorAll(".menu > li.has-sub");
+  function closeSubs(except) {
+    subs.forEach(function (li) { if (li !== except) { li.classList.remove("is-open"); var b = li.querySelector("button"); if (b) b.setAttribute("aria-expanded", "false"); } });
   }
+  subs.forEach(function (li) {
+    var b = li.querySelector("button"), t = null;
+    b.addEventListener("click", function () {
+      var open = !li.classList.contains("is-open");
+      closeSubs(li); li.classList.toggle("is-open", open); b.setAttribute("aria-expanded", open);
+    });
+    if (fine) {
+      li.addEventListener("pointerenter", function () { if (small.matches) return; clearTimeout(t); closeSubs(li); li.classList.add("is-open"); b.setAttribute("aria-expanded", "true"); });
+      li.addEventListener("pointerleave", function () { if (small.matches) return; t = setTimeout(function () { li.classList.remove("is-open"); b.setAttribute("aria-expanded", "false"); }, 160); });
+    }
+    li.addEventListener("focusout", function (e) { if (!small.matches && !li.contains(e.relatedTarget)) { li.classList.remove("is-open"); b.setAttribute("aria-expanded", "false"); } });
+  });
+  function setMenu(open) {
+    if (!menu || !burger) return;
+    menu.classList.toggle("open", open);
+    burger.setAttribute("aria-expanded", open);
+    burger.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
+    d.body.classList.toggle("menu-open", open);
+    if (!open) closeSubs();
+  }
+  if (burger && menu) {
+    menu.querySelectorAll(":scope > li").forEach(function (li, i) { li.style.setProperty("--i", i); });
+    burger.addEventListener("click", function () { setMenu(!menu.classList.contains("open")); });
+    menu.addEventListener("click", function (e) { if (e.target.closest("a") && menu.classList.contains("open")) setMenu(false); });
+  }
+  d.addEventListener("keydown", function (e) { if (e.key === "Escape") { closeSubs(); if (menu && menu.classList.contains("open")) { setMenu(false); burger.focus(); } } });
+  d.addEventListener("click", function (e) { if (!e.target.closest(".menu")) closeSubs(); });
 
   // Entrada de la primera pantalla
-  requestAnimationFrame(function () { requestAnimationFrame(function () { d.documentElement.classList.add("is-ready"); }); });
+  requestAnimationFrame(function () { requestAnimationFrame(function () { root.classList.add("is-ready"); }); });
 
-  // Cabecera al hacer scroll + engranaje del logo que gira
-  var header = d.querySelector(".site-header"), gears = d.querySelectorAll(".logo .gear");
+  // Cabecera al hacer scroll + engranajes que avanzan diente a diente (30°)
+  var header = d.querySelector(".site-header"), gears = d.querySelectorAll(".logo .gear, .cta-gear .g");
+  var depth = (!reduce && fine) ? d.querySelectorAll("[data-depth]") : [];
   var lastY = 0, ticking = false;
   function onScroll() {
     var y = w.scrollY;
     if (header) {
-      header.classList.toggle("is-scrolled", y > 30);
-      header.classList.toggle("is-hidden", y > 500 && y > lastY && !d.body.classList.contains("menu-open"));
+      header.classList.toggle("is-scrolled", y > 8);
+      header.classList.toggle("is-hidden", y > 520 && y > lastY + 4 && !d.body.classList.contains("menu-open") && !d.querySelector(".menu li.is-open"));
+      if (y < lastY - 4) header.classList.remove("is-hidden");
     }
-    // El engranaje avanza diente a diente (30 grados), no gira sin parar
     if (!reduce) {
-      var notch = Math.round(y / 180) * 30;
+      var notch = Math.round(y / 160) * 30;
       gears.forEach(function (g) { g.style.setProperty("--spin", notch + "deg"); });
-      d.documentElement.style.setProperty("--sy", y.toFixed(0));
+      depth.forEach(function (el) {
+        var r = el.getBoundingClientRect(), k = parseFloat(el.getAttribute("data-depth")) || 0.08;
+        el.style.transform = "translate3d(0," + ((r.top + r.height / 2 - w.innerHeight / 2) * -k).toFixed(1) + "px,0)";
+      });
     }
-    parallax(y);
     lastY = y; ticking = false;
   }
   w.addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
-
-  // Profundidad suave (solo ordenador)
-  var depth = (!reduce && !small) ? d.querySelectorAll("[data-depth]") : [];
-  function parallax(y) {
-    depth.forEach(function (el) {
-      var k = parseFloat(el.getAttribute("data-depth")) || 0.1;
-      el.style.transform = "translate3d(0," + (y * k).toFixed(1) + "px,0)";
-    });
-  }
   onScroll();
 
   // Aparición al desplazarse
-  var reveal = d.querySelectorAll("[data-r],[data-mask]");
+  var reveal = d.querySelectorAll("[data-r],.reveal-img");
   if ("IntersectionObserver" in w && !reduce) {
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } });
@@ -116,7 +113,22 @@ const FOTOS = [];
     reveal.forEach(function (el) { io.observe(el); });
   } else reveal.forEach(function (el) { el.classList.add("is-in"); });
 
-  // Inclinación con el ratón
+  // Método: el engranaje gira un diente por cada paso que se lee
+  d.querySelectorAll("[data-method]").forEach(function (m) {
+    var steps = m.querySelectorAll(".steps li"), gear = m.querySelector(".method-gear");
+    if (reduce || !("IntersectionObserver" in w)) { m.querySelector(".steps").classList.add("is-static"); return; }
+    var mo = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var n = Array.prototype.indexOf.call(steps, e.target);
+        steps.forEach(function (s, k) { s.classList.toggle("is-active", k <= n); });
+        if (gear) gear.style.setProperty("--turn", (n + 1) * 60 + "deg");
+      });
+    }, { rootMargin: "-45% 0px -45% 0px" });
+    steps.forEach(function (s) { mo.observe(s); });
+  });
+
+  // Inclinación suave con el ratón (solo ordenador)
   if (fine && !reduce) {
     d.querySelectorAll("[data-tilt]").forEach(function (el) {
       var area = el.closest("[data-tilt-area]") || el;
@@ -135,94 +147,57 @@ const FOTOS = [];
     new IntersectionObserver(function (es) { es.forEach(function (e) { e.isIntersecting ? start() : stop(); }); }, { threshold: 0.25 }).observe(el);
   }
 
-  // Demostración de automatización
+  // Demostración de una solicitud que avanza (datos de ejemplo)
   d.querySelectorAll("[data-flow]").forEach(function (flow) {
-    var steps = flow.querySelectorAll(".flow-step"), bar = flow.querySelector(".flow-progress"), log = d.querySelector(flow.getAttribute("data-log"));
+    var steps = flow.querySelectorAll(".flow-step"), bar = flow.querySelector(".flow-progress");
     var i = -1, t = null;
     function paint(n) {
       steps.forEach(function (s, k) {
         s.classList.toggle("is-done", k < n);
         s.classList.toggle("is-on", k === n);
-        var st = s.querySelector(".st"); if (st) st.textContent = k < n ? "Completado" : (k === n ? "En curso" : "En espera");
+        var st = s.querySelector(".st"); if (st) st.textContent = k < n ? "Hecho" : (k === n ? "En curso" : "En espera");
       });
-      if (bar && steps[n]) {
-        var first = steps[0].offsetTop + 30, cur = steps[n].offsetTop + 30;
-        bar.style.top = first + "px"; bar.style.height = Math.max(0, cur - first) + "px";
-      }
-      if (log && steps[n]) {
-        var line = d.createElement("div");
-        line.innerHTML = "<b>" + steps[n].querySelector("time").textContent + "</b> · " + steps[n].getAttribute("data-log-line");
-        log.appendChild(line);
-        while (log.children.length > 4) log.removeChild(log.firstChild);
-      }
+      if (bar && steps[n]) bar.style.height = (steps[n].offsetTop + 12) + "px";
     }
     function tick() {
       i++;
-      if (i >= steps.length) { i = -1; if (log) log.innerHTML = ""; steps.forEach(function (s) { s.classList.remove("is-on", "is-done"); }); if (bar) bar.style.height = 0; t = setTimeout(tick, 900); return; }
+      if (i >= steps.length) { i = -1; steps.forEach(function (s) { s.classList.remove("is-on", "is-done"); var st = s.querySelector(".st"); if (st) st.textContent = "En espera"; }); if (bar) bar.style.height = 0; t = setTimeout(tick, 900); return; }
       paint(i); t = setTimeout(tick, i === steps.length - 1 ? 3400 : 1900);
     }
     if (reduce) { paint(steps.length - 1); return; }
     whenVisible(flow, function () { if (!t) tick(); }, function () { clearTimeout(t); t = null; });
   });
 
-  // Fotografías reales (ver FOTOS arriba)
-  d.querySelectorAll("[data-photo]").forEach(function (slot) {
-    var n = slot.getAttribute("data-photo");
-    if (FOTOS.indexOf(n) < 0) return;
-    slot.innerHTML = '<picture><source srcset="/' + n + '.webp" type="image/webp"><img src="/' + n + '.jpg" alt="' + (slot.getAttribute("data-alt") || "") + '" loading="lazy" decoding="async" width="1600" height="900"></picture>';
-    slot.classList.add("has-photo");
-  });
-
-  // Mecanismo: el engranaje hace avanzar el pedido paso a paso
-  d.querySelectorAll("[data-mech]").forEach(function (m) {
-    var steps = m.querySelectorAll(".mech-steps li"), i = 0, t = null;
-    function go(n) { i = n; m.style.setProperty("--step", n); steps.forEach(function (s, k) { s.classList.toggle("is-on", k === n); }); }
-    if (reduce) return;
-    whenVisible(m, function () { if (!t) t = setInterval(function () { go((i + 1) % steps.length); }, 2600); }, function () { clearInterval(t); t = null; });
-  });
-
-  // Búsquedas de ejemplo que se escriben solas
-  d.querySelectorAll("[data-type]").forEach(function (el) {
-    if (reduce) return;
-    var list = el.getAttribute("data-type").split("|"), w0 = 0, c = list[0].length, del = true, t = null;
-    function tick() {
-      var word = list[w0];
-      if (del) { c--; if (c <= 0) { del = false; w0 = (w0 + 1) % list.length; } }
-      else { c++; if (c >= list[w0].length) { del = true; el.textContent = list[w0]; t = setTimeout(tick, 2200); return; } }
-      el.textContent = list[w0].slice(0, Math.max(c, 0));
-      t = setTimeout(tick, del ? 28 : 62);
+  // Formularios: validación clara antes de enviar, origen del contacto y evento de conversión
+  d.querySelectorAll("form[data-netlify]").forEach(function (form) {
+    form.setAttribute("novalidate", "");
+    var qs = new URLSearchParams(location.search);
+    var srv = form.querySelector('[name="servicio"]'), org = form.querySelector('[name="pagina-origen"]');
+    if (srv) srv.value = qs.get("servicio") || "";
+    if (org) { try { org.value = d.referrer ? new URL(d.referrer).pathname : "directo"; } catch (e) { org.value = ""; } }
+    var msgs = { valueMissing: "Este campo es necesario.", typeMismatch: "Revisa el formato (por ejemplo, nombre@empresa.com).", tooShort: "Cuéntanos un poco más, por favor." };
+    function check(f) {
+      var old = f.parentNode.querySelector(".err"); if (old) old.remove();
+      f.classList.remove("is-invalid"); f.removeAttribute("aria-invalid");
+      if (f.validity.valid) return true;
+      var key = Object.keys(msgs).filter(function (k) { return f.validity[k]; })[0];
+      var e = d.createElement("span"); e.className = "err"; e.id = (f.id || f.name) + "-err"; e.textContent = msgs[key] || "Revisa este campo.";
+      f.classList.add("is-invalid"); f.setAttribute("aria-invalid", "true"); f.setAttribute("aria-describedby", e.id);
+      (f.type === "checkbox" ? f.closest("label") : f).insertAdjacentElement("afterend", e);
+      return false;
     }
-    whenVisible(el, function () { if (!t) t = setTimeout(tick, 1800); }, function () { clearTimeout(t); t = null; });
-  });
-
-  // Demostración de IA (clasificar correos)
-  d.querySelectorAll("[data-ai]").forEach(function (box) {
-    var mails = box.querySelectorAll(".ai-mail"), reply = box.querySelector(".ai-reply"), i = 0, t = null;
-    function reset() { mails.forEach(function (m) { m.classList.remove("is-done", "is-busy"); }); if (reply) reply.classList.remove("is-in"); i = 0; }
-    function tick() {
-      if (i < mails.length) {
-        var m = mails[i]; m.classList.add("is-busy");
-        t = setTimeout(function () { m.classList.remove("is-busy"); m.classList.add("is-done"); i++; t = setTimeout(tick, 500); }, 1100);
-      } else if (reply && !reply.classList.contains("is-in")) { reply.classList.add("is-in"); t = setTimeout(tick, 4200); }
-      else { reset(); t = setTimeout(tick, 700); }
-    }
-    if (reduce) { mails.forEach(function (m) { m.classList.add("is-done"); }); if (reply) reply.classList.add("is-in"); return; }
-    whenVisible(box, function () { if (!t) tick(); }, function () { clearTimeout(t); t = null; });
-  });
-
-  // Móvil de Taxi 25: dos pantallas que se alternan
-  d.querySelectorAll("[data-tx]").forEach(function (stage) {
-    var shots = stage.querySelectorAll(".tx-shot"), tabs = stage.querySelectorAll("[data-go]");
-    var TIME = 5500, cur = 0, timer = null;
-    stage.style.setProperty("--tx-time", TIME / 1000 + "s");
-    function show(n) {
-      cur = n;
-      shots.forEach(function (s, k) { s.classList.toggle("is-on", k === n); });
-      tabs.forEach(function (b, k) { b.classList.remove("is-on"); b.setAttribute("aria-selected", k === n); if (k === n) { void b.offsetWidth; b.classList.add("is-on"); } });
-    }
-    function play() { clearInterval(timer); if (!reduce) timer = setInterval(function () { show((cur + 1) % shots.length); }, TIME); }
-    tabs.forEach(function (b) { b.addEventListener("click", function () { show(+b.getAttribute("data-go")); play(); }); });
-    whenVisible(stage, function () { stage.classList.remove("is-paused"); play(); }, function () { stage.classList.add("is-paused"); clearInterval(timer); });
+    form.querySelectorAll("input,select,textarea").forEach(function (f) {
+      if (f.type === "hidden" || f.closest(".hp")) return;
+      f.addEventListener("blur", function () { if (f.value || f.classList.contains("is-invalid")) check(f); });
+      f.addEventListener("input", function () { if (f.classList.contains("is-invalid")) check(f); });
+    });
+    form.addEventListener("submit", function (ev) {
+      var bad = null;
+      form.querySelectorAll("input,select,textarea").forEach(function (f) { if (f.type === "hidden" || f.closest(".hp")) return; if (!check(f) && !bad) bad = f; });
+      if (bad) { ev.preventDefault(); bad.focus(); return; }
+      var b = form.querySelector('[type="submit"]'); if (b) b.setAttribute("aria-busy", "true");
+      track("generate_lead", { form_name: form.getAttribute("name"), servicio: srv ? srv.value : "", transport_type: "beacon" });
+    });
   });
 
   // Aviso de cookies (necesario para la etiqueta de Google Ads)
@@ -232,9 +207,9 @@ const FOTOS = [];
     if (elegido) return;
     var aviso = d.createElement("div");
     aviso.className = "cookies";
-    aviso.setAttribute("role", "dialog");
+    aviso.setAttribute("role", "region");
     aviso.setAttribute("aria-label", "Aviso de cookies");
-    aviso.innerHTML = '<p>Usamos cookies de Google para saber qué anuncios funcionan. ¿Nos dejas?</p>' +
+    aviso.innerHTML = '<p>Usamos cookies de Google para medir qué anuncios funcionan. Solo se activan si las aceptas.</p>' +
       '<div><button type="button" data-c="no">Rechazar</button><button type="button" data-c="si">Aceptar</button></div>';
     d.body.appendChild(aviso);
     aviso.addEventListener("click", function (e) {

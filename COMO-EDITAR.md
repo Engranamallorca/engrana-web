@@ -32,45 +32,44 @@ Cada página vive en su propia carpeta con un archivo `index.html`. Así las dir
 
 ## Reglas importantes
 
-- **Enlaces e imágenes siempre empiezan por `/`**: `href="/contacto/"`, `src="/filosofia-02.jpg"`.
+- **Enlaces e imágenes siempre empiezan por `/`**: `href="/contacto/"`, `src="/img/taxi25-acceso.jpg"`.
+- **Imágenes de proyectos:** están en `/img/`, en `.webp` y `.jpg` y en dos o más tamaños. Son copias **anonimizadas**:
+  nunca subas capturas originales con nombres de clientes, personas, importes o referencias.
 - **No borres `_redirects`**: hace que las direcciones antiguas (`/webs.html`…) sigan funcionando.
 - **Página nueva** = carpeta nueva con su `index.html` + añadirla a `sitemap.xml`.
 
 ## Cambios rápidos
 
 - **Correo de contacto:** `main.js`, línea `const EMAIL = "..."`.
+- **Google Ads (AW-18540834573):** está en el `<head>` de cada página con modo de consentimiento. No lo dupliques.
 - **Google Analytics 4:** `main.js`, línea `const GA4_ID = ""` → pega tu ID (`G-XXXXXXX`) entre las comillas.
 - **Colores:** `styles.css`, arriba del todo.
 - **Palabras en cursiva** en los títulos: van entre `<em>` y `</em>`.
 
 ## Fotografías reales
 
-La web tiene huecos preparados para fotos reales (almacén, oficina, equipo). Mientras no haya foto, el hueco no se ve.
+La fotografía del almacén (`/img/almacen-fertilizantes-baleares.*`) es real: matrícula y rostros difuminados.
+Se usa como contexto del sector, **no** como proyecto de cliente; mantén esa aclaración en los pies de foto.
 
-1. Prepara la foto en horizontal (1600 × 900 px) y guárdala en dos formatos con el mismo nombre: `foto-almacen.jpg` y `foto-almacen.webp`.
-2. Súbelas a la carpeta principal.
-3. En `main.js`, cambia `const FOTOS = [];` por `const FOTOS = ["foto-almacen"];`.
+## Diseño (v4, noviembre 2026)
 
-Hueco disponible ahora: `foto-almacen` (portada, sección «Venimos de la distribución»).
-
-## Diseño (noviembre 2026)
-
-- Tipografías: **Archivo** (títulos y texto), **Newsreader** (cursivas entre `<em>`), **IBM Plex Mono** (datos).
-- El dorado solo se usa en el núcleo del engranaje y en pequeños acentos. Los botones son oscuros sobre fondo claro y claros sobre fondo oscuro.
-- Cada página lleva en `<body class="p-… t-…">` su nombre y su tono (`t-light`, `t-white`, `t-dark`, `t-carbon`, `t-blue`). Al crear una página nueva, copia el `<body>` de una parecida.
-- La capa de diseño actual está al final de `styles.css` («Dirección de arte v3»).
+- Tipografías: **Bricolage Grotesque** (títulos, la misma familia que el logotipo), **Instrument Sans** (texto) e **IBM Plex Mono** (etiquetas y datos).
+- Colores en `styles.css`, arriba del todo: verde `#103D33`, verde oscuro `#082820`, dorado `#E5A52F` (solo acentos), blanco cálido `#F5F3EC`.
+- Secciones: `sec` (papel), `sec sec--paper2` (papel más oscuro), `sec on-dark` / `on-deep` (verde). Para que algo aparezca al bajar, añade `data-r`.
+- La segunda parte de un titular en gris va en `<span class="soft">…</span>`.
+- Cambios de página con transición suave (View Transitions) y todas las animaciones se desactivan si el visitante lo pide en su sistema.
 
 ## Formulario de contacto
 
 Está en `/contacto/`. Los botones de cada página llevan a él indicando el servicio
-(`/contacto/?servicio=automatizacion`), y cada solicitud que llega a Netlify (Forms → diagnostico)
+(`/contacto/?servicio=automatizacion`), y cada solicitud que llega a Netlify (Forms → diagnostico). El formulario de `/ayuda/` llega como `ayuda-digitalizacion`. Ambos validan los campos antes de enviar y tienen campo trampa contra spam
 dice desde qué servicio y qué página vino.
 
 ## Publicar la frase de la semana (Filosofía)
 
 1. Sube la imagen a la carpeta principal con el nombre `filosofia-02.jpg` (la siguiente, `filosofia-03.jpg`…).
 2. Abre `filosofia/index.html` y pulsa el lápiz ✏️.
-3. Copia un bloque `<article class="idea"> … </article>` y pégalo **encima** del anterior.
+3. Copia un bloque `<article class="idea" …> … </article>` y pégalo **encima** del anterior.
 4. Cambia: `id="idea-02"`, número, fecha, imagen (`src="/filosofia-02.jpg"`), frase (también en `alt`), traducción y significado.
 5. **Commit changes.**
 
@@ -80,5 +79,10 @@ dice desde qué servicio y qué página vino.
 2. **Add file → Create new file** y escribe como nombre `blog/nombre-del-articulo/index.html` (sin tildes ni espacios). Pega.
 3. Cambia título SEO, descripción, fecha, categoría, texto y los enlaces relacionados.
    Borra la línea `<meta name="robots" content="noindex, follow">` y cambia el `canonical` por la nueva dirección.
-4. En `blog/index.html`, copia un bloque `<a class="post-card" …>…</a>`, pégalo el primero y cambia enlace, título y resumen.
+4. En `blog/index.html`, copia un bloque `<a class="post" …>…</a>`, pégalo el primero y cambia enlace, título y resumen.
 5. Añade la dirección a `sitemap.xml`.
+
+## Archivos de Netlify
+
+- `_redirects`: redirecciones 301 (URLs antiguas `.html`, imágenes retiradas y atajos como `/proyectos`).
+- `_headers`: cabeceras de seguridad y caché de imágenes.
