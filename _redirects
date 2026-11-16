@@ -39,3 +39,10 @@
 /soluciones/                        /servicios/                           301
 /distribucion                       /sectores/distribucion-suministro/    301
 /distribucion/                      /sectores/distribucion-suministro/    301
+
+# Diagnóstico de automatización
+/diagnostico                        /diagnostico/                         301
+# Carpetas internas que no deben servirse como páginas públicas
+/netlify/*                          /404.html                             404!
+/tests/*                            /404.html                             404!
+/docs/*                             /404.html                             404!
