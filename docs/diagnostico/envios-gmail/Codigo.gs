@@ -589,14 +589,30 @@ var SECTORES = ["Distribución y suministros", "Industria y fabricación", "Cons
 
 function doGet() {
   asegurarHojas_();
-  return HtmlService.createHtmlOutputFromFile("Panel")
+  return panelHtml_()
     .setTitle("Panel de envíos · Engrana")
     .addMetaTag("viewport", "width=device-width, initial-scale=1");
 }
 
+/** Carga Panel.html aunque el nombre tenga pequeñas variaciones; si no existe, explica cómo crearlo. */
+function panelHtml_() {
+  var nombres = ["Panel", "panel", "Panel.html", "PANEL", "Panel ", "Pagina", "Página"];
+  for (var i = 0; i < nombres.length; i++) {
+    try { return HtmlService.createHtmlOutputFromFile(nombres[i]); } catch (e) {}
+  }
+  return HtmlService.createHtmlOutput(
+    '<div style="font-family:Arial,sans-serif;max-width:620px;margin:40px auto;line-height:1.6;color:#17231F">' +
+    '<h2 style="color:#173F34">Falta el archivo «Panel»</h2>' +
+    '<p>El script no encuentra el archivo HTML del panel. Para arreglarlo:</p><ol>' +
+    '<li>En el editor de Apps Script, pulsa <b>＋ → HTML</b>.</li>' +
+    '<li>Escribe como nombre solo <b>Panel</b> (sin «.html»: lo añade Google). Debe verse como <b>Panel.html</b> en la lista.</li>' +
+    '<li>Pega dentro todo el contenido del archivo Panel.html y guarda.</li>' +
+    '<li>Si lo abres como aplicación web: <b>Implementar → Gestionar implementaciones → ✏️ → Versión: Nueva versión → Implementar</b>.</li></ol></div>');
+}
+
 function abrirPanel() {
   asegurarHojas_();
-  var html = HtmlService.createHtmlOutputFromFile("Panel").setWidth(1280).setHeight(820);
+  var html = panelHtml_().setWidth(1280).setHeight(820);
   SpreadsheetApp.getUi().showModalDialog(html, "Panel de envíos · Engrana");
 }
 
