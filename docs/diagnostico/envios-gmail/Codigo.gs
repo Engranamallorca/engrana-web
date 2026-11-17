@@ -56,6 +56,7 @@ var CONFIG_POR_DEFECTO = [
   ["Modo prueba", "SI", "SI = todo va al Email de prueba y no se marca nada como enviado. Ponlo en NO para enviar de verdad."],
   ["Email de prueba", "info@engrana-mallorca.com", "Dónde llegan los correos en modo prueba."],
   ["Firma", "Un saludo,\nEngrana\ninfo@engrana-mallorca.com\nwww.engrana-mallorca.com", ""],
+  ["Avisarme a", "info@engrana-mallorca.com", "Te llega un correo en cuanto alguien hace el test o pide la revisión. Déjalo vacío para no recibir avisos."],
   ["Texto de baja", "Si prefieres no recibir más correos nuestros, responde a este mensaje con la palabra BAJA.", "Se añade al final de cada correo."]
 ];
 
@@ -139,6 +140,9 @@ function asegurarHojas_() {
     cf.getRange(2, 2, CONFIG_POR_DEFECTO.length, 1).setWrap(true);
   }
 
+  var claves = cf.getRange(1, 1, Math.max(1, cf.getLastRow()), 1).getValues().map(function (r) { return String(r[0]).trim(); });
+  CONFIG_POR_DEFECTO.forEach(function (fila) { if (claves.indexOf(fila[0]) === -1) cf.appendRow(fila); });
+
   var b = ss.getSheetByName(HOJA_BAJAS) || ss.insertSheet(HOJA_BAJAS);
   if (b.getLastRow() === 0) { b.appendRow(["Email", "Fecha", "Motivo"]); b.getRange(1, 1, 1, 3).setFontWeight("bold"); }
 
@@ -183,7 +187,8 @@ function leerConfig_() {
     modoPrueba: si(m["Modo prueba"]),
     emailPrueba: String(m["Email de prueba"] || "").trim(),
     firma: String(m["Firma"] || ""),
-    textoBaja: String(m["Texto de baja"] || "")
+    textoBaja: String(m["Texto de baja"] || ""),
+    avisarA: String(m["Avisarme a"] === undefined ? "info@engrana-mallorca.com" : m["Avisarme a"]).trim()
   };
 }
 
@@ -859,11 +864,12 @@ function panelGuardarConfig(n) {
     "Hora de inicio": Number(n.horaInicio), "Hora de fin": Number(n.horaFin),
     "Solo días laborables": n.soloLaborables ? "SI" : "NO", "Exigir permiso": n.exigirPermiso ? "SI" : "NO",
     "Seguimiento automático": n.seguimiento ? "SI" : "NO", "Modo prueba": n.modoPrueba ? "SI" : "NO",
-    "Email de prueba": n.emailPrueba, "Firma": n.firma, "Texto de baja": n.textoBaja
+    "Email de prueba": n.emailPrueba, "Firma": n.firma, "Texto de baja": n.textoBaja, "Avisarme a": n.avisarA
   };
   if (!(mapa["Hora de inicio"] >= 0 && mapa["Hora de fin"] <= 24 && mapa["Hora de inicio"] < mapa["Hora de fin"])) throw new Error("Revisa el horario.");
   if (!(mapa["Límite diario"] > 0) || !(mapa["Envíos por ejecución"] > 0)) throw new Error("Los límites deben ser mayores que 0.");
   if (!esEmail_(mapa["Email de prueba"])) throw new Error("El email de prueba no es válido.");
+  if (mapa["Avisarme a"] && !esEmail_(mapa["Avisarme a"])) throw new Error("El correo de «Avisarme a» no es válido.");
   var h = SpreadsheetApp.getActive().getSheetByName(HOJA_CONFIG), datos = h.getDataRange().getValues();
   for (var i = 1; i < datos.length; i++) {
     var k = String(datos[i][0]).trim();
@@ -981,8 +987,13 @@ function doPost(e) {
         cambios["Resultado del test"] = Math.max(0, Math.min(100, Number(d.porcentaje) || 0)) + " % · " +
           String(d.nivel || "").slice(0, 80) + (d.oportunidad ? " · " + String(d.oportunidad).slice(0, 160) : "");
       }
+      var primeraVez = d.evento === "completado" && !f.valores["Hizo el test"];
       if (Object.keys(cambios).length) {
         escribir_(c, f, cambios);
+        if (primeraVez) avisarme_("✅ " + (f.valores["Empresa"] || f.valores["Email"]) + " ha hecho el diagnóstico (" + cambios["Resultado del test"].split(" · ")[0] + ")", [
+          ["Empresa", f.valores["Empresa"]], ["Contacto", [f.valores["Nombre"], f.valores["Cargo"]].filter(String).join(" · ")],
+          ["Correo", f.valores["Email"]], ["Resultado", cambios["Resultado del test"]], ["Referencia", d.ref]],
+          "Todavía no ha pedido la revisión. Es buen momento para escribirle o llamarle.");
         var etiqueta = { abierto: "Abrió el enlace", iniciado: "Empezó el test", completado: "Hizo el test" }[d.evento] || d.evento;
         registrar_(f.fila, f.valores["Email"], etiqueta, d.evento === "completado" ? cambios["Resultado del test"] : (d.ref || ""));
       }
@@ -1008,6 +1019,12 @@ function doPost(e) {
         if (!fila.valores["Resultado del test"]) cam["Resultado del test"] = lim(d.indice_porcentaje, 10) + " · " + lim(d.nivel, 80);
         escribir_(c, fila, cam);
       }
+      avisarme_("⭐ Nueva solicitud de revisión: " + lim(d.empresa, 80), [
+        ["Empresa", lim(d.empresa, 160)], ["Nombre", lim(d.nombre, 120)], ["Cargo", lim(d.cargo, 120)], ["Correo", lim(d.correo, 160)],
+        ["Teléfono", lim(d.telefono, 30)], ["Sector", lim(d.sector, 80)], ["Tamaño", lim(d.tamano_equipo, 40)],
+        ["Resultado", lim(d.indice_porcentaje, 10) + " · " + lim(d.nivel, 120)], ["Oportunidad", lim(d.oportunidad_principal, 300)],
+        ["Recomendaciones", lim(d.recomendaciones, 500)], ["Origen", ref ? "Correo del panel (" + ref + ")" : "Web u otro enlace"]],
+        "Ha pedido que revises su diagnóstico contigo. Las 8 respuestas están en la pestaña «Solicitudes web» y en Netlify → Forms.");
       registrar_(fila ? fila.fila : "", lim(d.correo, 160), "Pidió revisión", lim(d.empresa, 160) + (ref ? " · " + ref : " · llegó sin enlace del panel"));
       return respuesta_("ok");
     }
@@ -1027,4 +1044,25 @@ function panelSolicitudes() {
     return { recibido: iso_(r[0]), ref: String(r[1]), empresa: String(r[2]), nombre: String(r[3]), correo: String(r[4]), cargo: String(r[5]),
              telefono: String(r[6]), indice: String(r[10]), nivel: String(r[11]), oportunidad: String(r[12]) };
   });
+}
+
+
+/** Envía un aviso a «Avisarme a» (si está configurado). Nunca rompe la recepción si falla. */
+function avisarme_(asunto, filas, nota) {
+  try {
+    var cfg = leerConfig_();
+    if (!cfg.avisarA || !esEmail_(cfg.avisarA)) return;
+    var html = '<div style="font-family:Arial,sans-serif;font-size:14px;color:#17231F;max-width:560px">' +
+      '<p style="font-size:16px;font-weight:bold;color:#173F34;margin:0 0 12px">' + escaparHtml_(asunto) + '</p>' +
+      '<table style="border-collapse:collapse;width:100%">' + filas.filter(function (x) { return x[1]; }).map(function (x) {
+        return '<tr><td style="padding:6px 10px 6px 0;color:#65736D;vertical-align:top;white-space:nowrap">' + escaparHtml_(x[0]) +
+          '</td><td style="padding:6px 0;border-bottom:1px solid #E3EAE5">' + escaparHtml_(x[1]) + '</td></tr>';
+      }).join("") + '</table>' +
+      (nota ? '<p style="margin:16px 0 0;color:#286B54;font-weight:bold">' + escaparHtml_(nota) + '</p>' : '') +
+      '<p style="margin:18px 0 0;font-size:12px;color:#65736D">Aviso automático del panel de envíos de Engrana.</p></div>';
+    var texto = asunto + "\n\n" + filas.filter(function (x) { return x[1]; }).map(function (x) { return x[0] + ": " + x[1]; }).join("\n") + (nota ? "\n\n" + nota : "");
+    MailApp.sendEmail({ to: cfg.avisarA, subject: asunto, body: texto, htmlBody: html, name: "Panel Engrana" });
+  } catch (e) {
+    registrar_("", "", "Error de aviso", e.message);
+  }
 }

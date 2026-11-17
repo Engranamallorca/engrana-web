@@ -344,6 +344,7 @@ details.more button.r:hover{background:var(--red-sf);color:var(--red)}
       <div class="form">
         <div class="f full"><label class="check" style="background:var(--amber-sf)"><input type="checkbox" name="modoPrueba"><span><b>Modo prueba</b><span>Todo llega al email de prueba y no se marca nada como enviado. Desactívalo para enviar de verdad.</span></span></label></div>
         <div class="f"><label>Email de prueba</label><input name="emailPrueba" type="email"></div>
+        <div class="f"><label>Avisarme a <small>(cuando alguien hace el test o pide revisión)</small></label><input name="avisarA" type="email" placeholder="info@engrana-mallorca.com"><span class="hint">Vacío = sin avisos.</span></div>
         <div class="f"><label>Enviar desde</label><input name="desde" type="email"><span class="hint">La cuenta con la que abres la hoja o un alias «Enviar como».</span></div>
         <div class="f"><label>Nombre del remitente</label><input name="nombre"></div>
         <div class="f"><label>Responder a</label><input name="responderA" type="email"></div>
@@ -701,7 +702,7 @@ details.more button.r:hover{background:var(--red-sf);color:var(--red)}
     f.modoPrueba.checked = c.modoPrueba; f.emailPrueba.value = c.emailPrueba; f.desde.value = c.desde; f.nombre.value = c.nombre;
     f.responderA.value = c.responderA; f.campana.value = c.utm.utm_campaign; f.limiteDiario.value = c.limiteDiario; f.porEjecucion.value = c.porEjecucion;
     f.horaInicio.value = c.horaInicio; f.horaFin.value = c.horaFin; f.soloLaborables.checked = c.soloLaborables; f.seguimiento.checked = c.seguimiento;
-    f.exigirPermiso.checked = c.exigirPermiso; f.firma.value = c.firma; f.textoBaja.value = c.textoBaja;
+    f.exigirPermiso.checked = c.exigirPermiso; f.firma.value = c.firma; f.textoBaja.value = c.textoBaja; f.avisarA.value = c.avisarA || "";
   }
   $("#f-cfg").addEventListener("submit", function (e) {
     e.preventDefault();
