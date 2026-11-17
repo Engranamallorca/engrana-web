@@ -45,6 +45,38 @@ En Apps Script: **Implementar → Nueva implementación → Aplicación web**. *
 
 Cada contacto recibe un enlace con su referencia (`ref=E-XXXXXX`) y la campaña. Cuando alguien solicite la revisión en la web, el campo **URL de origen** de la solicitud lleva esa referencia: búscala en el panel para saber de qué contacto viene.
 
+## 2 bis. Conectar con la web (saber quién abre el enlace, hace el test o pide revisión)
+
+Una vez configurado, el panel apunta en cada contacto que llegó con tu enlace:
+
+- **Abrió el enlace**
+- **Hizo el test**, con su resultado (por ejemplo, `58 % · El trabajo manual tiene un peso importante · Centralizar los pedidos`)
+- **Pidió revisión**
+
+Además, todas las solicitudes del formulario se guardan en la pestaña **Solicitudes web** (también las de quien llegó sin enlace) y aparecen en la pestaña **Solicitudes** del panel. A quien ya hizo el test no se le envía el recordatorio.
+
+Se configura una sola vez (5 minutos), con la cuenta info@:
+
+1. **Actualiza los archivos.** Pega en Apps Script los nuevos `Codigo.gs` y `Panel.html`, guarda y recarga la hoja. Aparecen columnas nuevas en Contactos y la pestaña «Solicitudes web».
+2. **Copia la clave.** En el panel: *Configuración → Conectar con la web → Mostrar clave para Netlify*. Copia el texto.
+3. **Publica el receptor.** En Apps Script: **Implementar → Nueva implementación → Aplicación web**:
+   - *Descripción*: «Receptor web»
+   - *Ejecutar como*: **Yo**
+   - *Quién tiene acceso*: **Cualquiera**
+
+   Copia la URL que termina en `/exec`.
+
+   Esta implementación es distinta de la del panel, que sigue siendo «Solo yo». Aunque alguien encontrara esta URL, solo vería «Acceso restringido»: el panel comprueba que eres tú, y para escribir en la hoja hace falta la clave.
+4. **Pon las variables en Netlify.** En [tu proyecto de Netlify](https://app.netlify.com/projects/ephemeral-sfogliatella-85ee45) → *Site configuration → Environment variables → Add a variable*:
+   - `DIAGNOSTICO_WEBHOOK_URL` = la URL `/exec` del paso 3
+   - `DIAGNOSTICO_WEBHOOK_TOKEN` = la clave del paso 2
+5. **Vuelve a publicar la web** para que cargue las variables: *Deploys → Trigger deploy → Deploy site*.
+6. **Prueba.** Añade un contacto con tu propio correo, envíatelo de verdad, abre el enlace del correo y haz el test. En un minuto el panel mostrará «Abrió el enlace» y «Hizo el test».
+
+Cuando cambies `Codigo.gs`, actualiza **las dos** implementaciones: *Gestionar implementaciones → ✏️ → Nueva versión*.
+
+> Solo se registra a quien llega con un enlace personal (`ref=E-…`). Las visitas normales a la web no dejan rastro. La política de privacidad del diagnóstico explica este seguimiento.
+
 ## 3. Límites recomendados
 
 - Google Workspace permite hasta 1.500 destinatarios al día; una cuenta gratuita de Gmail, 100. El panel muestra la cuota restante.

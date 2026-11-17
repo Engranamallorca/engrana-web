@@ -20,6 +20,7 @@
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
 button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--green)}
 button{cursor:pointer}
 [hidden]{display:none!important}
 h1,h2,h3{font-family:var(--f-d);margin:0;letter-spacing:-.02em;line-height:1.15}
@@ -215,6 +216,7 @@ details.more button.r:hover{background:var(--red-sf);color:var(--red)}
     <button class="tab" data-tab="contactos">Contactos <span class="badge g" id="b-contactos">0</span></button>
     <button class="tab" data-tab="plantillas">Plantillas</button>
     <button class="tab" data-tab="config">Configuración</button>
+    <button class="tab" data-tab="solicitudes">Solicitudes <span class="badge" id="b-sol" hidden>0</span></button>
     <button class="tab" data-tab="registro">Registro</button>
   </nav>
 </header>
@@ -242,8 +244,8 @@ details.more button.r:hover{background:var(--red-sf);color:var(--red)}
       </div>
       <div class="card"><div class="k">Listos para enviar</div><div class="big" id="s-listos">0</div><div class="sub">Con permiso y sin enviar</div><div class="mini-bar"><i id="s-listos-bar" style="width:0"></i></div></div>
       <div class="card"><div class="k">Enviados</div><div class="big" id="s-env">0</div><div class="sub" id="s-env-sub">Total</div></div>
-      <div class="card"><div class="k">Respondidos</div><div class="big" id="s-resp">0</div><div class="sub">Alguien ha contestado: ¡a por ellos!</div></div>
-      <div class="card"><div class="k">Por revisar</div><div class="big" id="s-rev">0</div><div class="sub" id="s-rev-sub">Sin permiso, errores</div></div>
+      <div class="card"><div class="k">Respondidos</div><div class="big" id="s-resp">0</div><div class="sub" id="s-resp-sub">Contestaron al correo</div></div>
+      <div class="card"><div class="k">Hicieron el test</div><div class="big" id="s-test">0</div><div class="sub" id="s-test-sub">Desde tus enlaces</div></div>
     </div>
     <div class="grid g-2">
       <div class="card">
@@ -251,7 +253,7 @@ details.more button.r:hover{background:var(--red-sf);color:var(--red)}
         <ul class="list" id="siguientes"></ul>
       </div>
       <div class="card">
-        <div class="card-hd"><h2>Respuestas</h2><button class="btn sm" id="revisar">↻ Revisar ahora</button></div>
+        <div class="card-hd"><h2>Interesados</h2><button class="btn sm" id="revisar">↻ Revisar ahora</button></div>
         <ul class="list" id="respuestas"></ul>
       </div>
       <div class="card" style="grid-column:1/-1">
@@ -360,6 +362,20 @@ details.more button.r:hover{background:var(--red-sf);color:var(--red)}
       </div>
       <div style="margin-top:16px"><button class="btn pri" type="submit">Guardar configuración</button></div>
     </form>
+    <div class="card" style="max-width:860px;margin-top:16px">
+      <div class="card-hd"><h2>Conectar con la web</h2><span class="chip" id="web-chip">—</span></div>
+      <p class="hint" style="margin:0 0 12px">Para ver aquí quién abre tu enlace, hace el test o pide la revisión. Necesita la clave de abajo y la URL de este proyecto publicado como aplicación web con acceso «Cualquiera» (pasos en INSTRUCCIONES.md).</p>
+      <button class="btn" type="button" id="ver-clave">Mostrar clave para Netlify</button>
+      <div class="f" id="clave-box" style="margin-top:12px" hidden><label>DIAGNOSTICO_WEBHOOK_TOKEN</label><input id="clave" readonly onclick="this.select()"></div>
+    </div>
+  </section>
+
+  <!-- ======================= SOLICITUDES ======================= -->
+  <section data-view="solicitudes" hidden>
+    <div class="card"><div class="card-hd"><h2>Solicitudes de revisión</h2><span class="hint">Personas que pidieron la revisión en la web</span></div>
+      <div id="web-off" class="note warn" style="margin-bottom:12px" hidden>La web todavía no está conectada con esta hoja: las solicitudes llegan a Netlify y a tu correo, pero no aparecen aquí. Ve a <button class="link" data-go="config">Configuración → Conectar con la web</button>.</div>
+      <div style="overflow-x:auto"><table><thead><tr><th>Fecha</th><th>Empresa / contacto</th><th class="hide-m">Correo y teléfono</th><th>Resultado</th><th class="hide-m">Origen</th></tr></thead><tbody id="sol"></tbody></table></div>
+    </div>
   </section>
 
   <!-- ======================= REGISTRO ======================= -->
@@ -420,6 +436,7 @@ details.more button.r:hover{background:var(--red-sf);color:var(--red)}
     if (f) { filtro = f; pintarContactos(); }
     if (t === "plantillas" && D) pintarPlantillas();
     if (t === "config" && D) pintarConfig();
+    if (t === "solicitudes") call("panelSolicitudes").then(pintarSolicitudes);
     window.scrollTo(0, 0);
   }
   $("#tabs").addEventListener("click", function (e) { var b = e.target.closest(".tab"); if (b) ir(b.dataset.tab); });
@@ -453,8 +470,14 @@ details.more button.r:hover{background:var(--red-sf);color:var(--red)}
     $("#s-env").textContent = k.enviado + k.respondido;
     $("#s-env-sub").textContent = k.programado ? k.programado + " programados para más tarde" : "Total enviados";
     $("#s-resp").textContent = k.respondido;
-    $("#s-rev").textContent = k.sinpermiso + k.error;
-    $("#s-rev-sub").textContent = k.sinpermiso + " sin permiso · " + k.error + " con error";
+    var a = D.actividad || { abrieron: 0, test: 0, solicitudes: 0, solicitudesTotal: 0 };
+    $("#s-test").textContent = a.test;
+    $("#s-test-sub").textContent = a.abrieron + " abrieron el enlace · " + a.solicitudes + " pidieron revisión";
+    $("#s-resp-sub").textContent = "Contestaron al correo · " + a.solicitudesTotal + " solicitudes en total";
+    $("#b-sol").hidden = !a.solicitudesTotal; $("#b-sol").textContent = a.solicitudesTotal;
+    $("#web-off").hidden = !!D.webConectada;
+    $("#web-chip").className = "chip " + (D.webConectada ? "c-listo" : "c-sinpermiso");
+    $("#web-chip").textContent = D.webConectada ? "Clave creada" : "Sin conectar";
     $("#b-contactos").textContent = total;
 
     var sig = D.contactos.filter(function (x) { return x.grupo === "listo"; }).slice(0, 5);
@@ -462,10 +485,10 @@ details.more button.r:hover{background:var(--red-sf);color:var(--red)}
       return '<li><div class="t"><b>' + esc(x.empresa) + '</b><span>' + esc(x.nombre || x.email) + " · " + esc(x.plantilla) + '</span></div><button class="btn sm" data-ver="' + x.fila + '">Vista previa</button></li>';
     }).join("") : '<li class="empty">No hay contactos listos. <button class="link" data-go="anadir">Añade algunos</button>.</li>';
 
-    var resp = D.contactos.filter(function (x) { return x.grupo === "respondido"; }).slice(0, 5);
+    var resp = D.contactos.filter(interesado).sort(function (x, y) { return ultimaSenal(y) < ultimaSenal(x) ? -1 : 1; }).slice(0, 6);
     $("#respuestas").innerHTML = resp.length ? resp.map(function (x) {
-      return '<li><div class="t"><b>' + esc(x.empresa) + '</b><span>' + esc(x.nombre) + " · " + esc(x.email) + '</span></div><span class="chip c-respondido">Respondido</span></li>';
-    }).join("") : '<li class="empty">Todavía no hay respuestas.</li>';
+      return '<li><div class="t"><b>' + esc(x.empresa) + '</b><span>' + esc(x.nombre || x.email) + (x.resultado ? " · " + esc(x.resultado.split(" · ")[0]) : "") + '</span></div>' + senal(x) + "</li>";
+    }).join("") : '<li class="empty">Aún nadie ha abierto tus enlaces ni respondido.</li>';
 
     $("#actividad").innerHTML = D.registro.length ? D.registro.slice(0, 6).map(regLi).join("") : '<li class="empty">Sin actividad todavía.</li>';
     $("#reg").innerHTML = D.registro.map(function (r) { return "<tr><td>" + fecha(r.fecha) + "</td><td><b>" + esc(r.accion) + "</b></td><td>" + esc(r.email) + '</td><td class="hide-m sb">' + esc(r.detalle) + "</td></tr>"; }).join("") || '<tr><td colspan="4" class="empty">Sin movimientos.</td></tr>';
@@ -478,21 +501,39 @@ details.more button.r:hover{background:var(--red-sf);color:var(--red)}
 
     pintarContactos();
   }
+  /* Señales de interés de un contacto */
+  function interesado(x) { return x.solicitud || x.test || x.abrio || x.grupo === "respondido"; }
+  function ultimaSenal(x) { return [x.solicitud, x.test, x.abrio].filter(Boolean).sort().pop() || ""; }
+  function senal(x) {
+    if (x.solicitud) return '<span class="chip c-respondido">Pidió revisión</span>';
+    if (x.grupo === "respondido") return '<span class="chip c-respondido">Respondió</span>';
+    if (x.test) return '<span class="chip c-listo">Hizo el test</span>';
+    if (x.abrio) return '<span class="chip c-programado">Abrió el enlace</span>';
+    return "";
+  }
+  function actividadTxt(x) {
+    var p = [];
+    if (x.abrio) p.push("Abrió " + fecha(x.abrio, true));
+    if (x.test) p.push("Test " + esc((x.resultado || "").split(" · ")[0]));
+    if (x.solicitud) p.push("★ Pidió revisión");
+    return p.length ? '<div class="sb" style="color:var(--green);font-weight:700;margin-top:4px">' + p.join(" · ") + "</div>" : "";
+  }
   function regLi(r) {
     return '<li><div class="t"><b style="text-transform:none">' + esc(r.accion) + (r.email ? " · " + esc(r.email) : "") + '</b><span>' + esc(r.detalle) + '</span></div><span class="sub">' + fecha(r.fecha) + "</span></li>";
   }
 
   /* ---------- Contactos ---------- */
-  var FILTROS = [["todos", "Todos"], ["listo", "Listos"], ["programado", "Programados"], ["sinpermiso", "Sin permiso"], ["enviado", "Enviados"], ["respondido", "Respondidos"], ["baja", "Bajas"], ["error", "Errores"]];
+  var FILTROS = [["todos", "Todos"], ["listo", "Listos"], ["programado", "Programados"], ["sinpermiso", "Sin permiso"], ["enviado", "Enviados"], ["respondido", "Respondidos"], ["interesados", "Interesados"], ["baja", "Bajas"], ["error", "Errores"]];
   function pintarContactos() {
     if (!D) return;
     $("#filtros").innerHTML = FILTROS.map(function (f) {
-      var n = f[0] === "todos" ? D.contactos.length : (D.contadores[f[0]] || 0);
+      var n = f[0] === "todos" ? D.contactos.length : f[0] === "interesados" ? D.contactos.filter(interesado).length : (D.contadores[f[0]] || 0);
       return '<button class="flt' + (filtro === f[0] ? " on" : "") + '" data-f="' + f[0] + '">' + f[1] + " · " + n + "</button>";
     }).join("");
     var q = $("#buscar").value.trim().toLowerCase();
     var filas = D.contactos.filter(function (x) {
-      if (filtro !== "todos" && x.grupo !== filtro) return false;
+      if (filtro === "interesados") { if (!interesado(x)) return false; }
+      else if (filtro !== "todos" && x.grupo !== filtro) return false;
       return !q || (x.empresa + " " + x.nombre + " " + x.email + " " + x.ref).toLowerCase().indexOf(q) !== -1;
     });
     $("#tabla").innerHTML = filas.length ? filas.map(function (x) {
@@ -500,7 +541,7 @@ details.more button.r:hover{background:var(--red-sf);color:var(--red)}
       var est = x.grupo === "error" ? x.estado.replace(/^Error:\s*/, "") : "";
       return "<tr><td><div class=nm>" + esc(x.empresa || "—") + '</div><div class="sb">' + esc([x.nombre, x.cargo].filter(Boolean).join(" · ")) + (x.ref ? ' · <span title="Referencia en el diagnóstico">' + esc(x.ref) + "</span>" : "") + "</div></td>" +
         '<td class="hide-m">' + esc(x.email) + '</td><td class="hide-m">' + esc(x.plantilla) + "</td>" +
-        '<td><span class="chip c-' + x.grupo + '"' + (est ? ' title="' + esc(est) + '"' : "") + ">" + (x.estado === "Seguimiento enviado" ? "Seguimiento" : ETQ[x.grupo]) + "</span>" + (est ? '<div class="sb bad">' + esc(est) + "</div>" : "") + "</td>" +
+        '<td><span class="chip c-' + x.grupo + '"' + (est ? ' title="' + esc(est) + '"' : "") + ">" + (x.estado === "Seguimiento enviado" ? "Seguimiento" : ETQ[x.grupo]) + "</span>" + (est ? '<div class="sb bad">' + esc(est) + "</div>" : "") + actividadTxt(x) + "</td>" +
         '<td class="hide-m sb">' + (f ? fecha(f, true) : "") + "</td>" +
         '<td><div class="acts"><button class="btn sm" data-ver="' + x.fila + '">Ver</button><button class="btn sm hide-m" data-prueba="' + x.fila + '">Prueba</button>' +
         '<details class="more"><summary title="Más acciones">⋯</summary><div>' +
@@ -640,6 +681,19 @@ details.more button.r:hover{background:var(--red-sf);color:var(--red)}
     $("#tp-para").textContent = ej.email;
     $("#tp-html").innerHTML = aHtml(rellenar(esc(f.mensaje.value), datos));
   }
+
+  /* ---------- Solicitudes ---------- */
+  function pintarSolicitudes(l) {
+    $("#sol").innerHTML = l.length ? l.map(function (s) {
+      return "<tr><td>" + fecha(s.recibido) + '</td><td><div class="nm">' + esc(s.empresa) + '</div><div class="sb">' + esc([s.nombre, s.cargo].filter(Boolean).join(" · ")) + "</div></td>" +
+        '<td class="hide-m"><a href="mailto:' + esc(s.correo) + '">' + esc(s.correo) + "</a>" + (s.telefono ? '<div class="sb">' + esc(s.telefono) + "</div>" : "") + "</td>" +
+        "<td><b>" + esc(s.indice) + '</b><div class="sb">' + esc(s.oportunidad) + "</div></td>" +
+        '<td class="hide-m sb">' + (s.ref ? esc(s.ref) : "Web / otro enlace") + "</td></tr>";
+    }).join("") : '<tr><td colspan="5" class="empty">Todavía no hay solicitudes.</td></tr>';
+  }
+  $("#ver-clave").addEventListener("click", function () {
+    call("panelClaveWeb").then(function (t) { $("#clave").value = t; $("#clave-box").hidden = false; D.webConectada = true; pintar(); });
+  });
 
   /* ---------- Configuración ---------- */
   function pintarConfig() {

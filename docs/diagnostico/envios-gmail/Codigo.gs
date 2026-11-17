@@ -27,9 +27,16 @@ var HOJA_PLANTILLAS = "Plantillas";
 var HOJA_CONFIG = "Configuración";
 var HOJA_BAJAS = "Bajas";
 var HOJA_REGISTRO = "Registro";
+var HOJA_SOLICITUDES = "Solicitudes web";
 
 var COLUMNAS_CONTACTOS = ["Email", "Nombre", "Empresa", "Cargo", "Sector", "Plantilla", "Permiso", "Cómo dio permiso",
-  "Programar", "Estado", "Enviado el", "Seguimiento el", "Ref", "Hilo", "Notas"];
+  "Programar", "Estado", "Enviado el", "Seguimiento el", "Ref", "Hilo", "Notas",
+  "Abrió el enlace", "Hizo el test", "Resultado del test", "Pidió revisión"];
+
+/** Columnas de la pestaña «Solicitudes web» (lo que llega del formulario del diagnóstico). */
+var COLUMNAS_SOLICITUDES = ["Recibido", "Ref", "Empresa", "Nombre", "Correo", "Cargo", "Teléfono", "Sector", "Tamaño",
+  "Puntuación", "Índice", "Nivel", "Oportunidad principal", "Recomendaciones", "Respuestas", "Campaña",
+  "Comunicaciones comerciales", "Consentimiento", "URL de origen", "ID envío"];
 
 var CONFIG_POR_DEFECTO = [
   ["Enviar desde", "info@engrana-mallorca.com", "Cuenta o alias de Gmail desde el que salen los correos."],
@@ -83,6 +90,8 @@ function onOpen() {
     .addItem("▶ Activar envío programado", "activarProgramacion")
     .addItem("■ Desactivar envío programado", "desactivarProgramacion")
     .addItem("Estado de hoy", "mostrarEstado")
+    .addSeparator()
+    .addItem("🔗 Conectar con la web (clave)", "mostrarClaveWeb")
     .addToUi();
 }
 
@@ -135,6 +144,19 @@ function asegurarHojas_() {
 
   var r = ss.getSheetByName(HOJA_REGISTRO) || ss.insertSheet(HOJA_REGISTRO);
   if (r.getLastRow() === 0) { r.appendRow(["Fecha", "Fila", "Email", "Acción", "Detalle"]); r.getRange(1, 1, 1, 5).setFontWeight("bold"); }
+
+  var sw = ss.getSheetByName(HOJA_SOLICITUDES) || ss.insertSheet(HOJA_SOLICITUDES);
+  if (sw.getLastRow() === 0) {
+    sw.appendRow(COLUMNAS_SOLICITUDES); sw.setFrozenRows(1);
+    sw.getRange(1, 1, 1, COLUMNAS_SOLICITUDES.length).setFontWeight("bold").setBackground("#E6F0E9");
+  }
+
+  // Hojas creadas con una versión anterior: añade al final las columnas nuevas que falten
+  var cab = c.getRange(1, 1, 1, Math.max(1, c.getLastColumn())).getValues()[0].map(function (h) { return String(h).trim(); });
+  var faltan = COLUMNAS_CONTACTOS.filter(function (h) { return cab.indexOf(h) === -1; });
+  if (faltan.length) {
+    c.getRange(1, cab.length + 1, 1, faltan.length).setValues([faltan]).setFontWeight("bold").setBackground("#E6F0E9");
+  }
 }
 
 /* =====================================================================
@@ -375,6 +397,7 @@ function procesar_(manual) {
       for (var i = 0; i < c.filas.length && hechos < cupo; i++) {
         var f = c.filas[i], v = f.valores;
         if (String(v["Estado"]) !== "Enviado" || !v["Hilo"] || v["Seguimiento el"]) continue;
+        if (v["Hizo el test"] || v["Pidió revisión"]) continue;   // ya ha usado el diagnóstico: sin recordatorio
         var pl = plantillas[String(v["Plantilla"]).trim().toLowerCase()];
         if (!pl || !pl.dias || !pl.seguimiento) continue;
         if (bajas[normalizarEmail_(v["Email"])]) continue;
@@ -588,6 +611,9 @@ var SECTORES = ["Distribución y suministros", "Industria y fabricación", "Cons
   "Comercio", "Hostelería", "Servicios profesionales", "Otros"];
 
 function doGet() {
+  if (!esPropietario_()) {
+    return HtmlService.createHtmlOutput('<p style="font-family:Arial;margin:40px">Acceso restringido.</p>').setTitle("Engrana");
+  }
   asegurarHojas_();
   return panelHtml_()
     .setTitle("Panel de envíos · Engrana")
@@ -596,6 +622,7 @@ function doGet() {
 
 /** Carga Panel.html aunque el nombre tenga pequeñas variaciones; si no existe, explica cómo crearlo. */
 function panelHtml_() {
+  soloPropietario_();
   var nombres = ["Panel", "panel", "Panel.html", "PANEL", "Panel ", "Pagina", "Página"];
   for (var i = 0; i < nombres.length; i++) {
     try { return HtmlService.createHtmlOutputFromFile(nombres[i]); } catch (e) {}
@@ -634,6 +661,7 @@ function grupo_(v, cfg, bajas, ahora) {
 
 /** Todos los datos que necesita el panel en una sola llamada. */
 function panelDatos() {
+  soloPropietario_();
   asegurarHojas_();
   var cfg = leerConfig_(), c = leerContactos_(), bajas = leerBajas_(), ahora = new Date();
   var hoy = Utilities.formatDate(ahora, Session.getScriptTimeZone(), "yyyy-MM-dd");
@@ -646,9 +674,15 @@ function panelDatos() {
       cargo: String(v["Cargo"] || ""), sector: String(v["Sector"] || ""), plantilla: String(v["Plantilla"] || ""),
       permiso: String(v["Permiso"] || ""), comoPermiso: String(v["Cómo dio permiso"] || ""), programar: iso_(v["Programar"]),
       estado: String(v["Estado"] || ""), grupo: g, enviadoEl: iso_(v["Enviado el"]), seguimientoEl: iso_(v["Seguimiento el"]),
-      ref: String(v["Ref"] || ""), notas: String(v["Notas"] || "")
+      ref: String(v["Ref"] || ""), notas: String(v["Notas"] || ""),
+      abrio: iso_(v["Abrió el enlace"]), test: iso_(v["Hizo el test"]),
+      resultado: String(v["Resultado del test"] || ""), solicitud: iso_(v["Pidió revisión"])
     };
   });
+  var actividad = { abrieron: 0, test: 0, solicitudes: 0 };
+  contactos.forEach(function (x) { if (x.abrio) actividad.abrieron++; if (x.test) actividad.test++; if (x.solicitud) actividad.solicitudes++; });
+  var sw = SpreadsheetApp.getActive().getSheetByName(HOJA_SOLICITUDES);
+  actividad.solicitudesTotal = sw ? Math.max(0, sw.getLastRow() - 1) : 0;
   var plantillas = leerPlantillas_();
   var reg = SpreadsheetApp.getActive().getSheetByName(HOJA_REGISTRO);
   var registro = [];
@@ -666,6 +700,8 @@ function panelDatos() {
     enHorario: enHorario_(ahora, cfg),
     cfg: cfg,
     contadores: cont,
+    actividad: actividad,
+    webConectada: !!PropertiesService.getScriptProperties().getProperty("TOKEN_WEB"),
     contactos: contactos,
     plantillas: Object.keys(plantillas).map(function (k) { var p = plantillas[k]; return { nombre: k, asunto: p.asunto, mensaje: p.mensaje, dias: p.dias, seguimiento: p.seguimiento }; }),
     sectores: SECTORES,
@@ -705,6 +741,7 @@ function filaContacto_(d) {
 
 /** Añade un contacto desde el formulario del panel. */
 function panelGuardarContacto(d) {
+  soloPropietario_();
   var lock = LockService.getScriptLock(); lock.waitLock(10000);
   try {
     var c = leerContactos_(), cfg = leerConfig_();
@@ -722,6 +759,7 @@ function panelGuardarContacto(d) {
  * «comun» lleva plantilla, sector, permiso, comoPermiso y programar para todos.
  */
 function panelGuardarLote(texto, comun) {
+  soloPropietario_();
   var lock = LockService.getScriptLock(); lock.waitLock(10000);
   var anadidos = 0, omitidos = [];
   try {
@@ -756,6 +794,7 @@ function filaPorNumero_(n) {
 
 /** Correo tal como se enviaría (sin enviarlo). */
 function panelVistaPrevia(fila, tipo) {
+  soloPropietario_();
   var s = filaPorNumero_(fila), cfg = leerConfig_();
   var m = componer_(s.f, cfg, leerPlantillas_(), tipo === "seguimiento" ? "seguimiento" : "nuevo");
   if (!m.ok) throw new Error(m.motivo);
@@ -764,6 +803,7 @@ function panelVistaPrevia(fila, tipo) {
 
 /** Envía la versión de prueba de una fila al Email de prueba. */
 function panelPrueba(fila) {
+  soloPropietario_();
   var s = filaPorNumero_(fila), cfg = leerConfig_();
   comprobarRemitente_(cfg);
   var m = componer_(s.f, cfg, leerPlantillas_(), "nuevo");
@@ -775,6 +815,7 @@ function panelPrueba(fila) {
 
 /** Cambia el estado de una fila: "pendiente", "omitir", "baja" o "eliminar". */
 function panelAccion(fila, accion) {
+  soloPropietario_();
   var lock = LockService.getScriptLock(); lock.waitLock(10000);
   try {
     var s = filaPorNumero_(fila), v = s.f.valores;
@@ -796,6 +837,7 @@ function panelAccion(fila, accion) {
 
 /** Crea o actualiza una plantilla (por nombre). */
 function panelGuardarPlantilla(p) {
+  soloPropietario_();
   var nombre = String(p.nombre || "").trim().toLowerCase().replace(/\s+/g, "-");
   if (!nombre) throw new Error("La plantilla necesita un nombre.");
   if (!String(p.asunto || "").trim() || !String(p.mensaje || "").trim()) throw new Error("Escribe el asunto y el mensaje.");
@@ -810,6 +852,7 @@ function panelGuardarPlantilla(p) {
 
 /** Guarda los ajustes de «Configuración» que se editan desde el panel. */
 function panelGuardarConfig(n) {
+  soloPropietario_();
   var mapa = {
     "Nombre del remitente": n.nombre, "Responder a": n.responderA, "Enviar desde": n.desde, "utm_campaign": n.campana,
     "Límite diario": Number(n.limiteDiario), "Envíos por ejecución": Number(n.porEjecucion),
@@ -831,9 +874,11 @@ function panelGuardarConfig(n) {
   return panelDatos();
 }
 
-function panelEnviarTanda() { return { mensaje: procesar_(true), datos: panelDatos() }; }
+function panelEnviarTanda() {
+  soloPropietario_(); return { mensaje: procesar_(true), datos: panelDatos() }; }
 
 function panelProgramacion(activar) {
+  soloPropietario_();
   if (activar) {
     var cfg = leerConfig_();
     if (cfg.modoPrueba) throw new Error("Desactiva el modo prueba en Configuración antes de activar el envío programado.");
@@ -844,6 +889,142 @@ function panelProgramacion(activar) {
 }
 
 function panelRevisar() {
+  soloPropietario_();
   revisarRespuestas_(leerConfig_(), leerContactos_(), leerBajas_());
   return panelDatos();
+}
+
+
+/* =====================================================================
+   CONEXIÓN CON LA WEB DEL DIAGNÓSTICO
+   La web (a través de las funciones de Netlify) envía aquí:
+   - tipo "evento":    un contacto con enlace personal abrió el enlace,
+                       empezó o terminó el test (con su puntuación).
+   - tipo "solicitud": alguien pidió la revisión desde el formulario.
+   Para recibirlos hay que publicar este proyecto como aplicación web con
+   acceso «Cualquiera» (ver INSTRUCCIONES.md) y poner su URL y la clave
+   en las variables de entorno de Netlify. Sin la clave correcta no se
+   escribe nada.
+   ===================================================================== */
+
+/** true si quien ejecuta es el propietario del script (o la propia hoja abierta por un editor). */
+function esPropietario_() {
+  var activo = "", efectivo = "";
+  try { activo = normalizarEmail_(Session.getActiveUser().getEmail()); } catch (e) {}
+  try { efectivo = normalizarEmail_(Session.getEffectiveUser().getEmail()); } catch (e) {}
+  return !!activo && activo === efectivo;
+}
+
+function soloPropietario_() {
+  if (!esPropietario_()) throw new Error("Acceso restringido.");
+}
+
+/** Devuelve la clave para Netlify; la crea la primera vez. */
+function claveWeb_() {
+  var props = PropertiesService.getScriptProperties(), t = props.getProperty("TOKEN_WEB");
+  if (!t) {
+    t = Utilities.getUuid().replace(/-/g, "") + Utilities.getUuid().replace(/-/g, "").slice(0, 16);
+    props.setProperty("TOKEN_WEB", t);
+  }
+  return t;
+}
+
+function mostrarClaveWeb() {
+  var t = claveWeb_();
+  var html = '<div style="font-family:Arial,sans-serif;font-size:13px;line-height:1.6;color:#17231F">' +
+    '<p>Copia esta clave en Netlify como variable <b>DIAGNOSTICO_WEBHOOK_TOKEN</b>:</p>' +
+    '<p style="font-family:monospace;font-size:14px;background:#F1F7F3;padding:10px;border-radius:6px;word-break:break-all">' + t + '</p>' +
+    '<p>Los pasos completos están en INSTRUCCIONES.md, apartado «Conectar con la web».</p></div>';
+  SpreadsheetApp.getUi().showModalDialog(HtmlService.createHtmlOutput(html).setWidth(520).setHeight(240), "Conectar con la web");
+}
+
+function panelClaveWeb() {
+  soloPropietario_();
+  return claveWeb_();
+}
+
+/** Busca la fila de un contacto por su referencia (E-XXXXXX). */
+function filaPorRef_(c, ref) {
+  if (!/^E-[A-Z0-9]{6}$/.test(String(ref || ""))) return null;
+  for (var i = 0; i < c.filas.length; i++) if (String(c.filas[i].valores["Ref"]).trim() === ref) return c.filas[i];
+  return null;
+}
+
+/** Saca la referencia de una URL de origen (…?ref=E-XXXXXX…). */
+function refDeUrl_(url) {
+  var m = String(url || "").match(/[?&]ref=(E-[A-Z0-9]{6})\b/);
+  return m ? m[1] : "";
+}
+
+function respuesta_(texto) { return ContentService.createTextOutput(texto).setMimeType(ContentService.MimeType.TEXT); }
+
+function doPost(e) {
+  var d;
+  try { d = JSON.parse(e && e.postData ? e.postData.contents : "{}"); } catch (x) { return respuesta_("json"); }
+  var t = PropertiesService.getScriptProperties().getProperty("TOKEN_WEB");
+  if (!t || d.token !== t) return respuesta_("forbidden");
+
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(20000)) return respuesta_("busy");
+  try {
+    asegurarHojas_();
+    var c = leerContactos_(), ahora = new Date();
+    if (d.tipo === "evento") {
+      var f = filaPorRef_(c, d.ref);
+      if (!f) return respuesta_("ref desconocida");
+      var cambios = {};
+      if (d.evento === "abierto" && !f.valores["Abrió el enlace"]) cambios["Abrió el enlace"] = ahora;
+      if (d.evento === "iniciado" && !f.valores["Abrió el enlace"]) cambios["Abrió el enlace"] = ahora;
+      if (d.evento === "completado") {
+        if (!f.valores["Abrió el enlace"]) cambios["Abrió el enlace"] = ahora;
+        cambios["Hizo el test"] = ahora;
+        cambios["Resultado del test"] = Math.max(0, Math.min(100, Number(d.porcentaje) || 0)) + " % · " +
+          String(d.nivel || "").slice(0, 80) + (d.oportunidad ? " · " + String(d.oportunidad).slice(0, 160) : "");
+      }
+      if (Object.keys(cambios).length) {
+        escribir_(c, f, cambios);
+        var etiqueta = { abierto: "Abrió el enlace", iniciado: "Empezó el test", completado: "Hizo el test" }[d.evento] || d.evento;
+        registrar_(f.fila, f.valores["Email"], etiqueta, d.evento === "completado" ? cambios["Resultado del test"] : (d.ref || ""));
+      }
+      return respuesta_("ok");
+    }
+    if (d.tipo === "solicitud") {
+      var sw = SpreadsheetApp.getActive().getSheetByName(HOJA_SOLICITUDES);
+      // Sin duplicados por ID de envío
+      if (sw.getLastRow() > 1) {
+        var ids = sw.getRange(2, COLUMNAS_SOLICITUDES.length, sw.getLastRow() - 1, 1).getValues().map(function (r) { return String(r[0]); });
+        if (d.id_envio && ids.indexOf(String(d.id_envio)) !== -1) return respuesta_("duplicado");
+      }
+      var ref = refDeUrl_(d.url_origen);
+      var lim = function (v, n) { return String(v == null ? "" : v).slice(0, n || 500); };
+      sw.appendRow([ahora, ref, lim(d.empresa, 160), lim(d.nombre, 120), lim(d.correo, 160), lim(d.cargo, 120), lim(d.telefono, 30),
+        lim(d.sector, 80), lim(d.tamano_equipo, 40), lim(d.puntuacion_total, 10), lim(d.indice_porcentaje, 10), lim(d.nivel, 120),
+        lim(d.oportunidad_principal, 300), lim(d.recomendaciones, 500), lim(d.respuestas, 3000), lim(d.campana, 400),
+        lim(d.comunicaciones_comerciales, 5), lim(d.consentimiento_registro, 600), lim(d.url_origen, 500), lim(d.id_envio, 80)]);
+      var fila = filaPorRef_(c, ref);
+      if (fila) {
+        var cam = { "Pidió revisión": ahora };
+        if (!fila.valores["Hizo el test"]) cam["Hizo el test"] = ahora;
+        if (!fila.valores["Resultado del test"]) cam["Resultado del test"] = lim(d.indice_porcentaje, 10) + " · " + lim(d.nivel, 80);
+        escribir_(c, fila, cam);
+      }
+      registrar_(fila ? fila.fila : "", lim(d.correo, 160), "Pidió revisión", lim(d.empresa, 160) + (ref ? " · " + ref : " · llegó sin enlace del panel"));
+      return respuesta_("ok");
+    }
+    return respuesta_("tipo desconocido");
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+/** Últimas solicitudes de revisión para el panel. */
+function panelSolicitudes() {
+  soloPropietario_();
+  var sw = SpreadsheetApp.getActive().getSheetByName(HOJA_SOLICITUDES);
+  if (!sw || sw.getLastRow() < 2) return [];
+  var n = Math.min(50, sw.getLastRow() - 1);
+  return sw.getRange(sw.getLastRow() - n + 1, 1, n, COLUMNAS_SOLICITUDES.length).getValues().reverse().map(function (r) {
+    return { recibido: iso_(r[0]), ref: String(r[1]), empresa: String(r[2]), nombre: String(r[3]), correo: String(r[4]), cargo: String(r[5]),
+             telefono: String(r[6]), indice: String(r[10]), nivel: String(r[11]), oportunidad: String(r[12]) };
+  });
 }

@@ -46,6 +46,26 @@
     return { url: (win.location.origin + win.location.pathname + win.location.search).slice(0, 500), utm: utm, referente: (doc.referrer || "").slice(0, 300) };
   }
 
+  /* ---------- Seguimiento de campaña ----------
+     Solo si la persona llega con un enlace personal (?ref=E-XXXXXX) enviado
+     desde el panel de envíos. Avisa de tres momentos: abierto, iniciado y
+     completado (con la puntuación). Sin cookies ni datos del formulario.
+     Cada aviso se envía como mucho una vez por visita. */
+  var REF = /^E-[A-Z0-9]{6}$/.test(estado.origen.utm.ref || "") ? estado.origen.utm.ref : "";
+  var avisados = {};
+  function avisar(evento, extra) {
+    if (!REF || avisados[evento]) return;
+    avisados[evento] = true;
+    var datos = { ref: REF, evento: evento, campana: estado.origen.utm.utm_campaign || "" };
+    if (extra) Object.keys(extra).forEach(function (k) { datos[k] = extra[k]; });
+    var cuerpo = JSON.stringify(datos), url = "/.netlify/functions/diagnostico-evento";
+    try {
+      if (navigator.sendBeacon && navigator.sendBeacon(url, new Blob([cuerpo], { type: "application/json" }))) return;
+    } catch (e) {}
+    try { fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: cuerpo, keepalive: true }).catch(function () {}); } catch (e) {}
+  }
+  avisar("abierto");
+
   function nuevoId() {
     if (win.crypto && win.crypto.randomUUID) return win.crypto.randomUUID();
     return "d-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
@@ -240,6 +260,8 @@
     estado.editando = false;
     estado.resultado = M.calcular(estado.respuestas.slice(), { sector: estado.sector, tamano: estado.tamano });
     if (!estado.enviado) estado.idEnvio = nuevoId();
+    var r0 = estado.resultado;
+    avisar("completado", { porcentaje: r0.porcentaje, nivel: r0.nivel.titulo, oportunidad: r0.oportunidades.map(function (o) { return o.titulo; }).join(" + ") });
     // Pantalla intermedia breve (no entra en el historial)
     Object.keys(etapas).forEach(function (k) { etapas[k].hidden = k !== "analisis"; });
     estado.etapa = "analisis";
@@ -522,7 +544,7 @@
     var b = e.target.closest("[data-accion]"); if (!b) return;
     var a = b.getAttribute("data-accion");
     if (a === "comenzar") { e.preventDefault(); ir(estado.resultado ? "resultado" : "intro"); }
-    else if (a === "empezar") { estado.q = Math.max(0, estado.respuestas.indexOf(null)); ir("pregunta"); }
+    else if (a === "empezar") { avisar("iniciado"); estado.q = Math.max(0, estado.respuestas.indexOf(null)); ir("pregunta"); }
     else if (a === "siguiente") siguiente();
     else if (a === "anterior") anterior();
     else if (a === "salir") { e.preventDefault(); estado.editando = false; ir("inicio"); }

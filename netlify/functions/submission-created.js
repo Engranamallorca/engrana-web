@@ -101,7 +101,7 @@ exports.handler = async (event) => {
   const headers = { "Content-Type": "application/json" };
   if (process.env.DIAGNOSTICO_WEBHOOK_TOKEN) headers.Authorization = "Bearer " + process.env.DIAGNOSTICO_WEBHOOK_TOKEN;
   // Google Apps Script no lee cabeceras: el token también viaja en el cuerpo.
-  const cuerpo = Object.assign({ token: process.env.DIAGNOSTICO_WEBHOOK_TOKEN || "", recibido: payload.created_at || new Date().toISOString() }, lead);
+  const cuerpo = Object.assign({ tipo: "solicitud", token: process.env.DIAGNOSTICO_WEBHOOK_TOKEN || "", recibido: payload.created_at || new Date().toISOString() }, lead);
 
   try {
     const res = await fetch(url, { method: "POST", headers, body: JSON.stringify(cuerpo), redirect: "follow" });
