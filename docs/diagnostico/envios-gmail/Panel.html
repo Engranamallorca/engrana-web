@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel de envíos · Engrana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..700&family=Manrope:wght@400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --hd:#123329;--hd-2:#0C261F;--green:#286B54;--green-2:#4F9476;--green-sf:#E6F0E9;--green-xs:#F1F7F3;
+  --bg:#EEF2F0;--card:#FFFFFF;--ink:#17231F;--ink-2:#65736D;--line:#E3EAE5;--line-2:#D3DDD7;
+  --gold:#C6A45B;--gold-sf:#FBF3E2;--red:#B4412F;--red-sf:#FBEDEA;--amber:#9A6B12;--amber-sf:#FFF4DC;--blue:#2F5D8A;--blue-sf:#EAF1F8;
+  --r:14px;--sh:0 1px 2px rgba(18,51,41,.06),0 10px 30px -18px rgba(18,51,41,.25);
+  --f-d:"Bricolage Grotesque","Manrope",system-ui,sans-serif;--f:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--green)}
+button{cursor:pointer}
+[hidden]{display:none!important}
+h1,h2,h3{font-family:var(--f-d);margin:0;letter-spacing:-.02em;line-height:1.15}
+
+/* ---------- Cabecera (estilo panel comercial) ---------- */
+.hd{position:sticky;top:0;z-index:20;color:#fff;background:linear-gradient(180deg,var(--hd),var(--hd-2));background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 4px),linear-gradient(180deg,var(--hd),var(--hd-2));box-shadow:0 6px 20px -10px rgba(0,0,0,.4)}
+.hd-top{display:flex;align-items:center;gap:16px;padding:12px 22px}
+.brand{display:flex;align-items:center;gap:10px;background:#fff;color:var(--hd);padding:7px 14px 7px 10px;border-radius:10px;font-family:var(--f-d);font-weight:700;font-size:19px;letter-spacing:-.04em}
+.brand svg{width:24px;height:24px}
+.hd-title b{display:block;font-size:14px}
+.hd-title small{color:#B9CEC5;font-size:12px}
+.hd-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.pill{display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 12px;border-radius:99px;font-size:12px;font-weight:700;border:1px solid rgba(255,255,255,.25);color:#DCE9E3}
+.pill i{width:7px;height:7px;border-radius:50%;background:#7FB89D}
+.pill.test{background:rgba(198,164,91,.18);border-color:rgba(198,164,91,.6);color:#F3DDA8}
+.pill.test i{background:var(--gold)}
+.pill.real{background:rgba(127,184,157,.15);border-color:rgba(127,184,157,.5)}
+.pill.live i{animation:pulse 1.6s infinite}
+.btn-hd{height:36px;padding:0 16px;border-radius:9px;border:0;background:linear-gradient(180deg,#3A8F6E,#286B54);color:#fff;font-weight:700;box-shadow:0 4px 14px -4px rgba(58,143,110,.6)}
+.btn-hd:hover{filter:brightness(1.08)}
+.switch{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:#DCE9E3;background:none;border:1px solid rgba(255,255,255,.25);height:36px;padding:0 12px;border-radius:9px}
+.switch .tg{width:30px;height:18px;border-radius:99px;background:rgba(255,255,255,.25);position:relative;transition:.2s}
+.switch .tg::after{content:"";position:absolute;left:2px;top:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:.2s}
+.switch.on .tg{background:#4FB389}
+.switch.on .tg::after{left:14px}
+.tabs{display:flex;gap:4px;padding:0 14px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{position:relative;background:none;border:0;color:#B9CEC5;font-weight:700;padding:10px 12px 13px;white-space:nowrap;font-size:13.5px}
+.tab:hover{color:#fff}
+.tab.on{color:#fff}
+.tab.on::after{content:"";position:absolute;left:12px;right:12px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:#5CC497}
+.badge{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;margin-left:6px;border-radius:99px;background:#E0533F;color:#fff;font-size:11px;font-weight:800}
+.badge.g{background:#3A8F6E}
+
+/* ---------- Contenido ---------- */
+main{max-width:1180px;margin:0 auto;padding:26px 20px 60px}
+.hello h1{font-size:28px}
+.hello p{color:var(--ink-2);margin:4px 0 0}
+.grid{display:grid;gap:16px}
+.g-top{grid-template-columns:300px 1fr 1fr;margin-top:20px}
+.g-2{grid-template-columns:1fr 1fr;margin-top:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:18px 20px}
+.card h2{font-size:17px}
+.card-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.k{font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.big{font-family:var(--f-d);font-weight:700;font-size:38px;letter-spacing:-.04em;line-height:1.05;margin-top:6px}
+.big small{font-size:16px;color:var(--ink-2);font-weight:600;letter-spacing:0}
+.sub{font-size:12.5px;color:var(--ink-2)}
+.mini-bar{height:6px;border-radius:99px;background:var(--green-sf);margin-top:10px;overflow:hidden}
+.mini-bar i{display:block;height:100%;background:var(--green);border-radius:inherit;transition:width .6s}
+.stat-col{display:grid;gap:16px}
+/* Tarjeta oscura con indicador */
+.gauge-card{background:radial-gradient(120% 90% at 50% 0%,#1D4A3C,#0F2A22);color:#fff;border:0;display:flex;flex-direction:column;align-items:center;text-align:center;grid-row:span 2}
+.gauge-card .k{color:#CFE0D8;align-self:flex-start}
+.gauge{position:relative;width:220px;margin:8px auto 0}
+.gauge svg{width:100%;display:block;overflow:visible}
+.gauge .trk{fill:none;stroke:rgba(255,255,255,.12);stroke-width:12;stroke-linecap:round}
+.gauge .fil{fill:none;stroke:url(#gg);stroke-width:12;stroke-linecap:round;stroke-dasharray:100;transition:stroke-dashoffset 1s cubic-bezier(.2,.7,.2,1)}
+.gauge .tick{stroke:rgba(255,255,255,.35);stroke-width:1.5}
+.gauge .needle{transition:transform 1s cubic-bezier(.2,.7,.2,1);transform-origin:110px 110px}
+.gauge-num{font-family:var(--f-d);font-size:46px;font-weight:700;letter-spacing:-.04em;margin-top:2px;line-height:1}
+.gauge-cap{font-size:12.5px;color:#CFE0D8}
+.gauge-foot{display:flex;justify-content:space-between;width:100%;margin-top:auto;padding-top:14px;font-size:12px;color:#CFE0D8}
+.gauge-foot b{color:#fff}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:36px;padding:0 14px;border-radius:9px;border:1px solid var(--line-2);background:#fff;font-weight:700;font-size:13px;transition:.15s;white-space:nowrap}
+.btn:hover{border-color:var(--green-2);color:var(--hd)}
+.btn.pri{background:var(--green);border-color:var(--green);color:#fff}
+.btn.pri:hover{background:var(--hd);border-color:var(--hd);color:#fff}
+.btn.sm{height:30px;padding:0 10px;font-size:12px}
+.btn.danger:hover{border-color:var(--red);color:var(--red)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.link{background:none;border:0;color:var(--green);font-weight:700;padding:0}
+
+/* Listas */
+.list{list-style:none;margin:0;padding:0}
+.list li{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
+.list li:first-child{border-top:0}
+.list .t{flex:1;min-width:0}
+.list .t b{display:block;text-transform:uppercase;font-size:13px;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.list .t span{font-size:12.5px;color:var(--ink-2)}
+.empty{padding:22px 8px;text-align:center;color:var(--ink-2)}
+
+/* Chips de estado */
+.chip{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 9px;border-radius:99px;font-size:11.5px;font-weight:800;white-space:nowrap}
+.chip::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.c-listo{background:var(--green-sf);color:var(--green)}
+.c-programado{background:var(--blue-sf);color:var(--blue)}
+.c-sinpermiso{background:var(--amber-sf);color:var(--amber)}
+.c-enviado{background:#E3F1EA;color:#1F5A45}
+.c-respondido{background:var(--gold-sf);color:#7A5A12}
+.c-baja,.c-omitido,.c-ejemplo{background:#EEF1EF;color:#66726D}
+.c-error{background:var(--red-sf);color:var(--red)}
+
+/* Formularios */
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.f.full{grid-column:1/-1}
+.f label{font-weight:700;font-size:12.5px}
+.f label small{font-weight:600;color:var(--ink-2)}
+.f input,.f select,.f textarea{width:100%;border:1px solid var(--line-2);border-radius:9px;background:#fff;padding:0 12px;height:40px;font-size:14px;transition:.15s}
+.f textarea{height:auto;min-height:110px;padding:10px 12px;resize:vertical;line-height:1.5}
+.f input:focus,.f select:focus,.f textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(40,107,84,.14)}
+.hint{font-size:12px;color:var(--ink-2)}
+.check{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--green-xs)}
+.check input{width:18px;height:18px;margin:1px 0 0;accent-color:var(--green)}
+.check b{display:block;font-size:13px}
+.check span{font-size:12px;color:var(--ink-2)}
+.vars{display:flex;flex-wrap:wrap;gap:6px}
+.var{height:26px;padding:0 9px;border-radius:7px;border:1px dashed var(--green-2);background:var(--green-xs);color:var(--green);font-weight:700;font-size:12px}
+.note{padding:12px 14px;border-radius:10px;font-size:13px}
+.note.warn{background:var(--amber-sf);color:#6B4A12}
+.note.info{background:var(--green-xs);color:var(--hd)}
+
+/* Tabla de contactos */
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.search{flex:1;min-width:220px;height:38px;border:1px solid var(--line-2);border-radius:9px;padding:0 12px;background:#fff}
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.flt{height:32px;padding:0 12px;border-radius:99px;border:1px solid var(--line-2);background:#fff;font-weight:700;font-size:12.5px;color:var(--ink-2)}
+.flt.on{background:var(--hd);border-color:var(--hd);color:#fff}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2);font-weight:800;padding:10px 10px;border-bottom:1px solid var(--line)}
+td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:hover td{background:#FAFCFB}
+td .nm{font-weight:800;text-transform:uppercase;font-size:12.5px}
+td .sb{font-size:12px;color:var(--ink-2)}
+.acts{display:flex;gap:6px;justify-content:flex-end;align-items:center}
+details.more{position:relative}
+details.more summary{list-style:none;width:30px;height:30px;display:grid;place-items:center;border:1px solid var(--line-2);border-radius:8px;background:#fff;cursor:pointer;font-weight:800}
+details.more summary::-webkit-details-marker{display:none}
+details.more div{position:absolute;right:0;top:34px;z-index:5;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:var(--sh);padding:6px;min-width:170px}
+details.more button{display:block;width:100%;text-align:left;background:none;border:0;padding:8px 10px;border-radius:7px;font-weight:600;font-size:13px}
+details.more button:hover{background:var(--green-xs)}
+details.more button.r:hover{background:var(--red-sf);color:var(--red)}
+
+/* Plantillas */
+.tpl{display:grid;grid-template-columns:220px 1fr 1fr;gap:16px;align-items:start}
+.tpl-list button{display:block;width:100%;text-align:left;padding:10px 12px;border-radius:9px;border:1px solid transparent;background:none;font-weight:700;margin-bottom:4px}
+.tpl-list button small{display:block;font-weight:500;color:var(--ink-2);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tpl-list button.on{background:var(--green-xs);border-color:var(--green-sf);color:var(--hd)}
+.mail{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.mail-hd{padding:12px 14px;background:#FAFCFB;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink-2)}
+.mail-hd b{color:var(--ink)}
+.mail-bd{padding:16px}
+
+/* Modal y avisos */
+.modal{position:fixed;inset:0;z-index:50;background:rgba(10,25,20,.55);display:grid;place-items:center;padding:16px}
+.modal .card{width:min(680px,100%);max-height:92vh;overflow:auto}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:60;background:var(--hd);color:#fff;padding:12px 18px;border-radius:10px;font-weight:700;box-shadow:var(--sh);max-width:90vw;white-space:pre-line}
+.toast.err{background:var(--red)}
+.loading{position:fixed;top:0;left:0;right:0;height:3px;z-index:70;background:linear-gradient(90deg,transparent,#5CC497,transparent);background-size:40% 100%;background-repeat:no-repeat;animation:load 1s linear infinite}
+@keyframes load{from{background-position:-40% 0}to{background-position:140% 0}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(127,184,157,.6)}70%{box-shadow:0 0 0 6px rgba(127,184,157,0)}100%{box-shadow:0 0 0 0 rgba(127,184,157,0)}}
+.preview-tbl{max-height:220px;overflow:auto;border:1px solid var(--line);border-radius:10px}
+.preview-tbl td,.preview-tbl th{padding:7px 10px;font-size:12.5px}
+.bad{color:var(--red);font-weight:700}
+
+@media (max-width:980px){
+  .g-top{grid-template-columns:1fr 1fr}
+  .gauge-card{grid-row:auto;grid-column:1/-1}
+  .tpl{grid-template-columns:1fr}
+}
+@media (max-width:680px){
+  .hd-top{flex-wrap:wrap;padding:10px 14px}
+  .hd-title{display:none}
+  .g-2,.form{grid-template-columns:1fr}
+  .g-top{grid-template-columns:1fr 1fr;gap:12px}
+  .big{font-size:30px}
+  .card{padding:14px 16px}
+  main{padding:18px 12px 50px}
+  .hide-m{display:none}
+  td,th{padding:9px 6px}
+}
+</style>
+</head>
+<body>
+<div class="loading" id="loading" hidden></div>
+
+<header class="hd">
+  <div class="hd-top">
+    <div class="brand"><svg viewBox="0 0 100 100" aria-hidden="true"><g fill="#173F34"><rect x="42" y="2" width="16" height="20" rx="2"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(30 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(60 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(90 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(120 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(150 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(180 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(210 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(240 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(270 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(300 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(330 50 50)"/><circle cx="50" cy="50" r="34"/></g><circle cx="50" cy="50" r="13" fill="#C6A45B"/></svg>engrana</div>
+    <div class="hd-title"><b>Panel de envíos</b><small id="cuenta">Cargando…</small></div>
+    <div class="hd-right">
+      <span class="pill" id="modo"><i></i><span>—</span></span>
+      <button class="switch" id="prog" type="button" title="Envía cada 15 minutos dentro del horario"><span class="tg"></span><span>Envío programado</span></button>
+      <button class="btn-hd" id="tanda" type="button">✉ Enviar tanda ahora</button>
+    </div>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-tab="hoy">Hoy</button>
+    <button class="tab" data-tab="anadir">＋ Añadir contactos</button>
+    <button class="tab" data-tab="contactos">Contactos <span class="badge g" id="b-contactos">0</span></button>
+    <button class="tab" data-tab="plantillas">Plantillas</button>
+    <button class="tab" data-tab="config">Configuración</button>
+    <button class="tab" data-tab="solicitudes">Solicitudes <span class="badge" id="b-sol" hidden>0</span></button>
+    <button class="tab" data-tab="registro">Registro</button>
+  </nav>
+</header>
+
+<main>
+  <!-- ======================= HOY ======================= -->
+  <section data-view="hoy">
+    <div class="hello"><h1 id="saludo">Buenos días</h1><p id="fecha"></p></div>
+    <div id="aviso-prueba" class="note warn" style="margin-top:16px" hidden>Modo prueba activado: los correos llegan solo a <b id="ap-mail"></b> y no se marca nada como enviado. Cuando todo esté bien, desactívalo en <button class="link" data-go="config">Configuración</button>.</div>
+    <div class="grid g-top">
+      <div class="card gauge-card">
+        <span class="k">Correos de hoy</span>
+        <div class="gauge">
+          <svg viewBox="0 0 220 130" aria-hidden="true">
+            <defs><linearGradient id="gg" x1="0" x2="1"><stop offset="0" stop-color="#3A8F6E"/><stop offset="1" stop-color="#7FD1A8"/></linearGradient></defs>
+            <path class="trk" d="M20 110 A90 90 0 0 1 200 110" pathLength="100"/>
+            <path class="fil" id="g-fil" d="M20 110 A90 90 0 0 1 200 110" pathLength="100" style="stroke-dashoffset:100"/>
+            <g id="g-ticks"></g>
+            <g class="needle" id="g-needle" style="transform:rotate(-90deg)"><line x1="110" y1="110" x2="110" y2="44" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="110" cy="110" r="8" fill="#fff"/><circle cx="110" cy="110" r="4" fill="#3A8F6E"/></g>
+          </svg>
+        </div>
+        <div class="gauge-num" id="g-num">0</div>
+        <div class="gauge-cap" id="g-cap">de 40 permitidos hoy</div>
+        <div class="gauge-foot"><span>Cuota Gmail: <b id="g-cuota">—</b></span><span>Horario: <b id="g-hor">—</b></span></div>
+      </div>
+      <div class="card"><div class="k">Listos para enviar</div><div class="big" id="s-listos">0</div><div class="sub">Con permiso y sin enviar</div><div class="mini-bar"><i id="s-listos-bar" style="width:0"></i></div></div>
+      <div class="card"><div class="k">Enviados</div><div class="big" id="s-env">0</div><div class="sub" id="s-env-sub">Total</div></div>
+      <div class="card"><div class="k">Respondidos</div><div class="big" id="s-resp">0</div><div class="sub" id="s-resp-sub">Contestaron al correo</div></div>
+      <div class="card"><div class="k">Hicieron el test</div><div class="big" id="s-test">0</div><div class="sub" id="s-test-sub">Desde tus enlaces</div></div>
+    </div>
+    <div class="grid g-2">
+      <div class="card">
+        <div class="card-hd"><h2>Siguientes envíos</h2><span><button class="btn sm" data-go="contactos" data-filtro="listo">Ver lista</button> <button class="btn sm pri" data-go="anadir">＋ Añadir</button></span></div>
+        <ul class="list" id="siguientes"></ul>
+      </div>
+      <div class="card">
+        <div class="card-hd"><h2>Interesados</h2><button class="btn sm" id="revisar">↻ Revisar ahora</button></div>
+        <ul class="list" id="respuestas"></ul>
+      </div>
+      <div class="card" style="grid-column:1/-1">
+        <div class="card-hd"><h2>Actividad reciente</h2><button class="btn sm" data-go="registro">Ver todo</button></div>
+        <ul class="list" id="actividad"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= AÑADIR ======================= -->
+  <section data-view="anadir" hidden>
+    <div class="hello"><h1>Añadir contactos</h1><p>Uno a uno o pegando varias filas desde Excel.</p></div>
+    <div class="grid g-2">
+      <form class="card" id="f-uno" autocomplete="off">
+        <div class="card-hd"><h2>Un contacto</h2></div>
+        <div class="form">
+          <div class="f full"><label>Correo electrónico</label><input name="email" type="email" required placeholder="nombre@empresa.com"></div>
+          <div class="f"><label>Nombre</label><input name="nombre" placeholder="Ana"></div>
+          <div class="f"><label>Empresa</label><input name="empresa" required placeholder="Distribuciones Ejemplo SL"></div>
+          <div class="f"><label>Cargo <small>(opcional)</small></label><input name="cargo" placeholder="Gerente"></div>
+          <div class="f"><label>Sector</label><select name="sector" data-sectores></select></div>
+          <div class="f"><label>Plantilla</label><select name="plantilla" data-plantillas></select></div>
+          <div class="f"><label>Programar <small>(opcional)</small></label><input name="programar" type="datetime-local"></div>
+          <div class="f full"><label class="check"><input type="checkbox" name="permiso"><span><b>Ha pedido la información o ha aceptado recibirla</b><span>Solo se envía a contactos con permiso.</span></span></label></div>
+          <div class="f full" data-como hidden><label>¿Cómo dio permiso?</label><input name="comoPermiso" placeholder="Ej.: me pidió el enlace por LinkedIn el 16/11"></div>
+          <div class="f full"><label>Notas <small>(opcional)</small></label><input name="notas"></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:16px"><button class="btn pri" type="submit">Guardar contacto</button><button class="btn" type="reset">Limpiar</button></div>
+      </form>
+
+      <form class="card" id="f-lote" autocomplete="off">
+        <div class="card-hd"><h2>Pegar desde Excel</h2></div>
+        <p class="hint" style="margin:0 0 10px">En Excel, selecciona las columnas <b>Email · Nombre · Empresa · Cargo</b> (en ese orden), copia y pega aquí. También vale separado por comas.</p>
+        <div class="form">
+          <div class="f full"><textarea name="texto" rows="7" placeholder="ana@empresa.com&#9;Ana&#9;Empresa SL&#9;Gerente&#10;luis@otra.es&#9;Luis&#9;Otra SA"></textarea></div>
+          <div class="f full" id="lote-prev" hidden></div>
+          <div class="f"><label>Plantilla para todos</label><select name="plantilla" data-plantillas></select></div>
+          <div class="f"><label>Sector para todos</label><select name="sector" data-sectores></select></div>
+          <div class="f full"><label class="check"><input type="checkbox" name="permiso"><span><b>Todos han pedido la información o aceptado recibirla</b><span>Marca solo si es cierto para toda la lista.</span></span></label></div>
+          <div class="f full" data-como hidden><label>¿Cómo dieron permiso?</label><input name="comoPermiso" placeholder="Ej.: asistentes a la jornada del 12/11 que pidieron información"></div>
+          <div class="f full"><label>Programar <small>(opcional, para todos)</small></label><input name="programar" type="datetime-local"></div>
+        </div>
+        <div style="margin-top:16px"><button class="btn pri" type="submit" id="lote-btn" disabled>Añadir contactos</button></div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ======================= CONTACTOS ======================= -->
+  <section data-view="contactos" hidden>
+    <div class="card">
+      <div class="toolbar">
+        <input class="search" id="buscar" type="search" placeholder="Buscar empresa, nombre, correo o referencia…">
+        <div class="filters" id="filtros"></div>
+      </div>
+      <div style="overflow-x:auto"><table>
+        <thead><tr><th>Empresa / contacto</th><th class="hide-m">Correo</th><th class="hide-m">Plantilla</th><th>Estado</th><th class="hide-m">Fecha</th><th></th></tr></thead>
+        <tbody id="tabla"></tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <!-- ======================= PLANTILLAS ======================= -->
+  <section data-view="plantillas" hidden>
+    <div class="tpl">
+      <div class="card tpl-list"><div class="card-hd"><h2>Plantillas</h2></div><div id="tpl-list"></div><button class="btn sm" id="tpl-nueva" style="margin-top:8px">＋ Nueva plantilla</button></div>
+      <form class="card" id="f-tpl" autocomplete="off">
+        <div class="form">
+          <div class="f full"><label>Nombre</label><input name="nombre" required placeholder="diagnostico"></div>
+          <div class="f full"><label>Insertar dato</label><div class="vars" id="vars"></div><span class="hint">Pulsa para insertar donde está el cursor. Usa <b>{{Nombre|hola}}</b> para poner «hola» si falta el nombre.</span></div>
+          <div class="f full"><label>Asunto</label><input name="asunto" required></div>
+          <div class="f full"><label>Mensaje</label><textarea name="mensaje" rows="10" required></textarea></div>
+          <div class="f"><label>Seguimiento a los <small>(días, 0 = sin seguimiento)</small></label><input name="dias" type="number" min="0" max="60"></div>
+          <div class="f full"><label>Mensaje de seguimiento <small>(se envía en el mismo hilo si no responden)</small></label><textarea name="seguimiento" rows="5"></textarea></div>
+        </div>
+        <div style="margin-top:14px"><button class="btn pri" type="submit">Guardar plantilla</button></div>
+      </form>
+      <div class="card">
+        <div class="card-hd"><h2>Vista previa</h2><span class="hint" id="tpl-con"></span></div>
+        <div class="mail"><div class="mail-hd"><b id="tp-asunto"></b><br>Para: <span id="tp-para"></span></div><div class="mail-bd" id="tp-html"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= CONFIGURACIÓN ======================= -->
+  <section data-view="config" hidden>
+    <form class="card" id="f-cfg" autocomplete="off" style="max-width:860px">
+      <div class="card-hd"><h2>Configuración</h2></div>
+      <div class="form">
+        <div class="f full"><label class="check" style="background:var(--amber-sf)"><input type="checkbox" name="modoPrueba"><span><b>Modo prueba</b><span>Todo llega al email de prueba y no se marca nada como enviado. Desactívalo para enviar de verdad.</span></span></label></div>
+        <div class="f"><label>Email de prueba</label><input name="emailPrueba" type="email"></div>
+        <div class="f"><label>Enviar desde</label><input name="desde" type="email"><span class="hint">La cuenta con la que abres la hoja o un alias «Enviar como».</span></div>
+        <div class="f"><label>Nombre del remitente</label><input name="nombre"></div>
+        <div class="f"><label>Responder a</label><input name="responderA" type="email"></div>
+        <div class="f"><label>Campaña <small>(utm_campaign)</small></label><input name="campana"><span class="hint">Aparece en cada solicitud del diagnóstico.</span></div>
+        <div class="f"><label>Límite diario</label><input name="limiteDiario" type="number" min="1" max="1500"></div>
+        <div class="f"><label>Correos por tanda <small>(cada 15 min)</small></label><input name="porEjecucion" type="number" min="1" max="20"></div>
+        <div class="f"><label>Hora de inicio</label><input name="horaInicio" type="number" min="0" max="23"></div>
+        <div class="f"><label>Hora de fin</label><input name="horaFin" type="number" min="1" max="24"></div>
+        <div class="f full" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+          <label class="check"><input type="checkbox" name="soloLaborables"><span><b>Solo de lunes a viernes</b></span></label>
+          <label class="check"><input type="checkbox" name="seguimiento"><span><b>Seguimiento automático</b><span>Un recordatorio si no responden</span></span></label>
+          <label class="check"><input type="checkbox" name="exigirPermiso"><span><b>Exigir permiso</b><span>Recomendado: obligatorio por ley para correo comercial</span></span></label>
+        </div>
+        <div class="f full"><label>Firma</label><textarea name="firma" rows="4"></textarea></div>
+        <div class="f full"><label>Texto de baja</label><input name="textoBaja"></div>
+      </div>
+      <div style="margin-top:16px"><button class="btn pri" type="submit">Guardar configuración</button></div>
+    </form>
+    <div class="card" style="max-width:860px;margin-top:16px">
+      <div class="card-hd"><h2>Conectar con la web</h2><span class="chip" id="web-chip">—</span></div>
+      <p class="hint" style="margin:0 0 12px">Para ver aquí quién abre tu enlace, hace el test o pide la revisión. Necesita la clave de abajo y la URL de este proyecto publicado como aplicación web con acceso «Cualquiera» (pasos en INSTRUCCIONES.md).</p>
+      <button class="btn" type="button" id="ver-clave">Mostrar clave para Netlify</button>
+      <div class="f" id="clave-box" style="margin-top:12px" hidden><label>DIAGNOSTICO_WEBHOOK_TOKEN</label><input id="clave" readonly onclick="this.select()"></div>
+    </div>
+  </section>
+
+  <!-- ======================= SOLICITUDES ======================= -->
+  <section data-view="solicitudes" hidden>
+    <div class="card"><div class="card-hd"><h2>Solicitudes de revisión</h2><span class="hint">Personas que pidieron la revisión en la web</span></div>
+      <div id="web-off" class="note warn" style="margin-bottom:12px" hidden>La web todavía no está conectada con esta hoja: las solicitudes llegan a Netlify y a tu correo, pero no aparecen aquí. Ve a <button class="link" data-go="config">Configuración → Conectar con la web</button>.</div>
+      <div style="overflow-x:auto"><table><thead><tr><th>Fecha</th><th>Empresa / contacto</th><th class="hide-m">Correo y teléfono</th><th>Resultado</th><th class="hide-m">Origen</th></tr></thead><tbody id="sol"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- ======================= REGISTRO ======================= -->
+  <section data-view="registro" hidden>
+    <div class="card"><div class="card-hd"><h2>Registro</h2><span class="hint">Últimos 60 movimientos</span></div>
+      <div style="overflow-x:auto"><table><thead><tr><th>Fecha</th><th>Acción</th><th>Correo</th><th class="hide-m">Detalle</th></tr></thead><tbody id="reg"></tbody></table></div>
+    </div>
+  </section>
+</main>
+
+<div class="modal" id="modal" hidden>
+  <div class="card">
+    <div class="card-hd"><h2 id="m-tit">Vista previa</h2><button class="btn sm" id="m-x">Cerrar</button></div>
+    <div class="mail"><div class="mail-hd" id="m-hd"></div><div class="mail-bd" id="m-bd"></div></div>
+    <div style="display:flex;gap:10px;margin-top:14px" id="m-acts"></div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function () {
+  "use strict";
+  var D = null, tab = "hoy", filtro = "todos", tplSel = null;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var esc = function (s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+  var ETQ = { listo: "Listo", programado: "Programado", sinpermiso: "Sin permiso", enviado: "Enviado", respondido: "Respondido", baja: "Baja", error: "Error", omitido: "Omitido", ejemplo: "Ejemplo" };
+
+  /* ---------- Llamadas al servidor ---------- */
+  var pendientes = 0;
+  function call(fn) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    pendientes++; $("#loading").hidden = false;
+    return new Promise(function (ok) {
+      var runner = google.script.run
+        .withSuccessHandler(function (r) { fin(); ok(r); })
+        .withFailureHandler(function (e) { fin(); toast(e && e.message ? e.message : String(e), true); /* el aviso ya se muestra; la promesa queda sin resolver */ });
+      runner[fn].apply(runner, args);
+    });
+    function fin() { pendientes--; if (!pendientes) $("#loading").hidden = true; }
+  }
+  function toast(t, err) {
+    var el = $("#toast"); el.textContent = t; el.className = "toast" + (err ? " err" : ""); el.hidden = false;
+    clearTimeout(toast.t); toast.t = setTimeout(function () { el.hidden = true; }, err ? 6000 : 3500);
+  }
+  function fecha(iso, corta) {
+    if (!iso) return "";
+    var d = new Date(iso);
+    return corta ? d.toLocaleDateString("es-ES", { day: "numeric", month: "short" }) + " " + d.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })
+                 : d.toLocaleString("es-ES", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  }
+
+  /* ---------- Pestañas ---------- */
+  function ir(t, f) {
+    tab = t;
+    $$(".tab").forEach(function (b) { b.classList.toggle("on", b.dataset.tab === t); });
+    $$("[data-view]").forEach(function (s) { s.hidden = s.dataset.view !== t; });
+    if (f) { filtro = f; pintarContactos(); }
+    if (t === "plantillas" && D) pintarPlantillas();
+    if (t === "config" && D) pintarConfig();
+    if (t === "solicitudes") call("panelSolicitudes").then(pintarSolicitudes);
+    window.scrollTo(0, 0);
+  }
+  $("#tabs").addEventListener("click", function (e) { var b = e.target.closest(".tab"); if (b) ir(b.dataset.tab); });
+  document.addEventListener("click", function (e) { var b = e.target.closest("[data-go]"); if (b) ir(b.dataset.go, b.dataset.filtro); });
+
+  /* ---------- Pintar todo ---------- */
+  function cargar(d) { D = d; pintar(); }
+  function pintar() {
+    var c = D.cfg, k = D.contadores;
+    $("#cuenta").textContent = D.cuenta + " → envía como " + c.desde;
+    var m = $("#modo");
+    m.className = "pill " + (c.modoPrueba ? "test" : "real") + (D.programado ? " live" : "");
+    m.lastChild.textContent = c.modoPrueba ? "MODO PRUEBA" : (D.programado ? "ENVIANDO" : "ENVÍO REAL");
+    $("#prog").classList.toggle("on", D.programado);
+    $("#aviso-prueba").hidden = !c.modoPrueba; $("#ap-mail").textContent = c.emailPrueba;
+    var h = new Date().getHours();
+    $("#saludo").textContent = h < 14 ? "Buenos días" : h < 21 ? "Buenas tardes" : "Buenas noches";
+    $("#fecha").textContent = new Date().toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" }) + " · " + (D.enHorario ? "dentro del horario de envío" : "fuera del horario de envío");
+
+    // Indicador
+    var pct = Math.min(1, D.enviadosHoy / Math.max(1, c.limiteDiario));
+    $("#g-fil").style.strokeDashoffset = String(100 - pct * 100);
+    $("#g-needle").style.transform = "rotate(" + (-90 + pct * 180) + "deg)";
+    $("#g-num").textContent = D.enviadosHoy;
+    $("#g-cap").textContent = "de " + c.limiteDiario + " permitidos hoy";
+    $("#g-cuota").textContent = D.cuota; $("#g-hor").textContent = c.horaInicio + "–" + c.horaFin + " h";
+
+    $("#s-listos").textContent = k.listo;
+    var total = D.contactos.length - k.ejemplo;
+    $("#s-listos-bar").style.width = (total ? k.listo / total * 100 : 0) + "%";
+    $("#s-env").textContent = k.enviado + k.respondido;
+    $("#s-env-sub").textContent = k.programado ? k.programado + " programados para más tarde" : "Total enviados";
+    $("#s-resp").textContent = k.respondido;
+    var a = D.actividad || { abrieron: 0, test: 0, solicitudes: 0, solicitudesTotal: 0 };
+    $("#s-test").textContent = a.test;
+    $("#s-test-sub").textContent = a.abrieron + " abrieron el enlace · " + a.solicitudes + " pidieron revisión";
+    $("#s-resp-sub").textContent = "Contestaron al correo · " + a.solicitudesTotal + " solicitudes en total";
+    $("#b-sol").hidden = !a.solicitudesTotal; $("#b-sol").textContent = a.solicitudesTotal;
+    $("#web-off").hidden = !!D.webConectada;
+    $("#web-chip").className = "chip " + (D.webConectada ? "c-listo" : "c-sinpermiso");
+    $("#web-chip").textContent = D.webConectada ? "Clave creada" : "Sin conectar";
+    $("#b-contactos").textContent = total;
+
+    var sig = D.contactos.filter(function (x) { return x.grupo === "listo"; }).slice(0, 5);
+    $("#siguientes").innerHTML = sig.length ? sig.map(function (x) {
+      return '<li><div class="t"><b>' + esc(x.empresa) + '</b><span>' + esc(x.nombre || x.email) + " · " + esc(x.plantilla) + '</span></div><button class="btn sm" data-ver="' + x.fila + '">Vista previa</button></li>';
+    }).join("") : '<li class="empty">No hay contactos listos. <button class="link" data-go="anadir">Añade algunos</button>.</li>';
+
+    var resp = D.contactos.filter(interesado).sort(function (x, y) { return ultimaSenal(y) < ultimaSenal(x) ? -1 : 1; }).slice(0, 6);
+    $("#respuestas").innerHTML = resp.length ? resp.map(function (x) {
+      return '<li><div class="t"><b>' + esc(x.empresa) + '</b><span>' + esc(x.nombre || x.email) + (x.resultado ? " · " + esc(x.resultado.split(" · ")[0]) : "") + '</span></div>' + senal(x) + "</li>";
+    }).join("") : '<li class="empty">Aún nadie ha abierto tus enlaces ni respondido.</li>';
+
+    $("#actividad").innerHTML = D.registro.length ? D.registro.slice(0, 6).map(regLi).join("") : '<li class="empty">Sin actividad todavía.</li>';
+    $("#reg").innerHTML = D.registro.map(function (r) { return "<tr><td>" + fecha(r.fecha) + "</td><td><b>" + esc(r.accion) + "</b></td><td>" + esc(r.email) + '</td><td class="hide-m sb">' + esc(r.detalle) + "</td></tr>"; }).join("") || '<tr><td colspan="4" class="empty">Sin movimientos.</td></tr>';
+
+    // Selects
+    var opPl = D.plantillas.map(function (p) { return '<option value="' + esc(p.nombre) + '">' + esc(p.nombre) + "</option>"; }).join("");
+    $$("[data-plantillas]").forEach(function (s) { var v = s.value; s.innerHTML = opPl; if (v) s.value = v; });
+    var opSe = '<option value="">Sin indicar</option>' + D.sectores.map(function (x) { return "<option>" + esc(x) + "</option>"; }).join("");
+    $$("[data-sectores]").forEach(function (s) { var v = s.value; s.innerHTML = opSe; s.value = v || ""; });
+
+    pintarContactos();
+  }
+  /* Señales de interés de un contacto */
+  function interesado(x) { return x.solicitud || x.test || x.abrio || x.grupo === "respondido"; }
+  function ultimaSenal(x) { return [x.solicitud, x.test, x.abrio].filter(Boolean).sort().pop() || ""; }
+  function senal(x) {
+    if (x.solicitud) return '<span class="chip c-respondido">Pidió revisión</span>';
+    if (x.grupo === "respondido") return '<span class="chip c-respondido">Respondió</span>';
+    if (x.test) return '<span class="chip c-listo">Hizo el test</span>';
+    if (x.abrio) return '<span class="chip c-programado">Abrió el enlace</span>';
+    return "";
+  }
+  function actividadTxt(x) {
+    var p = [];
+    if (x.abrio) p.push("Abrió " + fecha(x.abrio, true));
+    if (x.test) p.push("Test " + esc((x.resultado || "").split(" · ")[0]));
+    if (x.solicitud) p.push("★ Pidió revisión");
+    return p.length ? '<div class="sb" style="color:var(--green);font-weight:700;margin-top:4px">' + p.join(" · ") + "</div>" : "";
+  }
+  function regLi(r) {
+    return '<li><div class="t"><b style="text-transform:none">' + esc(r.accion) + (r.email ? " · " + esc(r.email) : "") + '</b><span>' + esc(r.detalle) + '</span></div><span class="sub">' + fecha(r.fecha) + "</span></li>";
+  }
+
+  /* ---------- Contactos ---------- */
+  var FILTROS = [["todos", "Todos"], ["listo", "Listos"], ["programado", "Programados"], ["sinpermiso", "Sin permiso"], ["enviado", "Enviados"], ["respondido", "Respondidos"], ["interesados", "Interesados"], ["baja", "Bajas"], ["error", "Errores"]];
+  function pintarContactos() {
+    if (!D) return;
+    $("#filtros").innerHTML = FILTROS.map(function (f) {
+      var n = f[0] === "todos" ? D.contactos.length : f[0] === "interesados" ? D.contactos.filter(interesado).length : (D.contadores[f[0]] || 0);
+      return '<button class="flt' + (filtro === f[0] ? " on" : "") + '" data-f="' + f[0] + '">' + f[1] + " · " + n + "</button>";
+    }).join("");
+    var q = $("#buscar").value.trim().toLowerCase();
+    var filas = D.contactos.filter(function (x) {
+      if (filtro === "interesados") { if (!interesado(x)) return false; }
+      else if (filtro !== "todos" && x.grupo !== filtro) return false;
+      return !q || (x.empresa + " " + x.nombre + " " + x.email + " " + x.ref).toLowerCase().indexOf(q) !== -1;
+    });
+    $("#tabla").innerHTML = filas.length ? filas.map(function (x) {
+      var f = x.seguimientoEl || x.enviadoEl || x.programar;
+      var est = x.grupo === "error" ? x.estado.replace(/^Error:\s*/, "") : "";
+      return "<tr><td><div class=nm>" + esc(x.empresa || "—") + '</div><div class="sb">' + esc([x.nombre, x.cargo].filter(Boolean).join(" · ")) + (x.ref ? ' · <span title="Referencia en el diagnóstico">' + esc(x.ref) + "</span>" : "") + "</div></td>" +
+        '<td class="hide-m">' + esc(x.email) + '</td><td class="hide-m">' + esc(x.plantilla) + "</td>" +
+        '<td><span class="chip c-' + x.grupo + '"' + (est ? ' title="' + esc(est) + '"' : "") + ">" + (x.estado === "Seguimiento enviado" ? "Seguimiento" : ETQ[x.grupo]) + "</span>" + (est ? '<div class="sb bad">' + esc(est) + "</div>" : "") + actividadTxt(x) + "</td>" +
+        '<td class="hide-m sb">' + (f ? fecha(f, true) : "") + "</td>" +
+        '<td><div class="acts"><button class="btn sm" data-ver="' + x.fila + '">Ver</button><button class="btn sm hide-m" data-prueba="' + x.fila + '">Prueba</button>' +
+        '<details class="more"><summary title="Más acciones">⋯</summary><div>' +
+        '<button data-acc="pendiente" data-fila="' + x.fila + '">Volver a pendiente</button>' +
+        '<button data-acc="omitir" data-fila="' + x.fila + '">No enviar (omitir)</button>' +
+        '<button data-acc="baja" data-fila="' + x.fila + '">Marcar baja</button>' +
+        '<button class="r" data-acc="eliminar" data-fila="' + x.fila + '">Eliminar fila</button></div></details></div></td></tr>';
+    }).join("") : '<tr><td colspan="6" class="empty">No hay contactos con este filtro.</td></tr>';
+  }
+  $("#filtros").addEventListener("click", function (e) { var b = e.target.closest("[data-f]"); if (b) { filtro = b.dataset.f; pintarContactos(); } });
+  $("#buscar").addEventListener("input", pintarContactos);
+
+  document.addEventListener("click", function (e) {
+    var v = e.target.closest("[data-ver]"), p = e.target.closest("[data-prueba]"), a = e.target.closest("[data-acc]");
+    if (v) verCorreo(+v.dataset.ver);
+    if (p) call("panelPrueba", +p.dataset.prueba).then(toast);
+    if (a) {
+      var acc = a.dataset.acc;
+      if (acc === "eliminar" && !confirm("¿Eliminar esta fila de la hoja?")) return;
+      if (acc === "baja" && !confirm("¿Marcar como baja? No se le volverá a escribir.")) return;
+      call("panelAccion", +a.dataset.fila, acc).then(function (d) { cargar(d); toast("Hecho"); });
+    }
+    if (!e.target.closest("details.more")) $$("details.more[open]").forEach(function (d) { d.open = false; });
+  });
+
+  function verCorreo(fila) {
+    call("panelVistaPrevia", fila, "nuevo").then(function (m) {
+      $("#m-tit").textContent = "Vista previa";
+      $("#m-hd").innerHTML = "<b>" + esc(m.asunto) + "</b><br>De: " + esc(m.desde) + "<br>Para: " + esc(m.para);
+      $("#m-bd").innerHTML = m.html;
+      $("#m-acts").innerHTML = '<button class="btn pri" data-prueba="' + fila + '">Enviarme una prueba</button>';
+      $("#modal").hidden = false;
+    });
+  }
+  $("#m-x").addEventListener("click", function () { $("#modal").hidden = true; });
+  $("#modal").addEventListener("click", function (e) { if (e.target.id === "modal") $("#modal").hidden = true; });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") $("#modal").hidden = true; });
+
+  /* ---------- Añadir ---------- */
+  function datosForm(f) {
+    var o = {};
+    $$("input,select,textarea", f).forEach(function (i) { if (!i.name) return; o[i.name] = i.type === "checkbox" ? i.checked : i.value; });
+    o.permiso = o.permiso ? "SI" : "NO";
+    return o;
+  }
+  $$("#f-uno,#f-lote").forEach(function (f) {
+    f.permiso.addEventListener("change", function () { $("[data-como]", f).hidden = !f.permiso.checked; });
+  });
+  $("#f-uno").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var f = e.target, d = datosForm(f);
+    if (d.permiso === "SI" && !d.comoPermiso.trim()) return toast("Indica cómo dio permiso.", true);
+    call("panelGuardarContacto", d).then(function (r) { cargar(r); f.reset(); $("[data-como]", f).hidden = true; toast("Contacto guardado"); });
+  });
+  $("#f-uno").addEventListener("reset", function () { setTimeout(function () { $("[data-como]", $("#f-uno")).hidden = true; }); });
+
+  function parsear(texto) {
+    var ok = [], mal = [];
+    texto.split(/\r?\n/).forEach(function (l, i) {
+      if (!l.trim()) return;
+      var p = l.split(l.indexOf("\t") !== -1 ? "\t" : (l.indexOf(";") !== -1 ? ";" : ",")).map(function (x) { return x.trim(); });
+      if (i === 0 && /mail|correo/i.test(p[0]) && p[0].indexOf("@") === -1) return;
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(p[0] || "")) mal.push(l); else ok.push(p);
+    });
+    return { ok: ok, mal: mal };
+  }
+  $("#f-lote").texto.addEventListener("input", function () {
+    var r = parsear(this.value), box = $("#lote-prev");
+    $("#lote-btn").disabled = !r.ok.length;
+    $("#lote-btn").textContent = r.ok.length ? "Añadir " + r.ok.length + " contacto" + (r.ok.length > 1 ? "s" : "") : "Añadir contactos";
+    if (!r.ok.length && !r.mal.length) { box.hidden = true; return; }
+    box.hidden = false;
+    box.innerHTML = '<div class="preview-tbl"><table><thead><tr><th>Correo</th><th>Nombre</th><th>Empresa</th><th>Cargo</th></tr></thead><tbody>' +
+      r.ok.slice(0, 50).map(function (p) { return "<tr><td>" + esc(p[0]) + "</td><td>" + esc(p[1]) + "</td><td>" + esc(p[2]) + "</td><td>" + esc(p[3]) + "</td></tr>"; }).join("") +
+      r.mal.map(function (l) { return '<tr><td colspan="4" class="bad">Correo no válido: ' + esc(l) + "</td></tr>"; }).join("") + "</tbody></table></div>";
+  });
+  $("#f-lote").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var f = e.target, d = datosForm(f);
+    if (d.permiso === "SI" && !d.comoPermiso.trim()) return toast("Indica cómo dieron permiso.", true);
+    call("panelGuardarLote", d.texto, { plantilla: d.plantilla, sector: d.sector, permiso: d.permiso, comoPermiso: d.comoPermiso, programar: d.programar })
+      .then(function (r) {
+        cargar(r.datos);
+        toast(r.anadidos + " añadidos" + (r.omitidos.length ? "\n" + r.omitidos.length + " omitidos: " + r.omitidos.slice(0, 3).join("; ") + (r.omitidos.length > 3 ? "…" : "") : ""), !!r.omitidos.length && !r.anadidos);
+        if (r.anadidos) { f.reset(); $("#lote-prev").hidden = true; $("#lote-btn").disabled = true; $("[data-como]", f).hidden = true; }
+      });
+  });
+
+  /* ---------- Plantillas ---------- */
+  var VARS = ["Nombre", "Empresa", "Cargo", "Sector", "Enlace"];
+  $("#vars").innerHTML = VARS.map(function (v) { return '<button type="button" class="var" data-var="' + v + '">{{' + v + "}}</button>"; }).join("");
+  var ultimoCampo = null;
+  $$("#f-tpl input,#f-tpl textarea").forEach(function (i) { i.addEventListener("focus", function () { if (i.name !== "nombre" && i.name !== "dias") ultimoCampo = i; }); i.addEventListener("input", previewTpl); });
+  $("#vars").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-var]"); if (!b) return;
+    var c = ultimoCampo || $("#f-tpl").mensaje, t = "{{" + b.dataset.var + "}}", s = c.selectionStart || c.value.length;
+    c.value = c.value.slice(0, s) + t + c.value.slice(c.selectionEnd || s); c.focus(); c.selectionStart = c.selectionEnd = s + t.length; previewTpl();
+  });
+  function pintarPlantillas() {
+    if (!tplSel && D.plantillas.length) tplSel = D.plantillas[0].nombre;
+    $("#tpl-list").innerHTML = D.plantillas.map(function (p) {
+      return '<button type="button" class="' + (p.nombre === tplSel ? "on" : "") + '" data-tpl="' + esc(p.nombre) + '">' + esc(p.nombre) + "<small>" + esc(p.asunto) + "</small></button>";
+    }).join("");
+    var p = D.plantillas.filter(function (x) { return x.nombre === tplSel; })[0] || { nombre: "", asunto: "", mensaje: "", dias: 0, seguimiento: "" };
+    var f = $("#f-tpl");
+    f.nombre.value = p.nombre; f.asunto.value = p.asunto; f.mensaje.value = p.mensaje; f.dias.value = p.dias; f.seguimiento.value = p.seguimiento;
+    previewTpl();
+  }
+  $("#tpl-list").addEventListener("click", function (e) { var b = e.target.closest("[data-tpl]"); if (b) { tplSel = b.dataset.tpl; pintarPlantillas(); } });
+  $("#tpl-nueva").addEventListener("click", function () { tplSel = "__nueva"; pintarPlantillas(); $("#f-tpl").nombre.focus(); });
+  $("#f-tpl").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var f = e.target;
+    call("panelGuardarPlantilla", { nombre: f.nombre.value, asunto: f.asunto.value, mensaje: f.mensaje.value, dias: f.dias.value, seguimiento: f.seguimiento.value })
+      .then(function (d) { tplSel = f.nombre.value.trim().toLowerCase().replace(/\s+/g, "-"); cargar(d); pintarPlantillas(); toast("Plantilla guardada"); });
+  });
+  // Misma lógica de personalización que el servidor, para ver el resultado al instante
+  function rellenar(t, datos) {
+    return String(t).replace(/\{\{\s*([^}|]+?)\s*(?:\|([^}]*))?\}\}/g, function (_, k, def) {
+      var v = datos[k] ? String(datos[k]).trim() : "";
+      return v || (def !== undefined ? def.trim() : '<mark style="background:#FBEDEA;color:#B4412F">falta ' + esc(k) + "</mark>");
+    });
+  }
+  function aHtml(texto) {
+    var par = function (t) { return '<p style="margin:0 0 14px">' + t.replace(/(https?:\/\/[^\s<]+)/g, '<a href="#" style="color:#286B54;font-weight:bold">$1</a>').replace(/\n/g, "<br>") + "</p>"; };
+    return '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:#17231F">' + texto.split(/\n\s*\n/).map(par).join("") +
+      par(esc(D.cfg.firma)) + '<p style="margin:18px 0 0;font-size:12px;color:#65736D">' + esc(D.cfg.textoBaja) + "</p></div>";
+  }
+  function previewTpl() {
+    if (!D) return;
+    var ej = D.contactos.filter(function (x) { return x.grupo === "listo"; })[0] || { nombre: "Ana", empresa: "Empresa de Ejemplo SL", cargo: "Gerente", sector: "Distribución y suministros", email: "ana@empresa.com" };
+    var c = D.cfg, enlace = c.enlace + "?utm_source=" + c.utm.utm_source + "&utm_campaign=" + encodeURIComponent(c.utm.utm_campaign) + "&ref=E-XXXXXX";
+    var datos = { Nombre: ej.nombre, Empresa: ej.empresa, Cargo: ej.cargo, Sector: ej.sector, Enlace: enlace, Email: ej.email };
+    var f = $("#f-tpl");
+    $("#tpl-con").textContent = "Con los datos de " + (ej.empresa || "un ejemplo");
+    $("#tp-asunto").innerHTML = rellenar(esc(f.asunto.value), datos) || "(sin asunto)";
+    $("#tp-para").textContent = ej.email;
+    $("#tp-html").innerHTML = aHtml(rellenar(esc(f.mensaje.value), datos));
+  }
+
+  /* ---------- Solicitudes ---------- */
+  function pintarSolicitudes(l) {
+    $("#sol").innerHTML = l.length ? l.map(function (s) {
+      return "<tr><td>" + fecha(s.recibido) + '</td><td><div class="nm">' + esc(s.empresa) + '</div><div class="sb">' + esc([s.nombre, s.cargo].filter(Boolean).join(" · ")) + "</div></td>" +
+        '<td class="hide-m"><a href="mailto:' + esc(s.correo) + '">' + esc(s.correo) + "</a>" + (s.telefono ? '<div class="sb">' + esc(s.telefono) + "</div>" : "") + "</td>" +
+        "<td><b>" + esc(s.indice) + '</b><div class="sb">' + esc(s.oportunidad) + "</div></td>" +
+        '<td class="hide-m sb">' + (s.ref ? esc(s.ref) : "Web / otro enlace") + "</td></tr>";
+    }).join("") : '<tr><td colspan="5" class="empty">Todavía no hay solicitudes.</td></tr>';
+  }
+  $("#ver-clave").addEventListener("click", function () {
+    call("panelClaveWeb").then(function (t) { $("#clave").value = t; $("#clave-box").hidden = false; D.webConectada = true; pintar(); });
+  });
+
+  /* ---------- Configuración ---------- */
+  function pintarConfig() {
+    var c = D.cfg, f = $("#f-cfg");
+    f.modoPrueba.checked = c.modoPrueba; f.emailPrueba.value = c.emailPrueba; f.desde.value = c.desde; f.nombre.value = c.nombre;
+    f.responderA.value = c.responderA; f.campana.value = c.utm.utm_campaign; f.limiteDiario.value = c.limiteDiario; f.porEjecucion.value = c.porEjecucion;
+    f.horaInicio.value = c.horaInicio; f.horaFin.value = c.horaFin; f.soloLaborables.checked = c.soloLaborables; f.seguimiento.checked = c.seguimiento;
+    f.exigirPermiso.checked = c.exigirPermiso; f.firma.value = c.firma; f.textoBaja.value = c.textoBaja;
+  }
+  $("#f-cfg").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var d = datosForm(e.target); d.modoPrueba = e.target.modoPrueba.checked; delete d.permiso;
+    if (!d.modoPrueba && D.cfg.modoPrueba && !confirm("Vas a desactivar el modo prueba: los correos llegarán a los contactos reales. ¿Seguro?")) return;
+    if (!d.exigirPermiso && D.cfg.exigirPermiso && !confirm("Sin exigir permiso podrías enviar publicidad no solicitada, lo que prohíbe la ley (art. 21 LSSI). ¿Desactivarlo igualmente?")) return;
+    call("panelGuardarConfig", d).then(function (r) { cargar(r); toast("Configuración guardada"); });
+  });
+
+  /* ---------- Cabecera ---------- */
+  $("#tanda").addEventListener("click", function () {
+    var c = D.cfg;
+    var msg = c.modoPrueba ? "Modo prueba: se enviarán como máximo 3 correos a " + c.emailPrueba + ". ¿Continuar?"
+      : "Se enviarán de verdad hasta " + c.porEjecucion + " correos a contactos listos. ¿Continuar?";
+    if (!confirm(msg)) return;
+    call("panelEnviarTanda").then(function (r) { cargar(r.datos); toast(r.mensaje); });
+  });
+  $("#prog").addEventListener("click", function () {
+    var activar = !D.programado;
+    if (activar && !confirm("Se enviarán correos automáticamente cada 15 minutos dentro del horario. ¿Activar?")) return;
+    call("panelProgramacion", activar).then(function (d) { cargar(d); toast(activar ? "Envío programado activado" : "Envío programado desactivado"); });
+  });
+  $("#revisar").addEventListener("click", function () { call("panelRevisar").then(function (d) { cargar(d); toast("Respuestas revisadas"); }); });
+
+  // Marcas del indicador
+  (function () {
+    var g = $("#g-ticks"), ns = "http://www.w3.org/2000/svg";
+    for (var i = 0; i <= 10; i++) {
+      var a = Math.PI - Math.PI * i / 10, l = document.createElementNS(ns, "line");
+      l.setAttribute("class", "tick");
+      l.setAttribute("x1", 110 + 72 * Math.cos(a)); l.setAttribute("y1", 110 - 72 * Math.sin(a));
+      l.setAttribute("x2", 110 + (i % 5 ? 66 : 62) * Math.cos(a)); l.setAttribute("y2", 110 - (i % 5 ? 66 : 62) * Math.sin(a));
+      g.appendChild(l);
+    }
+  })();
+
+  call("panelDatos").then(cargar);
+  setInterval(function () { if (!document.hidden && !pendientes && $("#modal").hidden) google.script.run.withSuccessHandler(function (d) { D = d; pintar(); }).panelDatos(); }, 120000);
+})();
+</script>
+</body>
+</html>

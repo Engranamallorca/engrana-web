@@ -115,6 +115,8 @@ Para medir campañas, comparte el enlace con parámetros, por ejemplo:
 | Netlify → Environment variables | `DIAGNOSTICO_WEBHOOK_URL` | No | URL privada a la que reenviar cada solicitud (Apps Script, n8n, Make, CRM…) |
 | Netlify → Environment variables | `DIAGNOSTICO_WEBHOOK_TOKEN` | No (recomendada si hay webhook) | Secreto compartido; se envía como `Authorization: Bearer` y en el campo `token` |
 
+> Recomendado: usa como webhook el **panel de envíos** (`docs/diagnostico/envios-gmail/`). Recibe las solicitudes y, además, los avisos de la función `diagnostico-evento` (quién abrió el enlace personal, empezó o terminó el test). Ver «Conectar con la web» en sus INSTRUCCIONES.md.
+
 Ninguna de estas variables llega al navegador. Sin ellas, todo funciona igual: las
 solicitudes quedan en Netlify Forms y llegan por correo.
 
