@@ -135,7 +135,7 @@
     if (!opciones.mantenerScroll) win.scrollTo(0, 0);
     var h = etapas[etapa].querySelector("h1");
     if (h) { if (!h.hasAttribute("tabindex")) h.setAttribute("tabindex", "-1"); try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); } }
-    doc.title = (h ? h.textContent + " · " : "") + "Diagnóstico Engrana";
+    doc.title = (h ? h.textContent.replace(/\.$/, "") + " | " : "") + "Diagnóstico Engrana";
   }
 
   win.addEventListener("popstate", function (e) {
@@ -269,7 +269,7 @@
     win.scrollTo(0, 0);
     var items = $$("[data-checklist] li");
     items.forEach(function (li) { li.classList.remove("is-done"); });
-    var paso = reduce ? 60 : 420;
+    var paso = reduce ? 60 : 240;
     items.forEach(function (li, k) { setTimeout(function () { li.classList.add("is-done"); }, paso * (k + 1)); });
     setTimeout(function () { ir("resultado"); }, paso * (items.length + 1) + (reduce ? 0 : 200));
   }
@@ -283,7 +283,7 @@
 
   function pintarResultado(animar) {
     var r = estado.resultado; if (!r) return;
-    $("[data-r-meta]").textContent = fmtFecha(new Date()) + " · Ref. " + estado.idEnvio.slice(0, 8).toUpperCase();
+    $("[data-r-meta]").textContent = fmtFecha(new Date()) + ", ref. " + estado.idEnvio.slice(0, 8).toUpperCase();
 
     // Nivel
     var idxNivel = D.niveles.findIndex(function (n) { return n.id === r.nivel.id; });
@@ -371,12 +371,13 @@
   function pintarTicks() {
     if (ticksPintados) return; ticksPintados = true;
     var g = $(".dg-gauge__ticks"), ns = "http://www.w3.org/2000/svg";
-    for (var k = 0; k <= 10; k++) {
-      var a = Math.PI - (Math.PI * k / 10);
-      var r1 = 70, r2 = k % 5 === 0 ? 62 : 65;
+    // Anillo completo: 20 marcas desde arriba, en el sentido de las agujas del reloj
+    for (var k = 0; k < 20; k++) {
+      var a = Math.PI / 2 - (2 * Math.PI * k / 20);
+      var r1 = 76, r2 = k % 5 === 0 ? 68 : 72;
       var l = doc.createElementNS(ns, "line");
-      l.setAttribute("x1", (110 + r1 * Math.cos(a)).toFixed(2)); l.setAttribute("y1", (112 - r1 * Math.sin(a)).toFixed(2));
-      l.setAttribute("x2", (110 + r2 * Math.cos(a)).toFixed(2)); l.setAttribute("y2", (112 - r2 * Math.sin(a)).toFixed(2));
+      l.setAttribute("x1", (110 + r1 * Math.cos(a)).toFixed(2)); l.setAttribute("y1", (110 - r1 * Math.sin(a)).toFixed(2));
+      l.setAttribute("x2", (110 + r2 * Math.cos(a)).toFixed(2)); l.setAttribute("y2", (110 - r2 * Math.sin(a)).toFixed(2));
       g.appendChild(l);
     }
   }
@@ -400,7 +401,7 @@
     var r = estado.resultado; if (!r) return;
     $("[data-s-pct]").textContent = r.porcentaje + "%";
     $("[data-s-nivel]").textContent = r.nivel.titulo;
-    $("[data-s-opp]").textContent = r.oportunidades.map(function (o) { return o.titulo; }).join(" · ");
+    $("[data-s-opp]").textContent = r.oportunidades.map(function (o) { return o.titulo; }).join(" y ");
     var ul = $("[data-s-dims]"); ul.innerHTML = "";
     r.dimensiones.forEach(function (d) {
       var li = doc.createElement("li"); if (d.prioritaria) li.className = "is-prio";
@@ -561,6 +562,15 @@
      Portada: cabecera, aparición al hacer scroll y panel de flujo
      ========================================================= */
   var nav = $(".dg-nav");
+
+  // Menú móvil
+  (function menu() {
+    var btn = $("[data-menu]"), lista = $("#dg-menu"); if (!btn || !lista) return;
+    function abrir(si) { btn.setAttribute("aria-expanded", si ? "true" : "false"); nav.classList.toggle("is-open", si); }
+    btn.addEventListener("click", function () { abrir(btn.getAttribute("aria-expanded") !== "true"); });
+    lista.addEventListener("click", function (e) { if (e.target.closest("a, button")) abrir(false); });
+    doc.addEventListener("keydown", function (e) { if (e.key === "Escape" && nav.classList.contains("is-open")) { abrir(false); btn.focus(); } });
+  })();
   var onScroll = function () { nav.classList.toggle("is-scrolled", win.scrollY > 8); };
   win.addEventListener("scroll", onScroll, { passive: true }); onScroll();
 
@@ -577,7 +587,7 @@
     var pasos = $$(".dg-fstep", root), links = $$(".dg-flink", root), toast = $("[data-flow-toast]");
     var stats = $$("[data-flow-stat]");
     var chip = { esp: "En espera", act: "Procesando", ok: "Completado" };
-    var statVal = [["Registrada · 09:12"], ["Comercial asignado"], ["Llamar mañana · 10:00"]];
+    var statVal = [["Registrada a las 09:12"], ["Comercial asignado"], ["Llamar mañana a las 10:00"]];
     function set(i) {
       pasos.forEach(function (p, k) {
         p.classList.toggle("is-done", k < i);
@@ -596,11 +606,13 @@
     function tick() {
       if (i > 0 && i <= 3) { var l = links[i - 1]; l.classList.remove("is-run"); void l.offsetWidth; l.classList.add("is-run"); }
       set(i);
-      var espera = i === 4 ? 3400 : 1500;
-      i = i >= 4 ? 0 : i + 1;
-      timer = setTimeout(function () { if (visible && !doc.hidden) tick(); else timer = null; }, espera);
+      // Se reproduce una sola vez y se queda en el estado final
+      if (i >= 4) { terminado = true; return; }
+      i += 1;
+      timer = setTimeout(function () { if (visible && !doc.hidden) tick(); else timer = null; }, 1300);
     }
-    function reanudar() { if (!timer && visible && !doc.hidden) tick(); }
+    var terminado = false;
+    function reanudar() { if (!terminado && !timer && visible && !doc.hidden) tick(); }
     if ("IntersectionObserver" in win) {
       new IntersectionObserver(function (es) { visible = es[0].isIntersecting; reanudar(); }).observe(root);
     }
@@ -614,10 +626,10 @@
   (function galeria() {
     var dlg = $("[data-lightbox]"); if (!dlg || typeof dlg.showModal !== "function") return;
     var items = [
-      { src: "/diagnostico/img/sistema-pipeline.jpg", w: 1536, h: 777, alt: "Pipeline comercial: solicitudes organizadas por fases con avisos de plazo", cap: "Pipeline comercial · sistema para una empresa de suministro industrial" },
-      { src: "/diagnostico/img/sistema-panel.jpg", w: 1536, h: 767, alt: "Panel comercial diario con llamadas, objetivo semanal, agenda y siguientes llamadas", cap: "Panel comercial · actividad diaria del equipo" },
-      { src: "/img/taxi25-acceso.jpg", w: 706, h: 1536, alt: "Pantalla de acceso de la aplicación de gestión", cap: "Touchy · pantalla de acceso" },
-      { src: "/img/taxi25-administracion.jpg", w: 706, h: 1536, alt: "Pantalla de administración con facturación del día y resumen por conductor", cap: "Touchy · panel de administración (importes de ejemplo)" }
+      { src: "/diagnostico/img/sistema-pipeline.jpg", w: 1536, h: 777, alt: "Pipeline comercial: solicitudes organizadas por fases con avisos de plazo", cap: "Pipeline comercial de un sistema para una empresa de suministro industrial" },
+      { src: "/diagnostico/img/sistema-panel.jpg", w: 1536, h: 767, alt: "Panel comercial diario con llamadas, objetivo semanal, agenda y siguientes llamadas", cap: "Panel comercial con la actividad diaria del equipo" },
+      { src: "/img/taxi25-acceso.jpg", w: 706, h: 1536, alt: "Pantalla de acceso de la aplicación de gestión", cap: "Touchy: pantalla de acceso" },
+      { src: "/img/taxi25-administracion.jpg", w: 706, h: 1536, alt: "Pantalla de administración con facturación del día y resumen por conductor", cap: "Touchy: panel de administración (importes de ejemplo)" }
     ];
     var img = $("[data-lb-img]"), cap = $("[data-lb-cap]"), cnt = $("[data-lb-count]"), actual = 0, origen = null;
     function mostrar(i) {
