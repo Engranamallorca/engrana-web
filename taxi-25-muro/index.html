@@ -38,137 +38,100 @@
 <meta name="twitter:title" content="Caso Taxi 25 Muro: aplicación web de gestión para taxi · Engrana">
 <meta name="twitter:description" content="Taxi 25 Muro: aplicación web a medida de Engrana para la gestión diaria de una empresa de taxi: acceso por usuario y panel de administración.">
 <meta name="twitter:image" content="https://www.engrana-mallorca.com/og-taxi.jpg">
-<meta name="theme-color" content="#F5F3EC">
+<meta name="theme-color" content="#FCFDFA">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/icono.png">
 <script>document.documentElement.classList.add("js")</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:ital,wght@0,400..600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=4">
-
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..700&family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=5">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://www.engrana-mallorca.com/"},{"@type":"ListItem","position":2,"name":"Proyectos","item":"https://www.engrana-mallorca.com/casos/"},{"@type":"ListItem","position":3,"name":"Taxi 25 Muro","item":"https://www.engrana-mallorca.com/taxi-25-muro/"}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"Caso Taxi 25 Muro: aplicación web de gestión","description":"Taxi 25 Muro: aplicación web a medida de Engrana para la gestión diaria de una empresa de taxi: acceso por usuario y panel de administración.","url":"https://www.engrana-mallorca.com/taxi-25-muro/","image":"https://www.engrana-mallorca.com/img/taxi25-administracion.jpg","creator":{"@id":"https://www.engrana-mallorca.com/#org"},"inLanguage":"es"}</script>
 </head>
 <body class="p-taxi-25-muro">
 <a class="skip" href="#contenido">Saltar al contenido</a>
-<header class="site-header">
-  <div class="wrap nav">
+<header class="mast">
+  <div class="container mast-top">
+    <p class="mast-place">Muro, Mallorca</p>
     <a class="logo" href="/" aria-label="Engrana, ir al inicio"><svg viewBox="0 0 100 100" aria-hidden="true"><g class="gear"><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(0 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(30 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(60 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(90 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(120 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(150 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(180 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(210 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(240 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(270 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(300 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(330 50 50)"/><circle cx="50" cy="50" r="34"/></g><circle class="core" cx="50" cy="50" r="13"/></svg>engrana</a>
-    <nav aria-label="Principal">
-    <ul class="menu" id="menu">
-      <li class="has-sub"><button type="button" aria-expanded="false" aria-controls="sub-soluciones">Soluciones <svg class="caret" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg></button><ul class="sub" id="sub-soluciones"><li><a href="/servicios/"><span>—</span><b>Todas las soluciones</b><small>Qué hacemos y por dónde empezar</small></a></li><li><a href="/automatizacion/"><span>01</span><b>Automatización empresarial</b><small>Pedidos, presupuestos, avisos y tareas administrativas.</small></a></li><li><a href="/sistemas-comerciales/"><span>02</span><b>Sistemas comerciales y CRM</b><small>Panel comercial y pipeline de ofertas a medida.</small></a></li><li><a href="/ia-aplicada/"><span>03</span><b>Inteligencia artificial aplicada</b><small>Correos y documentos ordenados, con revisión humana.</small></a></li><li><a href="/webs/"><span>04</span><b>Desarrollo web y aplicaciones</b><small>Webs y aplicaciones web a medida para tu empresa.</small></a></li><li><a href="/marketing/"><span>05</span><b>Marketing digital</b><small>Reseñas, ficha de Google y correos a clientes.</small></a></li><li><a href="/correo/"><span>06</span><b>Correo profesional</b><small>Correo con tu dominio, configurado y ordenado.</small></a></li></ul></li>
-      <li><a href="/sectores/distribucion-suministro/">Distribución</a></li>
-      <li class="has-sub is-current"><button type="button" aria-expanded="false" aria-controls="sub-proyectos">Proyectos <svg class="caret" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg></button><ul class="sub" id="sub-proyectos"><li><a href="/casos/"><span>—</span><b>Todos los proyectos</b><small>Sistemas reales en empresas reales</small></a></li><li><a href="/inox-brico/"><span>01</span><b>INOX-BRICO</b><small>Pipeline y panel comercial · distribución industrial</small></a></li><li><a href="/taxi-25-muro/"><span>02</span><b>Taxi 25 Muro</b><small>Aplicación web de gestión · transporte</small></a></li><li><a href="/gaspar-pico/"><span>03</span><b>Gaspar Picó SL</b><small>Pedidos en un solo registro · distribución agrícola</small></a></li></ul></li>
-      <li><a class="nav-ayuda" href="/ayuda/">Ayuda 6.000 €</a></li>
-      <li class="has-sub"><button type="button" aria-expanded="false" aria-controls="sub-empresa">Engrana <svg class="caret" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg></button><ul class="sub" id="sub-empresa"><li><a href="/sobre-nosotros/"><span>01</span><b>Sobre nosotros</b><small>Quiénes somos y de dónde venimos.</small></a></li><li><a href="/filosofia/"><span>02</span><b>Filosofía</b><small>Una idea a la semana sobre cómo trabajamos.</small></a></li><li><a href="/blog/"><span>03</span><b>Blog</b><small>Guías prácticas para empresas.</small></a></li></ul></li>
-      <li class="only-mobile"><a class="btn btn--gold" href="/contacto/">Solicitar una valoración <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a></li>
-    </ul>
-    </nav>
-    <a class="btn nav-cta" href="/contacto/">Hablemos <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
-    <button class="burger" type="button" aria-label="Abrir menú" aria-controls="menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <a class="btn btn--quiet mast-cta" href="/contacto/">Hablemos</a>
+    <button class="burger" type="button" aria-controls="menu" aria-expanded="false">Menú</button>
   </div>
+  <nav class="mast-nav" id="menu" aria-label="Principal">
+    <ul class="container menu">
+      <li class="has-sub"><button type="button" aria-expanded="false" aria-controls="sub-soluciones">Soluciones <svg class="caret" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg></button><ul class="sub" id="sub-soluciones"><li><a href="/servicios/"><b>Todas las soluciones</b><small>Qué hacemos y por dónde empezar.</small></a></li><li><a href="/automatizacion/"><b>Automatización empresarial</b><small>Pedidos, presupuestos, avisos y tareas administrativas.</small></a></li><li><a href="/sistemas-comerciales/"><b>Sistemas comerciales y CRM</b><small>Pipeline de ofertas y panel comercial a medida.</small></a></li><li><a href="/ia-aplicada/"><b>Inteligencia artificial aplicada</b><small>Correos y documentos ordenados, con revisión humana.</small></a></li><li><a href="/webs/"><b>Desarrollo web y aplicaciones</b><small>Aplicaciones web y webs a medida para tu empresa.</small></a></li><li><a href="/marketing/"><b>Marketing digital</b><small>Reseñas, ficha de Google y correos a clientes.</small></a></li><li><a href="/correo/"><b>Correo profesional</b><small>Correo con tu dominio, configurado y ordenado.</small></a></li></ul></li>
+      <li><a href="/sectores/distribucion-suministro/">Distribución</a></li>
+      <li class="has-sub is-current"><button type="button" aria-expanded="false" aria-controls="sub-proyectos">Proyectos <svg class="caret" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg></button><ul class="sub" id="sub-proyectos"><li><a href="/casos/"><b>Todos los proyectos</b><small>Sistemas reales en empresas reales.</small></a></li><li><a href="/inox-brico/"><b>INOX-BRICO</b><small>Pipeline y panel comercial para una distribuidora industrial.</small></a></li><li><a href="/taxi-25-muro/"><b>Taxi 25 Muro</b><small>Aplicación web de gestión para una empresa de taxi.</small></a></li><li><a href="/gaspar-pico/"><b>Gaspar Picó SL</b><small>Pedidos en un solo registro, en distribución agrícola.</small></a></li></ul></li>
+      <li><a href="/diagnostico/">Diagnóstico</a></li>
+      <li class="has-sub"><button type="button" aria-expanded="false" aria-controls="sub-empresa">Engrana <svg class="caret" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg></button><ul class="sub" id="sub-empresa"><li><a href="/sobre-nosotros/"><b>Sobre nosotros</b><small>Quiénes somos y de dónde venimos.</small></a></li><li><a href="/filosofia/"><b>Filosofía</b><small>Una idea a la semana sobre cómo trabajamos.</small></a></li><li><a href="/blog/"><b>Blog</b><small>Guías prácticas para empresas.</small></a></li></ul></li>
+      <li><a href="/contacto/">Contacto</a></li>
+    </ul>
+  </nav>
 </header>
 <main id="contenido">
 
-<section class="phero on-deep">
-  <div class="wrap">
-    <div class="phero-grid phero-grid--media">
-      <div>
-        <nav class="crumbs" aria-label="Migas de pan"><a href="/">Inicio</a><span aria-hidden="true">/</span><a href="/casos/">Proyectos</a><span aria-hidden="true">/</span><span aria-current="page">Taxi 25 Muro</span></nav>
-        <p class="phero-index fade" style="--d:.1s"><b>Caso 02</b> · Transporte</p>
-        <h1><span class="line-in" style="--i:0"><span>Taxi 25 Muro:</span></span><span class="line-in" style="--i:1"><span>la gestión del día,</span></span><span class="line-in" style="--i:2"><span>en el móvil.</span></span></h1>
-        <p class="lead fade" style="--d:.45s">Una aplicación web desarrollada a medida para la gestión diaria de una empresa de taxi de Muro: acceso por usuario, lo facturado en el día y la actividad de cada taxista. El resto, por fases.</p>
-        
-      </div>
-      <div class="fade" style="--d:.5s"><div class="phones">
-  <figure><div class="phone"><div class="screen"><picture><source type="image/webp" srcset="/img/taxi25-acceso-400.webp 400w, /img/taxi25-acceso.webp 706w" sizes="(max-width: 640px) 45vw, 260px"><img src="/img/taxi25-acceso.jpg" srcset="/img/taxi25-acceso-400.jpg 400w, /img/taxi25-acceso.jpg 706w" sizes="(max-width: 640px) 45vw, 260px" alt="Pantalla de acceso de la aplicación Taxi 25 Muro: «¡Hola! Entra con tu usuario», con campos de usuario y contraseña y el botón Entrar" width="706" height="1536"></picture></div></div><figcaption class="figcap"><b>Fig. 01</b>Acceso</figcaption></figure>
-  <figure><div class="phone"><div class="screen"><picture><source type="image/webp" srcset="/img/taxi25-administracion-400.webp 400w, /img/taxi25-administracion.webp 706w" sizes="(max-width: 640px) 45vw, 260px"><img src="/img/taxi25-administracion.jpg" srcset="/img/taxi25-administracion-400.jpg 400w, /img/taxi25-administracion.jpg 706w" sizes="(max-width: 640px) 45vw, 260px" alt="Pantalla de administración de Taxi 25 Muro: facturado hoy, viajes de hoy y resumen por taxista, con datos de ejemplo" width="706" height="1536"></picture></div></div><figcaption class="figcap"><b>Fig. 02</b>Administración · datos de ejemplo</figcaption></figure>
-</div></div>
+<section class="phero ">
+  <div class="container">
+    <nav class="crumbs" aria-label="Migas de pan"><ol><li><a href="/">Inicio</a></li><li><a href="/casos/">Proyectos</a></li><li><span aria-current="page">Taxi 25 Muro</span></li></ol></nav>
+    <div class="phero-grid phero-grid--stage"><div><h1>Taxi 25 Muro: la gestión del día, en el móvil.</h1><p class="lead">Una aplicación web a medida para una empresa de taxi de Muro: acceso por usuario, lo facturado en el día y la actividad de cada taxista. El resto, por fases.</p></div><div><figure><div class="pair"><figure class=""><div class="shot shot--tall" data-slot="acceso" data-kind="product" data-alt="Pantalla de acceso de la aplicación Taxi 25 Muro: «¡Hola! Entra con tu usuario», con usuario, contraseña y el botón Entrar"><picture><source type="image/webp" srcset="/img/taxi25-acceso-400.webp 400w, /img/taxi25-acceso.webp 706w" sizes="(max-width: 40rem) 100vw, 22vw"><img src="/img/taxi25-acceso.jpg" srcset="/img/taxi25-acceso-400.jpg 400w, /img/taxi25-acceso.jpg 706w" sizes="(max-width: 40rem) 100vw, 22vw" alt="Pantalla de acceso de la aplicación Taxi 25 Muro: «¡Hola! Entra con tu usuario», con usuario, contraseña y el botón Entrar" width="706" height="1536"></picture></div></figure><figure class=""><div class="shot shot--tall" data-slot="admin" data-kind="product" data-alt="Pantalla de administración de Taxi 25 Muro: facturado hoy, viajes de hoy y resumen por taxista, con datos de ejemplo"><picture><source type="image/webp" srcset="/img/taxi25-administracion-400.webp 400w, /img/taxi25-administracion.webp 706w" sizes="(max-width: 40rem) 100vw, 22vw"><img src="/img/taxi25-administracion.jpg" srcset="/img/taxi25-administracion-400.jpg 400w, /img/taxi25-administracion.jpg 706w" sizes="(max-width: 40rem) 100vw, 22vw" alt="Pantalla de administración de Taxi 25 Muro: facturado hoy, viajes de hoy y resumen por taxista, con datos de ejemplo" width="706" height="1536"></picture></div></figure></div><figcaption class="caption">Capturas reales. En la administración, nombres e importes son de ejemplo.</figcaption></figure></div></div>
+    
+  </div>
+</section>
+<section class="sec sec--flush">
+  <div class="container"><dl class="facts"><div><dt>Sector</dt><dd>Taxi</dd></div><div><dt>Ubicación</dt><dd>Muro, Mallorca</dd></div><div><dt>Formato</dt><dd>Aplicación web móvil</dd></div><div><dt>Estado</dt><dd>En desarrollo por fases</dd></div></dl></div>
+</section>
+<section class="sec band--cream" aria-labelledby="t-historia">
+  <div class="container">
+    <div class="head head--stack"><h2><span id="t-historia">Un negocio que trabaja en la calle</span></h2></div>
+    <ul class="rows "><li><h3 class="t">El negocio</h3><p class="d">Los viajes, la caja y los gastos de cada día se apuntaban a mano, y la administración tenía que reunir después la información de cada taxista.</p></li><li><h3 class="t">La necesidad</h3><p class="d">Una herramienta en el móvil, sencilla y rápida de consultar entre servicio y servicio, que reuniera la información de todos los taxistas.</p></li><li><h3 class="t">La solución</h3><p class="d">Una aplicación propia, diseñada y desarrollada desde cero con su identidad visual. Es un ejemplo de <a class="text-link" href="/webs/">aplicación web a medida</a>.</p></li></ul>
+  </div>
+</section>
+<section class="sec" aria-labelledby="t-pantallas">
+  <div class="container">
+    <div class="head"><h2><span id="t-pantallas">Dos pantallas, un mismo proyecto</span></h2><p class="lead">En la de administración, los nombres de los taxistas y los importes se han sustituido por valores de ejemplo.</p></div>
+    <div class="annot annot--phone"><figure class=""><div class="shot shot--tall" data-slot="acceso" data-kind="product" data-alt="Pantalla de acceso de Taxi 25 Muro"><picture><source type="image/webp" srcset="/img/taxi25-acceso-400.webp 400w, /img/taxi25-acceso.webp 706w" sizes="(max-width: 60rem) 80vw, 26vw"><img src="/img/taxi25-acceso.jpg" srcset="/img/taxi25-acceso-400.jpg 400w, /img/taxi25-acceso.jpg 706w" sizes="(max-width: 60rem) 80vw, 26vw" alt="Pantalla de acceso de Taxi 25 Muro" width="706" height="1536" loading="lazy" decoding="async"></picture></div><figcaption class="caption">Acceso.</figcaption></figure><div><h3>Acceso</h3><p class="muted">La puerta de entrada de cada taxista y de la administración.</p><ol><li><div><b>Identidad propia</b><span>Verde profundo, dorado y el nombre de la empresa.</span></div></li><li><div><b>Usuario y contraseña</b><span>Cada persona entra con su usuario.</span></div></li><li><div><b>Solo la primera vez</b><span>Después la aplicación recuerda el acceso en ese teléfono.</span></div></li></ol></div></div>
+    <div class="annot annot--rev annot--phone"><figure class=""><div class="shot shot--tall" data-slot="admin" data-kind="product" data-alt="Pantalla de administración de Taxi 25 Muro con datos de ejemplo"><picture><source type="image/webp" srcset="/img/taxi25-administracion-400.webp 400w, /img/taxi25-administracion.webp 706w" sizes="(max-width: 60rem) 80vw, 26vw"><img src="/img/taxi25-administracion.jpg" srcset="/img/taxi25-administracion-400.jpg 400w, /img/taxi25-administracion.jpg 706w" sizes="(max-width: 60rem) 80vw, 26vw" alt="Pantalla de administración de Taxi 25 Muro con datos de ejemplo" width="706" height="1536" loading="lazy" decoding="async"></picture></div><figcaption class="caption">Administración, con datos de ejemplo.</figcaption></figure><div><h3>Administración</h3><p class="muted">Cómo va el día, sin esperar a la noche.</p><ol><li><div><b>Facturado hoy</b><span>El total del día, en grande, nada más entrar.</span></div></li><li><div><b>Viajes de hoy</b><span>Cuántos servicios se han hecho en la jornada.</span></div></li><li><div><b>Hoy por taxista</b><span>Viajes y facturación de cada taxista, por separado.</span></div></li><li><div><b>Próximas fases</b><span>El panel completo (viajes, cajas, facturas) llega por fases.</span></div></li></ol></div></div>
+  </div>
+</section>
+<section class="sec band" aria-labelledby="t-estado">
+  <div class="container">
+    <div class="head"><h2><span id="t-estado">Qué está hecho y qué está previsto</span></h2><p class="lead">La base funciona; el resto se añade cuando hace falta.</p></div>
+    <table class="status"><thead><tr><th scope="col">Funcionalidad</th><th scope="col">Qué hace</th><th scope="col">Estado</th></tr></thead><tbody><tr><td>Identidad visual propia</td><td>Pantallas con la marca de Taxi 25 Muro.</td><td><span class="state state--ok">Implementado</span></td></tr><tr><td>Acceso por usuario</td><td>Cada taxista y la administración con su acceso.</td><td><span class="state state--ok">Implementado</span></td></tr><tr><td>Resumen de administración</td><td>Facturado hoy, viajes del día y resumen por taxista.</td><td><span class="state state--ok">Implementado</span></td></tr><tr><td>Reservas y hojas de ruta</td><td>Registro de cada servicio y reserva.</td><td><span class="state ">Previsto</span></td></tr><tr><td>Caja y gastos</td><td>Cierre de caja diario y gastos de cada vehículo.</td><td><span class="state ">Previsto</span></td></tr><tr><td>Facturación</td><td>Facturas a clientes y empresas desde el móvil.</td><td><span class="state ">Previsto</span></td></tr></tbody></table>
+  </div>
+</section>
+<section class="sec" aria-labelledby="t-quien">
+  <div class="container">
+    <div class="head head--stack"><h2><span id="t-quien">A quién más le sirve</span></h2></div>
+    <ul class="rows "><li><h3 class="t">Taxi y licencias de Mallorca</h3><p class="d">Otras empresas que reúnen la información de varios conductores.</p></li><li><h3 class="t">Transporte y reparto</h3><p class="d">Empresas con varios vehículos y personas en ruta.</p></li><li><h3 class="t">Servicios fuera de oficina</h3><p class="d">Negocios cuyo equipo trabaja en la calle.</p></li><li><h3 class="t">Herramientas a medida</h3><p class="d">Empresas que necesitan una aplicación en el móvil hecha para ellas.</p></li></ul>
+  </div>
+</section>
+<section class="sec band" aria-labelledby="cierre">
+  <div class="container">
+    <div class="close">
+      <div><h2 id="cierre">¿Tu empresa también se gestiona con libretas?</h2><p class="lead">Diseñamos la aplicación que necesita tu empresa y te enseñamos las pantallas antes de programar.</p><div class="actions"><a class="btn" href="/contacto/?servicio=webs">Solicitar una valoración</a></div></div>
+      <dl class="contact-list"><dt>Correo</dt><dd><a data-email href="mailto:info@engrana-mallorca.com">info@engrana-mallorca.com</a></dd><dt>Dónde</dt><dd>Muro, Mallorca, y a distancia</dd><dt>Respuesta</dt><dd>En menos de 48 horas</dd></dl>
     </div>
-    <dl class="phero-meta fade" style="--d:.5s"><div><dt>Sector</dt><dd>Taxi</dd></div><div><dt>Ubicación</dt><dd>Muro, Mallorca</dd></div><div><dt>Formato</dt><dd>Aplicación web móvil</dd></div><div><dt>Estado</dt><dd>En desarrollo por fases</dd></div></dl>
-  </div>
-</section>
-
-<section class="sec">
-  <div class="wrap">
-    <div class="story"><article data-r><div><p class="label"><i>§ 01</i>El negocio</p><h2 style="margin-top:18px">Un negocio que trabaja <span class="soft">en la calle.</span></h2></div><div class="prose"><p>Una empresa de taxi trabaja en la calle, no en una oficina. Los viajes, la caja y los gastos de cada día se apuntaban a mano, y la administración tenía que reunir después la información de cada taxista.</p></div></article><article data-r><div><p class="label"><i>§ 02</i>Necesidad</p><h2 style="margin-top:18px">Ver cómo va el día <span class="soft">sin esperar a la noche.</span></h2></div><div class="prose"><p>Hacía falta una herramienta en el móvil, sencilla y rápida de consultar entre servicio y servicio, que reuniera la información de todos los taxistas y simplificara la administración.</p></div></article><article data-r><div><p class="label"><i>§ 03</i>Solución desarrollada</p><h2 style="margin-top:18px">Una aplicación propia, <span class="soft">con su identidad.</span></h2></div><div class="prose"><p>Hemos diseñado y desarrollado la aplicación desde cero, con su propia identidad visual. Cada taxista y la administración tienen su acceso, y la administración ve de un vistazo lo facturado en el día y la actividad de cada taxista.</p><p>Es un ejemplo de <a href="/webs/">aplicación web a medida</a>, el mismo tipo de desarrollo que hacemos para otras empresas.</p></div></article></div>
-  </div>
-</section>
-
-<section class="sec sec--paper2">
-  <div class="wrap">
-    <div class="shead"><div data-r><p class="label"><i>§ 04</i>Las pantallas</p></div><div data-r style="--d:.08s"><h2>Dos pantallas, <span class="soft">un mismo proyecto.</span></h2><p class="lead">Capturas reales de la aplicación. En la de administración, los nombres de los taxistas y los importes se han sustituido por valores de ejemplo.</p></div></div>
-    <div class="annot">
-      <div class="annot-media" data-r><div style="max-width:300px"><div class="phone"><div class="screen"><picture><source type="image/webp" srcset="/img/taxi25-acceso-400.webp 400w, /img/taxi25-acceso.webp 706w" sizes="(max-width: 640px) 45vw, 260px"><img src="/img/taxi25-acceso.jpg" srcset="/img/taxi25-acceso-400.jpg 400w, /img/taxi25-acceso.jpg 706w" sizes="(max-width: 640px) 45vw, 260px" alt="Pantalla de acceso de Taxi 25 Muro" width="706" height="1536" loading="lazy" decoding="async"></picture></div></div></div></div>
-      <div data-r style="--d:.08s"><h3>Acceso</h3><ol class="annot-list">
-        <li><div><b>Identidad propia</b><span>Verde profundo, dorado y el nombre de la empresa: una herramienta que se siente suya.</span></div></li>
-        <li><div><b>Usuario y contraseña</b><span>Cada persona entra con su usuario.</span></div></li>
-        <li><div><b>Solo la primera vez</b><span>Después la aplicación recuerda el acceso en ese teléfono.</span></div></li></ol></div>
-    </div>
-    <div class="annot annot--rev">
-      <div class="annot-media" data-r><div style="max-width:300px"><div class="phone"><div class="screen"><picture><source type="image/webp" srcset="/img/taxi25-administracion-400.webp 400w, /img/taxi25-administracion.webp 706w" sizes="(max-width: 640px) 45vw, 260px"><img src="/img/taxi25-administracion.jpg" srcset="/img/taxi25-administracion-400.jpg 400w, /img/taxi25-administracion.jpg 706w" sizes="(max-width: 640px) 45vw, 260px" alt="Pantalla de administración de Taxi 25 Muro con datos de ejemplo" width="706" height="1536" loading="lazy" decoding="async"></picture></div></div></div></div>
-      <div data-r style="--d:.08s"><h3>Administración</h3><ol class="annot-list">
-        <li><div><b>Facturado hoy</b><span>El total del día, en grande, nada más entrar.</span></div></li>
-        <li><div><b>Viajes de hoy</b><span>Cuántos servicios se han hecho en la jornada.</span></div></li>
-        <li><div><b>Hoy por taxista</b><span>Viajes y facturación de cada taxista, por separado.</span></div></li>
-        <li><div><b>Próximas fases</b><span>La propia aplicación indica que el panel completo (viajes, cajas, facturas) llega por fases.</span></div></li></ol></div>
-    </div>
-  </div>
-</section>
-
-<section class="sec">
-  <div class="wrap">
-    <div class="shead"><div data-r><p class="label"><i>§ 05</i>Funcionalidades</p></div><div data-r style="--d:.08s"><h2>Qué está hecho <span class="soft">y qué está previsto.</span></h2></div></div>
-    <div data-r><table class="status-table"><thead><tr><th>Funcionalidad</th><th>Qué hace</th><th>Estado</th></tr></thead><tbody><tr><td>Identidad visual propia</td><td>Pantallas con la marca de Taxi 25 Muro.</td><td><span class="pill pill--ok">Implementado</span></td></tr><tr><td>Acceso por usuario</td><td>Cada taxista y la administración con su acceso.</td><td><span class="pill pill--ok">Implementado</span></td></tr><tr><td>Resumen de administración</td><td>Facturado hoy, viajes del día y resumen por taxista.</td><td><span class="pill pill--ok">Implementado</span></td></tr><tr><td>Reservas y hojas de ruta</td><td>Registro de cada servicio y reserva.</td><td><span class="pill ">Previsto</span></td></tr><tr><td>Caja y gastos</td><td>Cierre de caja diario y gastos de cada vehículo.</td><td><span class="pill ">Previsto</span></td></tr><tr><td>Facturación</td><td>Facturas a clientes y empresas desde el móvil.</td><td><span class="pill ">Previsto</span></td></tr></tbody></table></div>
-  </div>
-</section>
-
-<section class="sec on-dark">
-  <div class="wrap split">
-    <div data-r><p class="label"><i>§ 06</i>Estado</p><h2 style="margin-top:22px">La base funciona. <span class="soft">El resto, por fases.</span></h2></div>
-    <ol class="ledger "><li data-r style="--d:0.00s"><span>01</span><b>Información en el móvil</b><p>La administración consulta el día desde cualquier sitio.</p></li><li data-r style="--d:0.05s"><span>02</span><b>Datos por taxista</b><p>Viajes y facturación separados por persona.</p></li><li data-r style="--d:0.10s"><span>03</span><b>Crece con la empresa</b><p>Cada fase se añade cuando hace falta.</p></li><li data-r style="--d:0.15s"><span>04</span><b>Herramienta propia</b><p>Diseñada para cómo trabaja esta empresa.</p></li></ol>
-  </div>
-</section>
-
-<section class="sec">
-  <div class="wrap split">
-    <div data-r><p class="label">¿A quién más le sirve?</p><h2 style="margin-top:22px">Empresas que podrían <span class="soft">necesitar algo similar.</span></h2></div>
-    <ol class="ledger "><li data-r style="--d:0.00s"><span>01</span><b>Taxi y licencias de Mallorca</b><p>Otras empresas que reúnen la información de varios conductores.</p></li><li data-r style="--d:0.05s"><span>02</span><b>Transporte y reparto</b><p>Empresas con varios vehículos y personas en ruta.</p></li><li data-r style="--d:0.10s"><span>03</span><b>Servicios fuera de oficina</b><p>Negocios cuyo equipo trabaja en la calle.</p></li><li data-r style="--d:0.15s"><span>04</span><b>Cualquier herramienta a medida</b><p>Empresas que necesitan una aplicación en el móvil hecha para ellas.</p></li></ol>
-  </div>
-</section>
-<section class="sec sec--tight sec--paper2">
-  <div class="wrap">
-    <div class="shead"><div data-r><p class="label">Páginas relacionadas</p></div><div data-r style="--d:.08s"><h2>Sigue <span class="soft">explorando.</span></h2></div></div>
-    <div class="rels"><a class="rel" href="/webs/" data-r style="--d:0.00s"><small>Solución</small><b>Aplicaciones web a medida</b><span>Herramientas internas para el móvil o el navegador.</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a><a class="rel" href="/automatizacion/" data-r style="--d:0.06s"><small>Solución</small><b>Automatización empresarial</b><span>Para la parte administrativa.</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a><a class="rel" href="/inox-brico/" data-r style="--d:0.12s"><small>Proyecto</small><b>Caso INOX-BRICO</b><span>Un sistema comercial a medida.</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a></div>
-  </div>
-</section>
-<section class="cta on-deep">
-  <div class="cta-gear" aria-hidden="true"><svg viewBox="0 0 100 100" aria-hidden="true"><g class="g"><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(0 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(30 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(60 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(90 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(120 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(150 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(180 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(210 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(240 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(270 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(300 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(330 50 50)"/><circle cx="50" cy="50" r="34"/></g></svg></div>
-  <div class="wrap cta-grid" data-r>
-    <div><p class="label">Valoración sin compromiso</p><h2>¿Tu empresa también se gestiona <span class="soft">con libretas?</span></h2><p class="lead">Diseñamos la aplicación que necesita tu empresa y te enseñamos las pantallas antes de programar.</p></div>
-    <div class="cta-side"><a class="btn btn--gold" href="/contacto/?servicio=webs">Solicitar una valoración <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a><a class="arrow-link" data-email href="mailto:info@engrana-mallorca.com">info@engrana-mallorca.com</a><p class="note">Respondemos personalmente en menos de 48 horas.</p></div>
+    <div class="rels"><h2>Páginas relacionadas</h2><ul class="rows rows--links"><li><a class="row" href="/webs/"><span class="t">Aplicaciones web a medida</span><span class="d">Herramientas internas para el móvil o el navegador.</span></a></li><li><a class="row" href="/automatizacion/"><span class="t">Automatización empresarial</span><span class="d">Para la parte administrativa.</span></a></li><li><a class="row" href="/inox-brico/"><span class="t">Caso INOX-BRICO</span><span class="d">Un sistema comercial a medida.</span></a></li></ul></div>
   </div>
 </section>
 
 </main>
-<footer class="site-footer on-deep">
-  <div class="wrap">
-    <div class="foot">
-      <div>
-        <a class="logo" href="/" aria-label="Engrana, ir al inicio"><svg viewBox="0 0 100 100" aria-hidden="true"><g class="gear"><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(0 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(30 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(60 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(90 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(120 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(150 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(180 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(210 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(240 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(270 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(300 50 50)"/><rect x="42" y="2" width="16" height="20" rx="2" transform="rotate(330 50 50)"/><circle cx="50" cy="50" r="34"/></g><circle class="core" cx="50" cy="50" r="13"/></svg>engrana</a>
-        <p>Consultoría tecnológica y desarrollo a medida desde Muro, Mallorca. Analizamos cómo trabaja cada empresa y construimos los sistemas que le quitan trabajo repetitivo.</p>
+<footer class="foot">
+  <div class="container">
+    <div class="foot-colophon">
+      <p>Engrana es una consultoría tecnológica de Muro, Mallorca. Analizamos cómo trabaja cada empresa y construimos los sistemas que le quitan trabajo repetitivo. Visitamos empresas en toda la isla y trabajamos a distancia. Escríbenos a <a data-email href="mailto:info@engrana-mallorca.com">info@engrana-mallorca.com</a> y te respondemos en menos de 48 horas.</p>
+      <div class="foot-links">
+        <div><h2>Soluciones</h2><ul><li><a href="/servicios/">Todas</a></li><li><a href="/automatizacion/">Automatización empresarial</a></li><li><a href="/sistemas-comerciales/">Sistemas comerciales y CRM</a></li><li><a href="/ia-aplicada/">Inteligencia artificial aplicada</a></li><li><a href="/webs/">Desarrollo web y aplicaciones</a></li><li><a href="/marketing/">Marketing digital</a></li><li><a href="/correo/">Correo profesional</a></li></ul></div>
+        <div><h2>Proyectos y sector</h2><ul><li><a href="/casos/">Todos los proyectos</a></li><li><a href="/inox-brico/">INOX-BRICO</a></li><li><a href="/taxi-25-muro/">Taxi 25 Muro</a></li><li><a href="/gaspar-pico/">Gaspar Picó SL</a></li><li><a href="/sectores/distribucion-suministro/">Distribución y suministro</a></li></ul></div>
+        <div><h2>Engrana</h2><ul><li><a href="/sobre-nosotros/">Sobre nosotros</a></li><li><a href="/filosofia/">Filosofía</a></li><li><a href="/blog/">Blog</a></li><li><a href="/diagnostico/">Diagnóstico</a></li><li><a href="/contacto/">Contacto</a></li></ul></div>
       </div>
-      <div><h2 class="fh">Soluciones</h2><ul><li><a href="/servicios/">Todas las soluciones</a></li><li><a href="/automatizacion/">Automatización empresarial</a></li><li><a href="/sistemas-comerciales/">Sistemas comerciales y CRM</a></li><li><a href="/ia-aplicada/">Inteligencia artificial aplicada</a></li><li><a href="/webs/">Desarrollo web y aplicaciones</a></li><li><a href="/marketing/">Marketing digital</a></li><li><a href="/correo/">Correo profesional</a></li></ul></div>
-      <div><h2 class="fh">Sector</h2><ul><li><a href="/sectores/distribucion-suministro/">Distribución y suministro</a></li></ul>
-        <h2 class="fh mt">Proyectos</h2><ul><li><a href="/casos/">Todos los proyectos</a></li><li><a href="/inox-brico/">INOX-BRICO</a></li><li><a href="/taxi-25-muro/">Taxi 25 Muro</a></li><li><a href="/gaspar-pico/">Gaspar Picó SL</a></li></ul></div>
-      <div><h2 class="fh">Engrana</h2><ul><li><a href="/sobre-nosotros/">Sobre nosotros</a></li><li><a href="/filosofia/">Filosofía</a></li><li><a href="/blog/">Blog</a></li><li><a href="/ayuda/">Ayuda de digitalización 2027</a></li></ul></div>
-      <div><h2 class="fh">Contacto</h2><ul><li><a data-email href="mailto:info@engrana-mallorca.com">info@engrana-mallorca.com</a></li><li><a href="/contacto/">Solicitar una valoración</a></li><li><span style="color:var(--mist);font-size:.95rem">Muro, Mallorca · toda la isla y a distancia</span></li></ul></div>
     </div>
-    <div class="foot-mark" aria-hidden="true"><svg viewBox="0 0 1000 205" role="presentation" focusable="false"><text x="-8" y="196">engrana</text></svg></div>
-    <div class="copyline"><span>© <span data-year>2026</span> Engrana · Mallorca</span><span>Fet a Mallorca</span></div>
+    <div class="foot-legal"><span>© <span data-year>2026</span> Engrana, Mallorca</span><span>Fet a Mallorca</span></div>
   </div>
 </footer>
-<script src="/main.js?v=4" defer></script>
+<script>window.hallmarkSlots = (m) => { for (const [k, v] of Object.entries(m)) { const s = document.querySelector(`[data-slot="${k}"]`); if (!s) continue; const im = new Image(); im.src = typeof v === 'string' ? v : v.src; im.alt = (typeof v === 'object' && v.alt) || s.dataset.alt || ''; s.querySelectorAll(':scope > img').forEach((o) => o.remove()); s.prepend(im); } };
+document.querySelectorAll('[data-slot] img').forEach((i) => { if (i.complete && !i.naturalWidth) i.remove(); else i.addEventListener('error', () => i.remove(), { once: true }); });</script>
+<script src="/main.js?v=5" defer></script>
 </body>
 </html>

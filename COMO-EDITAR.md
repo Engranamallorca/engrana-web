@@ -22,7 +22,6 @@ Cada página vive en su propia carpeta con un archivo `index.html`. Así las dir
 | `/filosofia/` | `filosofia/index.html` |
 | `/blog/` | `blog/index.html` |
 | `/blog/senales-web-pierde-clientes/` | `blog/senales-web-pierde-clientes/index.html` |
-| `/ayuda/` | `ayuda/index.html` (ayuda de digitalización 2027) |
 | `/contacto/` | `contacto/index.html` (el formulario) |
 | `/gracias/` | `gracias/index.html` |
 | — | `404.html` (página de error) |
@@ -51,18 +50,19 @@ Cada página vive en su propia carpeta con un archivo `index.html`. Así las dir
 La fotografía del almacén (`/img/almacen-fertilizantes-baleares.*`) es real: matrícula y rostros difuminados.
 Se usa como contexto del sector, **no** como proyecto de cliente; mantén esa aclaración en los pies de foto.
 
-## Diseño (v4, noviembre 2026)
+## Diseño (v5, noviembre 2026, hecho con Hallmark)
 
-- Tipografías: **Bricolage Grotesque** (títulos, la misma familia que el logotipo), **Instrument Sans** (texto) e **IBM Plex Mono** (etiquetas y datos).
-- Colores en `styles.css`, arriba del todo: verde `#103D33`, verde oscuro `#082820`, dorado `#E5A52F` (solo acentos), blanco cálido `#F5F3EC`.
-- Secciones: `sec` (papel), `sec sec--paper2` (papel más oscuro), `sec on-dark` / `on-deep` (verde). Para que algo aparezca al bajar, añade `data-r`.
-- La segunda parte de un titular en gris va en `<span class="soft">…</span>`.
-- Cambios de página con transición suave (View Transitions) y todas las animaciones se desactivan si el visitante lo pide en su sistema.
+- Las reglas del diseño están en `design.md`; los colores, tipografías y espacios, en `tokens.css`. `styles.css` solo usa esos tokens.
+- Paleta clara: papel blanco, salvia claro para alternar secciones, verde de marca solo en el botón principal y dorado como acento.
+- Tipografías: **Bricolage Grotesque** (títulos, la familia del logotipo) e **Instrument Sans** (texto).
+- Secciones: `sec` (blanco), `sec band--cream` (crema), `sec band` (salvia). Para que algo aparezca al bajar, añade `data-reveal` (una vez por página).
+- No pongas etiquetas pequeñas en mayúsculas encima de los títulos ni partas un título en dos colores: el título va de una pieza.
+- Las capturas van en `<div class="shot">`, sin marcos de navegador ni de móvil dibujados.
 
 ## Formulario de contacto
 
 Está en `/contacto/`. Los botones de cada página llevan a él indicando el servicio
-(`/contacto/?servicio=automatizacion`), y cada solicitud que llega a Netlify (Forms → diagnostico). El formulario de `/ayuda/` llega como `ayuda-digitalizacion`. Ambos validan los campos antes de enviar y tienen campo trampa contra spam
+(`/contacto/?servicio=automatizacion`), y cada solicitud que llega a Netlify (Forms → diagnostico). Ambos validan los campos antes de enviar y tienen campo trampa contra spam
 dice desde qué servicio y qué página vino.
 
 ## Publicar la frase de la semana (Filosofía)
@@ -86,3 +86,4 @@ dice desde qué servicio y qué página vino.
 
 - `_redirects`: redirecciones 301 (URLs antiguas `.html`, imágenes retiradas y atajos como `/proyectos`).
 - `_headers`: cabeceras de seguridad y caché de imágenes.
+- `.hallmark/`: capturas y registros internos del rediseño (no se suben a git).
