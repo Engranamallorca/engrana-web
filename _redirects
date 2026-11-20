@@ -46,3 +46,9 @@
 /netlify/*                          /404.html                             404!
 /tests/*                            /404.html                             404!
 /docs/*                             /404.html                             404!
+
+# Página de la ayuda de digitalización retirada (noviembre de 2026)
+/ayuda                              /                                     301
+/ayuda/                             /                                     301
+/design.md                          /404.html                             404!
+/.hallmark/*                        /404.html                             404!
