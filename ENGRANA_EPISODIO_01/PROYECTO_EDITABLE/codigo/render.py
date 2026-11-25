@@ -314,8 +314,8 @@ def sc_agente(c, t, tl, seg):
         hx, hy = 110, 300
         nx, ny0, nw, nh, gap = 110, 470, 860, 104, 127
     else:
-        hx, hy = 140, 150
-        nx, ny0, nw, nh, gap = 140, 268, 860, 80, 98
+        hx, hy = 140, 128
+        nx, ny0, nw, nh, gap = 140, 248, 860, 76, 90
     kicker(c, 'AGENTE DE INTELIGENCIA ARTIFICIAL', hx, hy, ka)
     text(c, 'Así podría trabajar un agente', hx, hy + (72 if V else 62), HEAD(58 if V else 50), CREAM, ka)
     text(c, 'Ejemplo ilustrativo · empresa de distribución industrial', hx, hy + (112 if V else 98), REG(24 if V else 20), CREAM, ka * .55)
@@ -376,7 +376,7 @@ def sc_agente(c, t, tl, seg):
 
 def ag_panel(c, t):
     """Panel derecho (solo 16:9): el correo y lo que el agente extrae / prepara."""
-    x, y, w = 1080, 268, 700
+    x, y, w = 1080, 248, 700
     a, p = vis(t, 50.4, 999, .6)
     if a <= 0: return
     y += (1 - p) * 24
