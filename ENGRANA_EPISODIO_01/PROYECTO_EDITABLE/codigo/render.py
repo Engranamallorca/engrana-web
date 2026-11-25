@@ -894,11 +894,15 @@ def draw_subs(c, t):
             a = min(eo(prog(t, cue['start'], .12)), 1 - prog(t, cue['end'] - .1, .1))
             lines = sub_lines(cue['idx'], f, maxw)
             y = base - (len(lines) - 1) * lh
+            bw = max(f.measureText(' '.join(s for s, _ in ln)) for ln in lines)
+            pv = skia.Paint(AntiAlias=True); pv.setColor(CI((0, 0, 0), .34 * a))
+            pv.setMaskFilter(skia.MaskFilter.MakeBlur(skia.kNormal_BlurStyle, 28))
+            c.drawRRect(skia.RRect.MakeRectXY(skia.Rect.MakeXYWH(W / 2 - bw / 2 - 30, y - fs - 14, bw + 60, lh * len(lines) + 22), 30, 30), pv)
             for ln in lines:
                 total = f.measureText(' '.join(s for s, _ in ln))
                 x = W / 2 - total / 2
                 for s, g in ln:
-                    text(c, s, x, y, f, GOLD if g else CREAM, a, shadow=10)
+                    text(c, s, x, y, f, GOLD if g else CREAM, a, shadow=14)
                     x += f.measureText(s + ' ')
                 y += lh
 
@@ -990,7 +994,7 @@ for _ in range(6):
 def sub_gradient(c):
     p = skia.Paint()
     y0 = H * (.62 if V else .66)
-    p.setShader(skia.GradientShader.MakeLinear([(0, y0), (0, H)], [CI((0, 0, 0), 0), CI((0, 0, 0), .5)]))
+    p.setShader(skia.GradientShader.MakeLinear([(0, y0), (0, H)], [CI((0, 0, 0), 0), CI((0, 0, 0), .64)]))
     c.drawRect(skia.Rect.MakeXYWH(0, y0, W, H - y0), p)
 
 
@@ -1084,11 +1088,22 @@ def main():
         layer[:] = 0
         for s, w in act:
             if s['kind'] != 'gfx': continue
-            clip_under = any(o['kind'] == 'clip' for o, _ in act) and not (A.layeronly and False)
+            clip_under = any(o['kind'] == 'clip' for o, _ in act)
             ga = w if clip_under else 1.0
+            if t >= s['t1']:  # cola: el segmento siguiente entra en fundido por encima
+                nxt = [ww for o, ww in act if o is not s and o['t0'] >= s['t1'] - 1e-6]
+                if nxt and clip_under:
+                    ga = min(ga, 1 - nxt[0])
+            if ga <= 0.002:
+                continue
             if ga < 1:
                 lc.saveLayerAlpha(None, int(ga * 255))
+            # movimiento de cámara lento y continuo en todo el grafismo
+            pz = clamp((t - s['t0']) / max(.1, s['t1'] - s['t0']))
+            z = 1.0 + .035 * pz
+            lc.save(); lc.translate(W / 2, H / 2); lc.scale(z, z); lc.translate(-W / 2, -H / 2)
             SCENES[s['fn']](lc, t, t - s['t0'], s)
+            lc.restore()
             if ga < 1:
                 lc.restore()
         watermark(lc, t)
