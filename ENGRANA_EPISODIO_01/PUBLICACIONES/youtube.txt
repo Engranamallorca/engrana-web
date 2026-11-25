@@ -1,0 +1,60 @@
+YOUTUBE — vídeo horizontal 1920×1080 · miniatura: PORTADAS/portada_EP01_horizontal_1920x1080.jpg
+Subtítulos: subir SUBTITULOS/ENGRANA_EP01_subtitulos_es-ES.srt (Subtítulos → Español (España) → Subir archivo → Con tiempos)
+Versión Short: el vídeo vertical (2:35) entra como Short (límite actual: 3 minutos).
+
+──────────────── TÍTULO (máx. 100 caracteres) ────────────────
+
+La IA ya no solo responde: ahora empieza a trabajar | Lo que está cambiando #01
+
+Alternativas:
+· Agentes de IA: de contestar preguntas a ejecutar tareas en tu empresa
+· Qué es un agente de inteligencia artificial (explicado con un ejemplo real)
+
+──────────────── DESCRIPCIÓN ────────────────
+
+Durante años hemos usado la inteligencia artificial para hacer preguntas: escribe un correo, resume un documento, ayúdame con un Excel. Lo que está cambiando es otra cosa: los agentes, sistemas capaces de usar herramientas y completar varios pasos de un proceso.
+
+En este primer episodio de «Lo que está cambiando» lo explicamos con un ejemplo de una empresa de distribución industrial: desde que llega el correo de un cliente pidiendo presupuesto hasta que el comercial tiene la tarea preparada. Y también lo que no cambia: hay decisiones (precios, pedidos, pagos, compromisos con clientes) que deben seguir pasando por una persona.
+
+Lo que verás:
+→ La diferencia entre una IA que responde y una que ejecuta tareas
+→ Los 7 pasos que podría seguir un agente con un correo de un cliente
+→ Por qué la clave es conectar herramientas (correo, ERP, CRM…)
+→ Qué puede hacer sola, qué debe preparar y qué necesita aprobación humana
+
+Capítulos
+0:00 La IA que responde preguntas
+0:14 De responder a ejecutar tareas
+0:26 El ejemplo: una distribuidora industrial
+0:48 Así podría trabajar un agente de IA
+1:11 Conectar herramientas, de principio a fin
+1:29 La supervisión humana
+1:52 El verdadero cambio
+2:08 La pregunta que deberíamos hacernos
+
+El caso del vídeo es un ejemplo ilustrativo. Es técnicamente posible hoy, pero no funciona igual en todas las empresas: depende de los datos, de los sistemas que se puedan conectar y de un buen diseño del proceso.
+
+Fuentes
+· Anthropic — Building effective agents: https://www.anthropic.com/engineering/building-effective-agents
+· OpenAI — A practical guide to building agents: https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf
+· OpenAI — Guardrails y aprobaciones humanas en agentes: https://developers.openai.com/api/docs/guides/agents/guardrails-approvals
+· Anthropic — Model Context Protocol: https://www.anthropic.com/news/model-context-protocol
+
+ENGRANA | Lo que está cambiando es una serie sobre inteligencia artificial, automatización y transformación de empresas, desde Mallorca.
+🌐 https://www.engrana-mallorca.com
+
+Imágenes y música: Adobe Stock (con licencia). Locución: Jaume Castellá.
+
+#InteligenciaArtificial #AgentesIA #Automatización
+
+──────────────── ETIQUETAS (campo «Etiquetas», separadas por comas) ────────────────
+
+inteligencia artificial, agentes de IA, agente de inteligencia artificial, IA para empresas, automatización de procesos, automatización empresarial, CRM, transformación digital, digitalización de empresas, distribución industrial, IA generativa, ChatGPT empresas, Claude, pymes, Mallorca, Engrana, lo que está cambiando
+
+──────────────── AJUSTES RECOMENDADOS ────────────────
+
+· Idioma del vídeo y de título/descripción: Español (España)
+· Categoría: Ciencia y tecnología
+· Contenido alterado o sintético: marcar «Sí». La voz está generada con un clon de la voz de Jaume (ElevenLabs) y YouTube pide declararlo cuando una voz realista está hecha con IA.
+· Pantalla final (últimos 7 s, cierre de marca): enlace al canal o a la web
+· Lista de reproducción: «ENGRANA | Lo que está cambiando»
