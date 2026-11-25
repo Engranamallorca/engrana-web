@@ -1,0 +1,29 @@
+INSTAGRAM — Reel (vídeo vertical 1080×1920) · portada: PORTADAS/portada_EP01_vertical_1080x1920.jpg
+Recorte de la cuadrícula del perfil: PORTADAS/portada_EP01_feed_1080x1350.jpg
+
+──────────────── TEXTO ────────────────
+
+La inteligencia artificial ya no solo responde. Ahora empieza a trabajar.
+
+Durante años la hemos usado para preguntar: escribe este correo, resume este documento, ayúdame con este Excel.
+
+Lo que está cambiando es otra cosa: agentes que pueden usar herramientas y encadenar pasos.
+
+Un ejemplo en una empresa de distribución industrial:
+📩 Llega un correo pidiendo presupuesto
+🔎 El agente identifica al cliente y extrae los datos
+📦 Consulta stock, tarifas y plazos
+📝 Registra la solicitud en el CRM y deja una tarea al comercial
+✋ Y el precio final lo revisa y lo aprueba una persona
+
+No se trata de dejar la IA funcionando sin control. Se trata de decidir qué puede hacer sola, qué debe preparar y qué necesita aprobación.
+
+¿Cuánto trabajo repetitivo seguís haciendo a mano?
+
+ENGRANA | Lo que está cambiando · Episodio 01
+
+#inteligenciaartificial #agentesIA #automatizacion #transformaciondigital #empresas #CRM #distribucion #pymes #Mallorca #Baleares #tecnologia #productividad #Engrana
+
+──────────────── NOTAS ────────────────
+· Subir con subtítulos quemados (ya incluidos). Para accesibilidad, se puede añadir también el SRT si la cuenta lo permite.
+· Primer comentario sugerido (fuentes): «Fuentes del episodio: guía de agentes de Anthropic ("Building effective agents"), guía práctica de OpenAI para construir agentes y documentación del Model Context Protocol. Enlaces en LinkedIn y en engrana-mallorca.com».

@@ -1,0 +1,283 @@
+1
+00:00:00,000 --> 00:00:03,380
+Durante los últimos años hemos
+utilizado la inteligencia artificial
+
+2
+00:00:03,400 --> 00:00:04,785
+para hacer preguntas.
+
+3
+00:00:04,805 --> 00:00:06,480
+Le pedimos que escriba un correo,
+
+4
+00:00:06,500 --> 00:00:07,780
+que resuma un documento,
+
+5
+00:00:07,800 --> 00:00:09,638
+que nos ayude con un Excel…
+
+6
+00:00:09,658 --> 00:00:12,122
+o que nos explique
+algo que no entendemos.
+
+7
+00:00:12,142 --> 00:00:14,073
+Pero hay algo que está cambiando.
+
+8
+00:00:14,093 --> 00:00:16,430
+Y probablemente
+va a tener mucha más importancia
+
+9
+00:00:16,450 --> 00:00:17,765
+de la que imaginamos.
+
+10
+00:00:17,785 --> 00:00:20,296
+Estamos pasando
+de una inteligencia artificial
+
+11
+00:00:20,316 --> 00:00:22,060
+que simplemente responde…
+
+12
+00:00:22,080 --> 00:00:24,220
+a una que puede ejecutar tareas.
+
+13
+00:00:24,240 --> 00:00:25,369
+Te pongo un ejemplo.
+
+14
+00:00:25,389 --> 00:00:28,260
+Imagina una empresa
+de distribución industrial.
+
+15
+00:00:28,280 --> 00:00:30,884
+Cada día recibe correos
+de clientes solicitando
+
+16
+00:00:30,904 --> 00:00:33,520
+presupuestos, preguntando
+por productos,
+
+17
+00:00:33,540 --> 00:00:37,084
+consultando plazos de entrega
+o reclamando pedidos.
+
+18
+00:00:37,104 --> 00:00:39,046
+Alguien tiene que abrir esos correos,
+
+19
+00:00:39,066 --> 00:00:42,401
+identificar al cliente,
+entender qué necesita,
+
+20
+00:00:42,421 --> 00:00:45,698
+buscar la información,
+registrar la solicitud y hacer
+
+21
+00:00:45,718 --> 00:00:46,720
+el seguimiento.
+
+22
+00:00:46,740 --> 00:00:49,843
+Ahora imagina que parte
+de ese trabajo lo realiza
+
+23
+00:00:49,863 --> 00:00:51,979
+un agente de inteligencia artificial.
+
+24
+00:00:51,999 --> 00:00:53,675
+Puede analizar el correo,
+
+25
+00:00:53,695 --> 00:00:56,450
+identificar qué está
+solicitando el cliente,
+
+26
+00:00:56,470 --> 00:00:58,145
+extraer los datos importantes,
+
+27
+00:00:58,165 --> 00:01:01,152
+consultar información
+disponible en otros sistemas
+
+28
+00:01:01,172 --> 00:01:03,044
+y preparar una respuesta.
+
+29
+00:01:03,064 --> 00:01:06,469
+Incluso puede registrar
+la solicitud en un CRM
+
+30
+00:01:06,489 --> 00:01:09,151
+y dejar una tarea preparada
+para el comercial.
+
+31
+00:01:09,171 --> 00:01:10,800
+Y aquí está lo interesante:
+
+32
+00:01:10,820 --> 00:01:13,830
+no estamos hablando simplemente
+de generar un texto.
+
+33
+00:01:13,850 --> 00:01:16,953
+Estamos hablando de conectar
+diferentes herramientas
+
+34
+00:01:16,973 --> 00:01:19,786
+para completar un proceso
+de principio a fin.
+
+35
+00:01:19,806 --> 00:01:23,350
+Esto también puede aplicarse
+a inmobiliarias,
+
+36
+00:01:23,370 --> 00:01:25,080
+empresas de suministros,
+
+37
+00:01:25,100 --> 00:01:27,901
+asesorías o departamentos comerciales.
+
+38
+00:01:27,921 --> 00:01:30,548
+Pero hay algo importante
+que debemos entender.
+
+39
+00:01:30,568 --> 00:01:33,660
+No significa que podamos dejar
+una inteligencia artificial
+
+40
+00:01:33,680 --> 00:01:35,390
+funcionando sin control.
+
+41
+00:01:35,410 --> 00:01:38,350
+Hay decisiones que necesitan
+revisión humana,
+
+42
+00:01:38,370 --> 00:01:40,579
+especialmente cuando
+hablamos de precios,
+
+43
+00:01:40,599 --> 00:01:43,621
+pedidos, pagos
+o compromisos con clientes.
+
+44
+00:01:43,641 --> 00:01:46,152
+La clave está en saber
+qué tareas puede ejecutar
+
+45
+00:01:46,172 --> 00:01:49,588
+por sí misma, cuáles
+debe preparar y cuáles necesitan
+
+46
+00:01:49,608 --> 00:01:50,598
+aprobación.
+
+47
+00:01:50,618 --> 00:01:53,048
+Y creo que aquí está
+el verdadero cambio.
+
+48
+00:01:53,068 --> 00:01:55,776
+Durante mucho tiempo,
+las empresas han utilizado
+
+49
+00:01:55,796 --> 00:01:58,969
+programas para registrar
+información y herramientas
+
+50
+00:01:58,989 --> 00:02:00,710
+para organizar su trabajo.
+
+51
+00:02:00,730 --> 00:02:04,240
+Ahora empezamos a tener sistemas
+capaces de utilizar
+
+52
+00:02:04,260 --> 00:02:06,179
+esa información para actuar.
+
+53
+00:02:06,199 --> 00:02:08,582
+La pregunta ya no es solamente
+qué puede hacer
+
+54
+00:02:08,602 --> 00:02:11,078
+la inteligencia artificial
+por nosotros.
+
+55
+00:02:11,098 --> 00:02:14,329
+La pregunta es cuánto trabajo repetitivo
+vamos a seguir
+
+56
+00:02:14,349 --> 00:02:17,638
+haciendo manualmente
+cuando existen otras formas
+
+57
+00:02:17,658 --> 00:02:18,532
+de hacerlo.
+
+58
+00:02:18,552 --> 00:02:21,632
+Porque el futuro de las empresas
+no consiste simplemente
+
+59
+00:02:21,652 --> 00:02:23,269
+en tener más tecnología.
+
+60
+00:02:23,289 --> 00:02:25,544
+Consiste en trabajar mejor con ella.
+
+61
+00:02:25,564 --> 00:02:26,566
+Esto es Engrana.
+
+62
+00:02:26,586 --> 00:02:28,776
+Y esto es lo que está cambiando.
+

@@ -1,0 +1,18 @@
+FACEBOOK — vídeo vertical (Reel) o horizontal · portada: PORTADAS/portada_EP01_feed_1080x1350.jpg
+
+──────────────── TEXTO ────────────────
+
+¿Y si la inteligencia artificial, además de contestar, pudiera hacer parte del trabajo?
+
+Hasta ahora la usábamos para preguntar: un correo, un resumen, una duda con el Excel. Lo que empieza a cambiar son los agentes: sistemas que pueden usar herramientas y completar varios pasos de un proceso.
+
+En este primer episodio de «Lo que está cambiando» lo explicamos con un ejemplo real de cualquier empresa de distribución: llega un correo pidiendo presupuesto, el agente identifica al cliente, consulta stock y plazos, registra la solicitud en el CRM y deja una tarea al comercial. Y lo importante —precios, pedidos y pagos— lo revisa una persona.
+
+No es magia ni funciona igual en todas partes. Pero ya es posible, y conviene entenderlo.
+
+👉 ¿Qué tarea repetitiva de tu empresa te gustaría dejar de hacer a mano?
+
+ENGRANA | Lo que está cambiando · Ep. 01
+engrana-mallorca.com
+
+Fuentes: Anthropic («Building effective agents»), OpenAI («A practical guide to building agents») y documentación del Model Context Protocol.

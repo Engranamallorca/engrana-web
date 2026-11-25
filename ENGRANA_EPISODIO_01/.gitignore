@@ -1,0 +1,11 @@
+# Medios con licencia Adobe Stock: no redistribuir sueltos
+VIDEO_CLIPS/
+AUDIO/musica/
+# Archivos pesados (se entregan aparte)
+AUDIO/stems/
+AUDIO/mezcla_final_48k.wav
+VIDEO_FINAL/
+MOTION_GRAPHICS/*.mov
+MOTION_GRAPHICS/escenas/
+IMAGENES/*.png
+__pycache__/

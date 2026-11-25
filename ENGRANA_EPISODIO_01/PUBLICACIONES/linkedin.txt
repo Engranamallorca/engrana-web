@@ -1,0 +1,35 @@
+LINKEDIN — vídeo horizontal 1920×1080 (o vertical si se publica desde móvil) · miniatura: PORTADAS/portada_EP01_horizontal_1920x1080.jpg
+Subtítulos: subir SUBTITULOS/ENGRANA_EP01_subtitulos_es-ES.srt (si se usa la versión con subtítulos quemados, no hace falta).
+
+──────────────── TEXTO ────────────────
+
+La inteligencia artificial ya no solo responde. Ahora empieza a trabajar.
+
+Abrimos «Lo que está cambiando», una serie breve sobre inteligencia artificial, automatización y transformación de empresas. Sin promesas exageradas: qué se puede hacer hoy, qué todavía no y dónde está el cambio real.
+
+En este primer episodio hablamos del paso de los asistentes que contestan preguntas a los agentes que ejecutan tareas.
+
+La diferencia no está en que el modelo escriba mejor, sino en que puede usar herramientas: leer un correo, consultar un ERP, registrar una solicitud en un CRM o crear una tarea para el equipo comercial.
+
+El ejemplo: una empresa de distribución industrial que recibe cada día peticiones de presupuesto, consultas de producto, preguntas sobre plazos y reclamaciones. Hoy ya es técnicamente posible que un agente:
+1. Lea el correo y entienda qué se pide.
+2. Identifique al cliente y extraiga los datos importantes.
+3. Consulte la información disponible en otros sistemas.
+4. Prepare una respuesta.
+5. Registre la solicitud en el CRM.
+6. Deje una tarea preparada para el comercial.
+7. Y deje pendiente de aprobación humana lo que lo requiera.
+
+Dos matices importantes:
+· No funciona igual en todas las empresas. Depende de la calidad de los datos, de que los sistemas se puedan conectar y de un buen diseño del proceso.
+· Precios, pedidos, pagos y compromisos con clientes deben pasar por una persona. Las propias guías de OpenAI y Anthropic recomiendan definir puntos de revisión y aprobación humana para acciones sensibles.
+
+La pregunta ya no es solo qué puede hacer la IA por nosotros. Es cuánto trabajo repetitivo vamos a seguir haciendo a mano cuando existen otras formas de hacerlo.
+
+Fuentes:
+· Anthropic — Building effective agents: https://www.anthropic.com/engineering/building-effective-agents
+· OpenAI — A practical guide to building agents: https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf
+· OpenAI — Guardrails y aprobaciones humanas en agentes: https://developers.openai.com/api/docs/guides/agents/guardrails-approvals
+· Anthropic — Model Context Protocol: https://www.anthropic.com/news/model-context-protocol
+
+#InteligenciaArtificial #AgentesIA #Automatización #TransformaciónDigital #CRM #Distribución #Empresas
